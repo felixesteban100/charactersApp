@@ -13,6 +13,7 @@ import SuccessChanged from './Components/SuccessChanged';
 import Error from './Components/Error';
 import ModalSettings from './Components/ModalSettings';
 
+
 type Character = {
   powerstats: {
     intelligence: number;
@@ -70,6 +71,7 @@ type Character = {
 //https://www.youtube.com/watch?v=0MOF_QPcgxs&list=PLTxN-M601XkQrncbxuDKY-zo9jNj6XhUe&index=32&t=10s
 
 function App() {
+  const [allCharactersSAVED, setAllCharactersSAVED] = useLocalStorage<Character[] | []>("CHARACTERS_APP_ALLCHARACTERS", [])
   const [charactersFiltered, setCharactersFiltered] = useLocalStorage<Character[] | []>("CHARACTERS_APP_CHARACTERSFILTERED", [])
 
   const [characterName, setCharacterName] = useLocalStorage<string>("CHARACTERS_APP_NAME", "")
@@ -89,13 +91,14 @@ function App() {
 
   const [theme, setTheme] = useLocalStorage("CHARACTERS_APP_THEME", "dark")
 
-  const { isLoading, isError, data: allCharacters } = useQuery<Character[]>({
+  const { isLoading, isError } = useQuery<Character[]>({
     queryKey: ["Characters"],
     queryFn: async () => {
       const result = await axios.get<Character[]>('https://heroes-backend.onrender.com/').then((response) => response.data)
       if (result !== undefined) {
         // select 5 random characters at the beginning (when there's no localstorage yet)
         if (charactersFiltered.length === 0) setCharactersFiltered(result.sort(() => 0.5 - Math.random()).slice(0, 6))
+        setAllCharactersSAVED(result)
         return result
       }
       return []
@@ -104,10 +107,10 @@ function App() {
   })
 
   function filterCharacters() {
-    if (allCharacters !== undefined) {
+    if (allCharactersSAVED !== undefined) {
       let result: Character[] = []
       let firstFilter: Character[] = []
-      const randomizedArray = allCharacters.sort(() => Math.random() - 0.5);
+      const randomizedArray = allCharactersSAVED.sort(() => Math.random() - 0.5);
 
       /* filter name */
       if (characterName === "") {
@@ -151,7 +154,7 @@ function App() {
       })
 
       if (team === "All") setTeamMembers(result)
-      if (team !== "All") setTeamMembers(allCharacters!.filter((currentCharacter) => currentCharacter.connections.groupAffiliation.includes(team)))
+      if (team !== "All") setTeamMembers(allCharactersSAVED!.filter((currentCharacter) => currentCharacter.connections.groupAffiliation.includes(team)))
     }
   }
 
@@ -198,7 +201,7 @@ function App() {
     localStorage.removeItem("CHARACTERS_APP_TEAMMEMBERS")
     // localStorage.removeItem("CHARACTERS_APP_THEME")
 
-    if (allCharacters) setCharactersFiltered(allCharacters.sort(() => 0.5 - Math.random()).slice(0, 6))
+    if (allCharactersSAVED) setCharactersFiltered(allCharactersSAVED.sort(() => 0.5 - Math.random()).slice(0, 6))
     setCharacterName("")
     setHowMany(0)
     setSide("All")
@@ -208,8 +211,6 @@ function App() {
     setHeroSection({ imgs: ["https://media.tenor.com/TY1HfJK5qQYAAAAC/galaxy-pixel-art.gif"], title: "", description: "" })
     setTeamMembers([])
   }
-
-  console.log("That all that happens in your life bad or good is your fault and for that reason you shouldn't blame anyone else but you.".toUpperCase())
 
   /* teams */
   const listOfTeams = [
@@ -226,7 +227,12 @@ function App() {
     "Teen Titans",
     "Future Foundation",
     "Symbiotes",
-    "Flash Family"
+    "Flash Family",
+    "Suicide Squad",
+    "Demon Slayer",
+    "Ben 10",
+    "New Guardians",
+    "Lantern Corps"
   ]
   function teamIMG(teamName: string) {
     // change these for comics images like the guardians of the galaxy one (for a more responsive design)
@@ -265,13 +271,28 @@ function App() {
         return ["https://13thdimension.com/wp-content/uploads/2016/09/640z.jpg"]
 
       case "Future Foundation":
-        return ["https://media.wired.com/photos/5932b9ebd80dd005b42b03b1/master/w_2560%2Cc_limit/FF_1_Cover-660.jpg" , "https://staticg.sportskeeda.com/editor/2022/07/3d896-16591198229869-1920.jpg", "https://comicaption.files.wordpress.com/2011/11/fantasticfour600a1.jpg"]
+        return ["https://media.wired.com/photos/5932b9ebd80dd005b42b03b1/master/w_2560%2Cc_limit/FF_1_Cover-660.jpg", "https://staticg.sportskeeda.com/editor/2022/07/3d896-16591198229869-1920.jpg", "https://comicaption.files.wordpress.com/2011/11/fantasticfour600a1.jpg"]
 
       case "Symbiotes":
         return ["https://celebrity.fm/wp-content/uploads/2022/05/Who-is-the-God-of-symbiote-celebrityfm.jpg", "https://i.pinimg.com/originals/a7/d8/4b/a7d84bf9fe6b44529f3b17555ab07a5d.jpg"]
 
       case "Flash Family":
         return ["https://w0.peakpx.com/wallpaper/618/788/HD-wallpaper-flash-family-dceu-arrowverse-dc-dc-comics.jpg", "https://i0.wp.com/www.comicsbeat.com/wp-content/uploads/2020/05/EX_IIaHUYAAE6Aa.jpg?ssl=1"]
+
+      case "Suicide Squad":
+        return ["https://m.media-amazon.com/images/I/A1nLFV0is9L._AC_UF1000,1000_QL80_.jpg", "https://oyster.ignimgs.com/wordpress/stg.ign.com/2019/09/suicide_squad_detail_-_publicity_-_embed_-_2019.jpg"]
+
+      case "Demon Slayer":
+        return ["https://demonslayer-hinokami.sega.com/img/purchase/digital-standard.jpg", "https://m.media-amazon.com/images/M/MV5BZjZjNzI5MDctY2Y4YS00NmM4LTljMmItZTFkOTExNGI3ODRhXkEyXkFqcGdeQXVyNjc3MjQzNTI@._V1_.jpg", "https://www.nme.com/wp-content/uploads/2023/01/demon-slayer-season-3-swordsmith-village-arc-key-art@2000x1270.jpg"]
+
+      case "Ben 10":
+        return ["https://i.pinimg.com/originals/56/81/f2/5681f244b6d26283fa5e535e176613e9.jpg"]
+
+      case "New Guardians":
+        return ["https://digitalspyuk.cdnds.net/12/40/comics_new_guardians_2.jpg", "https://e1.pxfuel.com/desktop-wallpaper/769/825/desktop-wallpaper-i-redesigned-kyle-s-white-lantern-suit-original-art-by-tyler-kirkham-from-green-lantern-new-guardians-%E2%80%A6-lantern-corps-suits.jpg"]
+
+      case "Lantern Corps":
+        return ["https://qph.cf2.quoracdn.net/main-qimg-2673d6d36ab6b962fecea97a8dc6f231-lq"]
 
       default:
         return ["https://media.tenor.com/TY1HfJK5qQYAAAAC/galaxy-pixel-art.gif"]
@@ -280,64 +301,68 @@ function App() {
   /* teams */
 
 
-
   return (
     <div data-theme={theme} className={`min-h-screen transition-colors duration-500 bg-base-200`}>
       <Header />
 
-      {
-        universe === "Marvel Comics" && !listOfTeams.includes(team) ?
-          <Hero
-            imgs={["https://i.chzbgr.com/full/8448259840/h26325623/superheroes-the-avengers-marvel-spider-man-8-bit-gif-art"]}
-            title="MARVEL COMICS"
-            description="Look for all the characters possible ever creaded"
-          />
-          : universe === "DC Comics" && !listOfTeams.includes(team) ?
+      <div>
+        {
+          universe === "Marvel Comics" && !listOfTeams.includes(team) ?
             <Hero
-              imgs={["https://i.gifer.com/XtUG.gif"]}
-              title="DC COMICS"
+              imgs={["https://i.chzbgr.com/full/8448259840/h26325623/superheroes-the-avengers-marvel-spider-man-8-bit-gif-art"]}
+              title="MARVEL COMICS"
               description="Look for all the characters possible ever creaded"
             />
-            : universe === "George Lucas" && !listOfTeams.includes(team) ?
+            : universe === "DC Comics" && !listOfTeams.includes(team) ?
               <Hero
-                imgs={["https://mir-s3-cdn-cf.behance.net/project_modules/max_632/10c76f30299121.561ce8fba1cb0.gif"]}
-                title="GEORGE LUCAS"
+                imgs={["https://i.gifer.com/XtUG.gif"]}
+                title="DC COMICS"
                 description="Look for all the characters possible ever creaded"
               />
-              : universe === "Shueisha" && !listOfTeams.includes(team) ?
+              : universe === "George Lucas" && !listOfTeams.includes(team) ?
                 <Hero
-                  imgs={["https://wallpapercave.com/wp/wp5104275.jpg", "https://i.pinimg.com/736x/f7/23/10/f72310b21418359a9c7e3922fbafb4a5.jpg", "https://e1.pxfuel.com/desktop-wallpaper/479/745/desktop-wallpaper-manga-iphone-posted-by-ethan-sellers-shonen-jump-iphone.jpg", "https://e1.pxfuel.com/desktop-wallpaper/872/47/desktop-wallpaper-shonen-jump-vs-anime-all-stars-by-supersaiyancrash-manga-anime-digital-4961x3508-for-your-mobile-tablet-shonen-jump-iphone.jpg"]}
-                  title="ANIME - MANGA - SHUEISHA"
-                  description="Look for all the anime | manga characters possible ever creaded"
+                  imgs={["https://mir-s3-cdn-cf.behance.net/project_modules/max_632/10c76f30299121.561ce8fba1cb0.gif"]}
+                  title="GEORGE LUCAS"
+                  description="Look for all the characters possible ever creaded"
                 />
-                : team !== "All" && listOfTeams.includes(team) ?
+                : universe === "Shueisha" && !listOfTeams.includes(team) ?
                   <Hero
-                    imgs={heroSection.imgs}
-                    title={heroSection.title}
-                    description={heroSection.description}
+                    imgs={["https://wallpapercave.com/wp/wp5104275.jpg", "https://i.pinimg.com/736x/f7/23/10/f72310b21418359a9c7e3922fbafb4a5.jpg", "https://e1.pxfuel.com/desktop-wallpaper/479/745/desktop-wallpaper-manga-iphone-posted-by-ethan-sellers-shonen-jump-iphone.jpg", "https://e1.pxfuel.com/desktop-wallpaper/872/47/desktop-wallpaper-shonen-jump-vs-anime-all-stars-by-supersaiyancrash-manga-anime-digital-4961x3508-for-your-mobile-tablet-shonen-jump-iphone.jpg"]}
+                    title="ANIME - MANGA - SHUEISHA"
+                    description="Look for all the anime | manga characters possible ever creaded"
                   />
-                  :
-                  <Hero
-                    imgs={["https://media.tenor.com/TY1HfJK5qQYAAAAC/galaxy-pixel-art.gif"]}
-                    title="Characters App"
-                    description="Look for all the characters possible ever creaded"
-                  />
-      }
+                  : team !== "All" && listOfTeams.includes(team) ?
+                    <Hero
+                      imgs={heroSection.imgs}
+                      title={heroSection.title}
+                      description={heroSection.description}
+                    />
+                    :
+                    <Hero
+                      imgs={["https://media.tenor.com/TY1HfJK5qQYAAAAC/galaxy-pixel-art.gif"]}
+                      title="Characters App"
+                      description="Look for all the characters possible ever creaded"
+                    />
+        }
+      </div>
 
-      {
-        isLoading ?
-          <div>
-            <Loading />
-          </div>
-          : isError || allCharacters === undefined ?
-            <Error />
-            :
+
+      <div>
+        {
+          isLoading ?
             <div>
-              <Characters
-                charactersFiltered={charactersFiltered}
-              />
+              <Loading />
             </div>
-      }
+            : isError || allCharactersSAVED === undefined ?
+              <Error />
+              :
+              <div>
+                <Characters
+                  charactersFiltered={charactersFiltered}
+                />
+              </div>
+        }
+      </div>
 
       <SuccessChanged
         heroSection={heroSection}

@@ -284,6 +284,64 @@ function ModalChangeCharacters({
                 },
             ]
             break;
+
+        case "Shueisha":
+            teamByUniverse = [
+                {
+                    name: "One Piece",
+                    value: "One Piece"
+                },
+                {
+                    name: "Black Clover",
+                    value: "Black Clover"
+                },
+                {
+                    name: "Dragon Ball",
+                    value: "Dragon Ball"
+                },
+                {
+                    name: "Demon Slayer",
+                    value: "Demon Slayer"
+                },
+                {
+                    name: "Jujutsu Kaisen",
+                    value: "Jujutsu Kaisen"
+                },
+                {
+                    name: "Bleach",
+                    value: "Bleach"
+                },
+                {
+                    name: "Attack on Titan",
+                    value: "Attack on Titan"
+                },
+                {
+                    name: "Naruto Shippuden",
+                    value: "Naruto Shippuden"
+                },
+                {
+                    name: "One Punch Man",
+                    value: "One Punch Man"
+                },
+                {
+                    name: "Chainsaw Man",
+                    value: "Chainsaw Man"
+                },
+                {
+                    name: "Metal Alchemist",
+                    value: "Metal Alchemist"
+                },
+            ]
+            break;
+
+        case "Warner Bros":
+            teamByUniverse = [
+                {
+                    name: "Ben 10",
+                    value: "Ben 10"
+                }
+            ]    
+        break;
     }
 
     return (
@@ -354,6 +412,7 @@ function ModalChangeCharacters({
                             <option value="George Lucas">George Lucas</option>
                             <option value="IDW Publishing">IDW Publishing</option>
                             <option value="Image Comics">Image Comics</option>
+                            <option value="Warner Bros">Warner Bros</option>
                         </select>
                     </div>
 

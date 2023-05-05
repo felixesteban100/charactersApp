@@ -54,7 +54,6 @@ type Character = {
 
 function ModalTeamMembers({ teamMembers, team, universe }: ModalTeamMembersProps) {
   return (
-
     <div>
       <div>
         <input type="checkbox" id="my-modal-membersList" className="modal-toggle" />
@@ -64,7 +63,7 @@ function ModalTeamMembers({ teamMembers, team, universe }: ModalTeamMembersProps
             <p className="text-lg font-bold">Members of {team === "All" ? universe : team}</p>
             <p>Total number of members: {teamMembers?.length}</p>
             <div className='flex flex-col gap-5'>
-              
+
               <table className="table w-full">
                 <thead>
                   <tr>
@@ -78,8 +77,7 @@ function ModalTeamMembers({ teamMembers, team, universe }: ModalTeamMembersProps
                   {
                     teamMembers !== undefined &&
                     teamMembers.map((currentMember: Character) => (
-                      <tr key={currentMember.slug} className="hover">
-                        {/* <td className="invisible w-0"></td> */}
+                      <tr key={currentMember.slug} className={`hover`}>
                         <td>{currentMember.name}</td>
                         <td>{currentMember.biography.publisher}</td>
                         <td>{currentMember.biography.alignment}</td>
