@@ -80,6 +80,7 @@ function App() {
   const [universe, setUniverse] = useLocalStorage<string>("CHARACTERS_APP_UNIVERSE", "All")
   const [team, setTeam] = useLocalStorage<string>("CHARACTERS_APP_TEAM", "All")
   const [gender, setGender] = useLocalStorage<string>("CHARACTERS_APP_GENDER", "All")
+  const [race, setRace] = useLocalStorage<string>("CHARACTERS_APP_RACE", "All")
 
 
   const [heroSection, setHeroSection] = useLocalStorage("CHARACTERS_APP_HEROSECTION", {
@@ -179,14 +180,87 @@ function App() {
   }
 
   function confirmConditions(current: Character) {
-    if (side === "All" && universe === "All" && gender === "All") return current
-    if (side !== 'All' && universe === "All" && gender === "All" && (current.biography.alignment === side)) return current
-    if (side !== 'All' && universe === "All" && gender !== "All" && (current.biography.alignment === side) && (current.appearance.gender === gender)) return current
-    if (side !== 'All' && universe !== "All" && gender === "All" && (current.biography.alignment === side) && (current.biography.publisher === universe)) return current
-    if (side === 'All' && universe !== "All" && gender === "All" && (current.biography.publisher === universe)) return current
-    if (side === 'All' && universe !== "All" && gender !== "All" && (current.biography.publisher === universe) && (current.appearance.gender === gender)) return current
-    if (side === 'All' && universe === "All" && gender !== "All" && (current.appearance.gender === gender)) return current
-    if (current.biography.alignment === side && current.biography.publisher === universe && current.appearance.gender === gender) return current
+    if (side === "All"
+      && universe === "All"
+      && gender === "All"
+      && race === "All") return current
+
+    if (side !== 'All'
+      && universe === "All"
+      && gender === "All"
+      && race === "All"
+      && (current.biography.alignment === side)) return current
+
+    if (side !== 'All'
+      && universe !== "All"
+      && gender === "All"
+      && race === "All"
+      && (current.biography.alignment === side)
+      && (current.biography.publisher === universe)) return current
+
+    if (side === 'All'
+      && universe !== "All"
+      && gender === "All"
+      && race === "All"
+      && (current.biography.publisher === universe)) return current
+
+    if (side === 'All'
+      && universe !== "All"
+      && gender !== "All"
+      && race === "All"
+      && (current.biography.publisher === universe)
+      && (current.appearance.gender === gender)) return current
+
+    if (side === 'All'
+      && universe === "All"
+      && gender !== "All"
+      && race === "All"
+      && (current.appearance.gender === gender)) return current
+
+    if (side === 'All'
+      && universe === "All"
+      && gender !== "All"
+      && race !== "All"
+      && (current.appearance.gender === gender)
+      // && (current.appearance.race === race)) return current
+      && (current.appearance.race?.toLowerCase().includes(race.toLowerCase()))) return current
+
+    if (side === 'All'
+      && universe === "All"
+      && gender === "All"
+      && race !== "All"
+      // && (current.appearance.race === race)) return current
+      && (current.appearance.race?.toLowerCase().includes(race.toLowerCase()))) return current
+
+    if (side !== 'All'
+      && universe === "All"
+      && gender === "All"
+      && race !== "All"
+      && (current.appearance.race === race)
+      && (current.biography.alignment === side)) return current
+
+    if (side !== 'All'
+      && universe === "All"
+      && gender !== "All"
+      && race === "All"
+      && (current.biography.alignment === side)
+      && (current.appearance.gender === gender)) return current
+
+    if (side === 'All'
+      && universe !== "All"
+      && gender === "All"
+      && race !== "All"
+      && (current.biography.publisher === universe)
+      // && (current.appearance.race === race)) return current
+      && (current.appearance.race?.toLowerCase().includes(race.toLowerCase()))) return current
+      
+
+    if (current.biography.alignment === side
+      && current.biography.publisher === universe
+      && current.appearance.gender === gender
+      // && current.appearance.race === race) return current
+      && (current.appearance.race?.toLowerCase().includes(race.toLowerCase()))) return current
+
   }
 
   function resetCharactersSelection() {
@@ -197,6 +271,7 @@ function App() {
     localStorage.removeItem("CHARACTERS_APP_UNIVERSE")
     localStorage.removeItem("CHARACTERS_APP_TEAM")
     localStorage.removeItem("CHARACTERS_APP_GENDER")
+    localStorage.removeItem("CHARACTERS_APP_RACE")
     localStorage.removeItem("CHARACTERS_APP_HEROSECTION")
     localStorage.removeItem("CHARACTERS_APP_TEAMMEMBERS")
     // localStorage.removeItem("CHARACTERS_APP_THEME")
@@ -354,7 +429,9 @@ function App() {
               <Loading />
             </div>
             : isError || allCharactersSAVED === undefined ?
-              <Error />
+              <Error
+                message="Opps.... something happend please try again."
+              />
               :
               <div>
                 <Characters
@@ -364,8 +441,10 @@ function App() {
         }
       </div>
 
+
       <SuccessChanged
         heroSection={heroSection}
+        charactersFiltered={charactersFiltered}
       />
 
       <ModalChangeCharacters
@@ -381,6 +460,8 @@ function App() {
         setTeam={setTeam}
         gender={gender}
         setGender={setGender}
+        race={race}
+        setRace={setRace}
 
         filterCharacters={filterCharacters}
         resetCharactersSelection={resetCharactersSelection}

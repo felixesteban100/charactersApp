@@ -12,6 +12,8 @@ type ModalChangeCharactersProps = {
     setTeam: React.Dispatch<React.SetStateAction<string>>
     gender: string;
     setGender: React.Dispatch<React.SetStateAction<string>>
+    race: string;
+    setRace: React.Dispatch<React.SetStateAction<string>>
 
     filterCharacters: () => void
     resetCharactersSelection: () => void
@@ -30,6 +32,8 @@ function ModalChangeCharacters({
     setUniverse,
     team,
     setTeam,
+    race,
+    setRace,
 
     filterCharacters,
     resetCharactersSelection
@@ -340,8 +344,8 @@ function ModalChangeCharacters({
                     name: "Ben 10",
                     value: "Ben 10"
                 }
-            ]    
-        break;
+            ]
+            break;
     }
 
     return (
@@ -381,6 +385,32 @@ function ModalChangeCharacters({
                             <option value={"All"}>Both genders</option>
                             <option value={"Female"}>Female</option>
                             <option value={"Male"}>Male</option>
+                        </select>
+                    </div>
+
+                    <div className="form-control w-full">
+                        <label className="label">
+                            <span className="label-text">Pick the characters race</span>
+                        </label>
+                        <select value={race} onChange={(event) => setRace(event.target.value)} className="select select-bordered">
+                            <option value="All">All races</option>
+                            <option value="Human">Human</option>
+                            <option value="Metahuman">Metahuman</option>
+                            <option value="Alien">Alien</option>
+                            <option value="Kryptonian">Kryptonian</option>
+                            <option value="Symbiote">Symbiote</option>
+                            <option value="Mutant">Mutant</option>
+                            <option value="Atlantean">Atlantean</option>
+                            <option value="Demon">Demon</option>
+                            <option value="Android">Android</option>
+                            <option value="Cyborg">Cyborg</option>
+                            <option value="Animal">Animal</option>
+                            <option value="Zombie">Zombie</option>
+                            <option value="Amazon">Amazon</option>
+                            <option value="Eternal">Eternal</option>
+                            <option value="Inhuman">Inhuman</option>
+                            <option value="Asgardian">Asgardian </option>
+                            <option value="Cosmic Entity">Cosmic Entity</option>
                         </select>
                     </div>
 

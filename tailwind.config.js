@@ -33,7 +33,22 @@ export default {
 
   daisyui: {
     styled: true,
-    themes: ["light", "dark", "cupcake", "bumblebee", "emerald", "corporate", "synthwave", "retro", "cyberpunk", "valentine", "halloween", "garden", "forest", "aqua", "lofi", "pastel", "fantasy", "wireframe", "black", "luxury", "dracula", "cmyk", "autumn", "business", "acid", "lemonade", "night", "coffee", "winter"],
+    themes: [
+      {
+        mytheme1: {
+          "primary": "#080a91",
+          "secondary": "#d6d62c",
+          "accent": "#aaffd9",
+          "neutral": "#202B32",
+          "base-100": "#383A51",
+          "info": "#5B85F1",
+          "success": "#135852",
+          "warning": "#94710A",
+          "error": "#EA7775",
+        },
+      },
+
+      "light", "dark", "cupcake", "bumblebee", "emerald", "corporate", "synthwave", "retro", "cyberpunk", "valentine", "halloween", "garden", "forest", "aqua", "lofi", "pastel", "fantasy", "wireframe", "black", "luxury", "dracula", "cmyk", "autumn", "business", "acid", "lemonade", "night", "coffee", "winter"],
     base: true,
     utils: true,
     logs: true,
