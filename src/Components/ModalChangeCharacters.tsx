@@ -14,6 +14,7 @@ type ModalChangeCharactersProps = {
     setGender: React.Dispatch<React.SetStateAction<string>>
     race: string;
     setRace: React.Dispatch<React.SetStateAction<string>>
+    viewFavorites: () => void
 
     filterCharacters: () => void
     resetCharactersSelection: () => void
@@ -34,6 +35,7 @@ function ModalChangeCharacters({
     setTeam,
     race,
     setRace,
+    viewFavorites,
 
     filterCharacters,
     resetCharactersSelection
@@ -362,7 +364,7 @@ function ModalChangeCharacters({
                             <span className="label-text">Type the name or names</span>
                         </label>
                         <input
-                            value={characterName}
+                            value={characterName ?? ""}
                             onChange={(event) => setCharacterName(event.target.value)}
                             type="text"
                             placeholder="Batman / batman, robin..."
@@ -460,7 +462,7 @@ function ModalChangeCharacters({
                         </select>
                     </div>
 
-                    <div className="flex justify-around">
+                    <div className="flex flex-col md:flex-row gap-5 justify-around">
                         <label
                             htmlFor="my-modal-change"
                             className="btn btn-primary"
@@ -471,6 +473,13 @@ function ModalChangeCharacters({
                         <label
                             htmlFor="my-modal-change"
                             className="btn btn-warning"
+                            onClick={() => viewFavorites()}
+                        >
+                            Favorites
+                        </label>
+                        <label
+                            htmlFor="my-modal-change"
+                            className="btn btn-danger"
                             onClick={() => resetCharactersSelection()}
                         >
                             Reset filters

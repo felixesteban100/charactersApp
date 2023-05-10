@@ -1,6 +1,6 @@
 import useImageColorPalette from '../customComponents/useImageColorPalette';
 import { useEffect, useState } from 'react'
-import { motion/* , useAnimation */, stagger, useAnimate, usePresence } from "framer-motion"
+// import { motion, stagger, useAnimate, usePresence } from "framer-motion"
 // import { useInView } from "react-intersection-observer";
 
 
@@ -8,6 +8,8 @@ import { motion/* , useAnimation */, stagger, useAnimate, usePresence } from "fr
 
 type CharactersProps = {
     charactersFiltered: Character[]
+    manageFavorite: (action:string, characterSelected: Character) => void
+    favorites: Character[]
 }
 
 type Character = {
@@ -104,8 +106,8 @@ const characterEmpty: Character = {
     comics: [""]
 }
 
-function Characters({ charactersFiltered }: CharactersProps) {
-    const [isPresent, safeToRemove] = usePresence()
+function Characters({ charactersFiltered, manageFavorite, favorites }: CharactersProps) {
+    /* const [isPresent, safeToRemove] = usePresence()
     const [scope, animate] = useAnimate()
 
     useEffect(() => {
@@ -131,11 +133,10 @@ function Characters({ charactersFiltered }: CharactersProps) {
             }
             exitAnimation()
         }
+    }) */
 
-    })
 
-
-    const [selectedCharacter, setSelectedCharacter] = useState<Character>(characterEmpty)
+    // const [selectedCharacter, setSelectedCharacter] = useState<Character>(characterEmpty)
 
     function publisherIMG(publisher: string) {
         switch (publisher) {
@@ -146,10 +147,16 @@ function Characters({ charactersFiltered }: CharactersProps) {
                 return "https://upload.wikimedia.org/wikipedia/commons/3/3d/DC_Comics_logo.svg"
 
             case "Shueisha":
-                return "https://p1.hiclipart.com/preview/659/548/877/anime-logo-white-and-black-kanji-script-texts.jpg"
+                return "https://www.shueisha.co.jp/wp-content/themes/shueisha/image/en/mv/mv_subtitle_01.png"
+
+            case "George Lucas":
+                return "https://media.comicbook.com/wp-content/uploads/2012/06/120411064621_lucasfilm-logo-640x360-16x9.jpg"
 
             case "Warner Bros":
                 return "https://variety.com/wp-content/uploads/2022/04/IMG_3724.jpg"
+
+            case "Dark Horse Comics":
+                return "https://i0.wp.com/www.comicsbeat.com/wp-content/uploads/2020/03/dark-horse-logo-banner.png?fit=1200%2C500&ssl=1"
 
             default:
                 return "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRykZHBER1nS5QMUGvv0qJCJFuqtf5wPrliiiE_1hMMbCwvONjVOaYloiVHMeCyH710z7g&usqp=CAU"
@@ -177,9 +184,9 @@ function Characters({ charactersFiltered }: CharactersProps) {
                         return (
                             <div key={currentCharacter.slug}>
                                 {/* <label onClick={() => setSelectedCharacter(currentCharacter)} className="cursor-pointer" htmlFor="my-modal-specificCharacter"> */}
-                                <label onClick={() => setSelectedCharacter(currentCharacter)} className="cursor-pointer" htmlFor="my-modal">
+                                <label /* onClick={() => setSelectedCharacter(currentCharacter)} */ className="cursor-pointer" htmlFor={`my-modal-${currentCharacter.slug}`}>
                                     <div
-                                        ref={scope}
+                                    // ref={scope}
                                     >
                                         <div className="card image-full hover:opacity-1 inset-0 object-cover w-full h-[20rem] md:h-[25rem] lg:h-[35rem] bg-base-100 shadow-xl hover:scale-110 group/item">
                                             <figure>
@@ -205,58 +212,145 @@ function Characters({ charactersFiltered }: CharactersProps) {
                                         </div>
                                     </div>
                                 </label>
+                                <ModalCharacter
+                                    selectedCharacter={currentCharacter}
+                                    manageFavorite={manageFavorite}
+                                    favorites={favorites}
+                                />
                             </div>
                         )
                     })
                 }
             </div>
-
-            <ModalCharacter
-                selectedCharacter={selectedCharacter}
-            />
         </div >
     )
 }
 
 type ModalCharacterProps = {
     selectedCharacter: Character
+    manageFavorite: (action:string, characterSelected: Character) => void
+    favorites: Character[]
 }
 
-const numColors = 1
+// const numColors = 1
 
-function ModalCharacter({ selectedCharacter }: ModalCharacterProps) {
-    const [colors] = useImageColorPalette(selectedCharacter.images.md, numColors)
+function ModalCharacter({ selectedCharacter, manageFavorite, favorites }: ModalCharacterProps) {
+    // const [colors] = useImageColorPalette(selectedCharacter.images.md, numColors)
     // console.log(selectedCharacter.name, colors)
 
     const [selectedOption, setSelectedOption] = useState<"Stats" | "Appereance" | "Biography">("Stats")
 
+    function organizedComicsProperty(comics: string[] | null | undefined, publisher: string): string[] {
+        if (comics === undefined || comics === null) {
+            switch (publisher) {
+                case "Marvel Comics":
+                    return [
+                        "https://i.annihil.us/u/prod/marvel/i/mg/5/04/5d5d4cbf869ff/clean.jpg",
+                        "https://upload.wikimedia.org/wikipedia/en/1/19/Marvel_Universe_%28Civil_War%29.jpg",
+                        "https://cdn.marvel.com/u/prod/marvel/i/mg/f/70/5d5aaf2e85d4d/clean.jpg",
+                        "https://i5.walmartimages.com/asr/4bb4cfc9-ce7f-4d44-821d-dff6eae1f38b.fbf723c17381a38682b8660aaed481d9.jpeg",
+                        "https://images.saymedia-content.com/.image/t_share/MTc0MzA1MTk3OTc4Mjk4MjM2/getting-into-comics-a-general-guide.jpg",
+
+                        "https://i5.walmartimages.com/asr/4bb4cfc9-ce7f-4d44-821d-dff6eae1f38b.fbf723c17381a38682b8660aaed481d9.jpeg",
+                        "https://i5.walmartimages.com/asr/4bb4cfc9-ce7f-4d44-821d-dff6eae1f38b.fbf723c17381a38682b8660aaed481d9.jpeg",
+                        "https://i5.walmartimages.com/asr/4bb4cfc9-ce7f-4d44-821d-dff6eae1f38b.fbf723c17381a38682b8660aaed481d9.jpeg",
+                    ]
+
+                case "DC Comics":
+                    return [
+                        "http://www.moviepostersetc.com/_staticProxy/content/ff808081163c05b001169d6655243ae9/Justice_League_of_America_poster_Issue_1.jpg",
+
+                        "https://cdn.europosters.eu/image/1300/julisteet/dc-comics-collage-i15088.jpg",
+                        "https://d.newsweek.com/en/full/975273/heroes-crisis-tom-king-clay-mann-dc-comics.jpg",
+                        "https://i.pinimg.com/originals/02/fb/e3/02fbe3db4a82b9b15c9afefe2b9799a9.png",
+                        "https://i0.wp.com/batman-news.com/wp-content/uploads/2018/05/9781608878321.jpg?fit=696%2C862&quality=80&strip=info&ssl=1",
+                        "https://www.previewsworld.com/news_images/177217_889486_3.jpg",
+                    ]
+
+                case "Shueisha":
+                    return [
+                        "https://cdn.animenewsnetwork.com/hotlink/thumbnails/max1000x1500/cms/interest/134237/jump_1833_fixw_640_hq.jpg",
+                        "https://cdn.animenewsnetwork.com/hotlink/thumbnails/max1000x1500/cms/interest/134237/jump_1833_fixw_640_hq.jpg",
+                        "https://cdn.animenewsnetwork.com/hotlink/thumbnails/max1000x1500/cms/interest/134237/jump_1833_fixw_640_hq.jpg",
+                        "https://cdn.animenewsnetwork.com/hotlink/thumbnails/max1000x1500/cms/interest/134237/jump_1833_fixw_640_hq.jpg"
+                    ]
+
+                case "IDW Publishing":
+                    return [
+                        "https://images.squarespace-cdn.com/content/v1/593f201de3df288fc6465e6f/1643902801105-VUT092WGQWT7VUD66Y8M/Teenage+Mutant+Ninja+Turtles+Reborn+Vol.+1.jpg?format=1000w",
+                        "https://d1466nnw0ex81e.cloudfront.net/n_iv/600/2066186.jpg",
+                        "https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/81j8N4V4pIL.jpg",
+                        "https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/91L4+Vf8YWL._AC_UF1000,1000_QL80_.jpg"
+                    ]
+
+                case "George Lucas":
+                    return [
+                        "https://cdn.marvel.com/u/prod/marvel/i/mg/c/00/5ff32d6aad522/clean.jpg",
+                        "https://tools.toywiz.com/_images/_webp/_products/lg/apr221023.webp",
+                        "https://i0.wp.com/MynockManor.com/wp-content/uploads/2020/11/Star-Wars-11-Full-Cover-Vol-2.jpeg?ssl=1",
+                        "https://storage.googleapis.com/hipcomic/p/007ce152f644d7971541cb74253b82cf.jpg"
+                    ]
+
+                default:
+                    return [
+                        "https://img.freepik.com/free-vector/comics-poster-template_225004-800.jpg?w=2000",
+                        "https://img.freepik.com/free-vector/comics-poster-template_225004-800.jpg?w=2000",
+                        "https://img.freepik.com/free-vector/comics-poster-template_225004-800.jpg?w=2000",
+                        "https://img.freepik.com/free-vector/comics-poster-template_225004-800.jpg?w=2000"
+                    ]
+
+            }
+        }
+
+        return comics
+    }
+
     return (
-        <div>
-            <input type="checkbox" id="my-modal" className="modal-toggle" />
-            <label htmlFor="my-modal" className="modal">
+        <div key={selectedCharacter.slug}>
+            <input type="checkbox" id={`my-modal-${selectedCharacter.slug}`} className="modal-toggle" value="" />
+            <label htmlFor={`my-modal-${selectedCharacter.slug}`} className="modal">
                 <label className="" htmlFor="">
-                    <div className="rounded-md bg-base-100  my-10 h-[80vh] w-[80vw] max-w-[80rem] overflow-y-auto">
-                        <div className='flex flex-col justify-center mx-5 my-5'>
-                            <label htmlFor="my-modal" className="btn btn-sm btn-circle right-2 top-2">✕</label>
+                    <div className="rounded-md bg-base-100 h-[95vh] w-[80vw] max-w-[80rem] overflow-y-auto overflow-x-hidden">
+                        {/* <div className='flex flex-col justify-center mx-5 my-5'> */}
+                        <div className='flex flex-col justify-center mt-5'>
+                            <div className='flex justify-between mb-5 mx-5'>
+                                <label htmlFor={`my-modal-${selectedCharacter.slug}`} className="btn btn-sm btn-circle right-2 top-2">✕</label>
+                                <label className="swap swap-flip text-2xl">
+                                    <input /* id={selectedCharacter.slug} */ type="checkbox" checked={favorites.includes(selectedCharacter) ? true : false} />
+                                        <div onClick={() => manageFavorite("remove", selectedCharacter)} className="swap-on tooltip tooltip-left" data-tip="favorite">🌟</div>
+                                        <div onClick={() => manageFavorite("add", selectedCharacter)} className="swap-off tooltip tooltip-left" data-tip="not favorite">⭐</div>
+                                </label>
+                            </div>
                             <div className='flex flex-col gap-5'>
                                 <div className="w-full bg-base-200 p-5">
-                                    <div className="flex flex-col md:flex-row lg:flex-row justify-center gap-10">
-                                        <div className='flex flex-col items-center align-middle gap-3 mx-auto'>
-                                            <img
-                                                src={selectedCharacter.images.md}
-                                                className={`w-sm md:max-w-sm lg:max-w-sm rounded-lg shadow-lg `}
-                                                style={colors !== null ? { boxShadow: `0 0 10px 0 ${colors[Math.floor(Math.random() * numColors)]}` } : {}}
-                                            />
+                                    <div className="flex flex-col md:flex-row lg:flex-row justify-center">
+
+                                        <div className='flex flex-col items-center align-middle gap-3 mx-auto max-w-screen-lg'>
+                                            <div className="relative w-64 md:w-72 lg:w-96 h-[25rem] md:h-[25rem] lg:h-[35rem] bg-base-100 shadow-xl">
+                                                <figure>
+                                                    <img className="absolute w-full h-full object-cover rounded-md" src={selectedCharacter.images.md} alt={selectedCharacter.name} />
+                                                </figure>
+                                            </div>
+                                            {/* <div className='image-full inset-0 object-cover w-full h-[20rem] md:h-[25rem] lg:h-[35rem] shadow-xl'>
+                                                <figure>
+                                                    <img
+                                                        src={selectedCharacter.images.md}
+                                                        className={`w-full h-full rounded-lg shadow-lg `}
+                                                        // style={colors !== null ? { boxShadow: `0 0 10px 0 ${colors[Math.floor(Math.random() * numColors)]}` } : {}}
+                                                    />
+                                                </figure>
+                                            </div> */}
                                             <div className='self-center'>
                                                 <h1 className={`text-5xl font-bold`} /* style={colors !== null ? {color: colors[1]} : {}} */>{selectedCharacter.name}</h1>
                                                 <p className={`py-2`} /* style={colors !== null ? {color: colors[1]} : {}} */>{selectedCharacter.biography.fullName}</p>
                                             </div>
                                         </div>
+
                                         <div className='mx-auto flex flex-col justify-center gap-3 items-center w-[90%] md:w-[50%] lg:w-[50%]'>
-                                            <div className="tabs w-full justify-center">
-                                                <div onClick={() => setSelectedOption("Stats")} className={`text-[10px] md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Stats" ? "tab-active" : ""}`}>Stats</div>
-                                                <div onClick={() => setSelectedOption("Appereance")} className={`text-[10px] md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Appereance" ? "tab-active" : ""}`}>Appereance</div>
-                                                <div onClick={() => setSelectedOption("Biography")} className={`text-[10px] md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Biography" ? "tab-active" : ""}`}>Biography</div>
+                                            <div className="w-full grid grid-flow-col grid-col-3">
+                                                <div onClick={() => setSelectedOption("Stats")} className={`text-md md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Stats" ? "tab-active" : ""}`}>Stats</div>
+                                                <div onClick={() => setSelectedOption("Appereance")} className={`text-md md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Appereance" ? "tab-active" : ""}`}>Appereance</div>
+                                                <div onClick={() => setSelectedOption("Biography")} className={`text-md md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Biography" ? "tab-active" : ""}`}>Biography</div>
                                             </div>
 
                                             {
@@ -435,12 +529,24 @@ function ModalCharacter({ selectedCharacter }: ModalCharacterProps) {
                                                                         <p className='text-2xl md:text-5xl lg:text-5xl'>🔠</p>
                                                                     </div>
                                                                     <div className="stat-title">Aliases</div>
-                                                                    <div className="stat-value text-sm md:text-xl lg:text-xl">
-                                                                    {selectedCharacter.biography.aliases.map((currentAlias => {
-                                                                        return (
-                                                                            <p className='tooltip flex flex-col items-start' data-tip={currentAlias}>{currentAlias.slice(0, 10)}...</p>
-                                                                        )
-                                                                    }))}
+                                                                    {/* <div className="stat-value text-sm md:text-xl lg:text-xl">
+                                                                        {selectedCharacter.biography.aliases.map((currentAlias => {
+                                                                            return (
+                                                                                <p className='tooltip flex flex-col items-start' data-tip={currentAlias}>{currentAlias.slice(0, 10)}...</p>
+                                                                            )
+                                                                        }))}
+                                                                    </div> */}
+                                                                    <div tabIndex={0} className="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box">
+                                                                        <div className="collapse-title text-xl font-medium">
+                                                                            Aliases...
+                                                                        </div>
+                                                                        <div className="collapse-content">
+                                                                            {selectedCharacter.biography.aliases.map((currentAlias => {
+                                                                                return (
+                                                                                    <p>{currentAlias}</p>
+                                                                                )
+                                                                            }))}
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                                 <div className="stat">
@@ -448,22 +554,35 @@ function ModalCharacter({ selectedCharacter }: ModalCharacterProps) {
                                                                         <p className='text-2xl md:text-5xl lg:text-5xl'>🆎</p>
                                                                     </div>
                                                                     <div className="stat-title">Alter Egos</div>
-                                                                    <div className="stat-value text-sm md:text-xl lg:text-xl tooltip flex" data-tip={selectedCharacter.biography.alterEgos}>{selectedCharacter.biography.alterEgos === "No alter egos found." ? "Unknown" : selectedCharacter.biography.alterEgos.slice(0, 15)}</div>
+                                                                    {
+                                                                        selectedCharacter.biography.alterEgos ?
+                                                                            <div className="stat-value text-sm md:text-xl lg:text-xl tooltip flex" data-tip={selectedCharacter.biography.alterEgos}>{selectedCharacter.biography.alterEgos === "No alter egos found." ? "Unknown" : selectedCharacter.biography.alterEgos.slice(0, 15)}</div>
+                                                                            : null
+                                                                    }
+
                                                                 </div>
-                                                                {/* <div className="stat">
+                                                                <div className="stat">
                                                                     <div className="stat-figure text-secondary">
                                                                         <p className='text-2xl md:text-5xl lg:text-5xl'>👪</p>
                                                                     </div>
                                                                     <div className="stat-title">Group Affiliation</div>
-                                                                    // <div className="stat-value text-sm md:text-xl lg:text-xl tooltip" data-tip={selectedCharacter.connections.groupAffiliation.split(",")}>{selectedCharacter.connections.groupAffiliation.split(",").map(((currentGroup, index) => {
-                                                                    <div className="stat-value text-sm md:text-xl lg:text-xl tooltip flex flex-col items-start" data-tip={selectedCharacter.connections.groupAffiliation.split(",")[0]}>{selectedCharacter.connections.groupAffiliation.split(",").map(((currentGroup, index) => {
+                                                                    {/* <div className="stat-value text-sm md:text-xl lg:text-xl tooltip" data-tip={selectedCharacter.connections.groupAffiliation.split(",")}>{selectedCharacter.connections.groupAffiliation.split(",").map(((currentGroup, index) => { */}
+                                                                    {/* <div className="stat-value text-sm md:text-xl lg:text-xl tooltip flex flex-col items-start" data-tip={selectedCharacter.connections.groupAffiliation.split(",")[0]}>{selectedCharacter.connections.groupAffiliation.split(",").map(((currentGroup, index) => {
                                                                             if (index < 2) {
                                                                                 return (
                                                                                     <p>{currentGroup}</p>
                                                                                 )
                                                                             }
-                                                                    }))}...</div>
-                                                                </div> */}
+                                                                    }))}...</div> */}
+                                                                    <div tabIndex={0} className="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box">
+                                                                        <div className="collapse-title text-xl font-medium">
+                                                                            Teams...
+                                                                        </div>
+                                                                        <div className="collapse-content">
+                                                                            <p>{selectedCharacter.connections.groupAffiliation}</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                                 <div className="stat">
                                                                     <div className="stat-figure text-secondary">
                                                                         <p className='text-2xl md:text-5xl lg:text-5xl'>🧾</p>
@@ -476,44 +595,40 @@ function ModalCharacter({ selectedCharacter }: ModalCharacterProps) {
                                                             null
                                             }
                                         </div>
+
+                                    </div>
+                                    <div className='flex flex-col justify-center items-center my-10'>
+                                        <br />
+                                        <div className='w-48 md:w-60 lg:w-96 h-[5px] bg-current rounded-md' />
+                                        <br />
+                                    </div>
+
+                                    <div className='my-5'>
+                                        <div className='flex flex-col items-center justify-center'>
+                                            <p className='text-2xl font-bold'>Comics</p>
+                                            <p className='text-2xl font-bold mb-2'>💥💨💢💫💠💭💬</p>
+                                        </div>
+                                        <div className='h-[35vh] md:h-[50vh] lg:h-[80vh] flex justify-center'>
+                                            <div className="carousel lg:carousel-vertical carousel-center h-full max-w-md lg:max-w-md p-4 space-x-4 bg-base-100 rounded-box">
+                                                {organizedComicsProperty(selectedCharacter.comics, selectedCharacter.biography.publisher).map((comic) => {
+                                                    return (
+                                                        <div className="carousel-item lg:py-2">
+                                                            <img src={comic} className="rounded-box" />
+                                                        </div>
+                                                    )
+                                                })}
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
-
-
-                                {/* <div>
-                                <p>Other Info</p>
-                                <p>Biography:</p>
-                                <p>fullName: {selectedCharacter.biography.fullName}</p>
-                                <p>alignment: {selectedCharacter.biography.alignment}</p>
-                                <p>firstAppearance: {selectedCharacter.biography.firstAppearance}</p>
-                                <p>placeOfBirth: {selectedCharacter.biography.placeOfBirth}</p>
-                                <p>publisher: {selectedCharacter.biography.publisher}</p>
-                                <p>aliases: {selectedCharacter.biography.aliases}</p>
-                                <p>alterEgos: {selectedCharacter.biography.alterEgos}</p>
-                                <br />
-                                <br />
-                                <p>connections:</p>
-                                <p>groupAffiliation: {selectedCharacter.connections.groupAffiliation}</p>
-                                <p>relatives: {selectedCharacter.connections.relatives}</p>
-                                <br />
-                                <br />
-                                <p>work</p>
-                                <p>base: {selectedCharacter.work.base}</p>
-                                <p>occupation: {selectedCharacter.work.occupation}</p>
-                            </div> */}
                             </div>
                         </div>
                     </div>
                 </label>
-
             </label>
         </div>
     )
 }
 
 export default Characters
-
-
-
-
-

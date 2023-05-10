@@ -12,6 +12,7 @@ import ModalTeamMembers from './Components/ModalTeamMembers';
 import SuccessChanged from './Components/SuccessChanged';
 import Error from './Components/Error';
 import ModalSettings from './Components/ModalSettings';
+import { useEffect } from 'react';
 
 
 type Character = {
@@ -70,9 +71,12 @@ type Character = {
 // AND WATCH THIS VIDEO, MAYBE IT WILL BE HELPFUL
 //https://www.youtube.com/watch?v=0MOF_QPcgxs&list=PLTxN-M601XkQrncbxuDKY-zo9jNj6XhUe&index=32&t=10s
 
+
 function App() {
   const [allCharactersSAVED, setAllCharactersSAVED] = useLocalStorage<Character[] | []>("CHARACTERS_APP_ALLCHARACTERS", [])
   const [charactersFiltered, setCharactersFiltered] = useLocalStorage<Character[] | []>("CHARACTERS_APP_CHARACTERSFILTERED", [])
+
+  const [favorites, setFavorites] = useLocalStorage<Character[] | []>("CHARACTERS_APP_FAVORITES", [])
 
   const [characterName, setCharacterName] = useLocalStorage<string>("CHARACTERS_APP_NAME", "")
   const [howMany, setHowMany] = useLocalStorage<number>("CHARACTERS_APP_HOWMANY", 0)
@@ -81,7 +85,6 @@ function App() {
   const [team, setTeam] = useLocalStorage<string>("CHARACTERS_APP_TEAM", "All")
   const [gender, setGender] = useLocalStorage<string>("CHARACTERS_APP_GENDER", "All")
   const [race, setRace] = useLocalStorage<string>("CHARACTERS_APP_RACE", "All")
-
 
   const [heroSection, setHeroSection] = useLocalStorage("CHARACTERS_APP_HEROSECTION", {
     imgs: ["https://media.tenor.com/TY1HfJK5qQYAAAAC/galaxy-pixel-art.gif"],
@@ -106,6 +109,28 @@ function App() {
     },
     onError: (error) => console.log(error)
   })
+
+  useEffect(() => {
+    if(favorites.length === charactersFiltered.length - 1){
+      setCharactersFiltered(favorites)
+    }
+  }, [favorites])
+
+  function viewFavorites() {
+    setCharactersFiltered(favorites)
+  }
+
+  function manageFavorite(action: string, characterSelected: Character) {
+    switch (action) {
+      case "add":
+        setFavorites(prev => [...prev, characterSelected])
+        break;
+
+      case "remove":
+        setFavorites(prev => prev.filter(current => current.slug !== characterSelected.slug))
+        break;
+    }
+  }
 
   function filterCharacters() {
     if (allCharactersSAVED !== undefined) {
@@ -253,7 +278,7 @@ function App() {
       && (current.biography.publisher === universe)
       // && (current.appearance.race === race)) return current
       && (current.appearance.race?.toLowerCase().includes(race.toLowerCase()))) return current
-      
+
 
     if (current.biography.alignment === side
       && current.biography.publisher === universe
@@ -358,7 +383,7 @@ function App() {
         return ["https://m.media-amazon.com/images/I/A1nLFV0is9L._AC_UF1000,1000_QL80_.jpg", "https://oyster.ignimgs.com/wordpress/stg.ign.com/2019/09/suicide_squad_detail_-_publicity_-_embed_-_2019.jpg"]
 
       case "Demon Slayer":
-        return ["https://demonslayer-hinokami.sega.com/img/purchase/digital-standard.jpg", "https://m.media-amazon.com/images/M/MV5BZjZjNzI5MDctY2Y4YS00NmM4LTljMmItZTFkOTExNGI3ODRhXkEyXkFqcGdeQXVyNjc3MjQzNTI@._V1_.jpg", "https://www.nme.com/wp-content/uploads/2023/01/demon-slayer-season-3-swordsmith-village-arc-key-art@2000x1270.jpg"]
+        return ["https://demonslayer-hinokami.sega.com/img/purchase/digital-standard.jpg", "https://m.media-amazon.com/images/M/MV5BZjZjNzI5MDctY2Y4YS00NmM4LTljMmItZTFkOTExNGI3ODRhXkEyXkFqcGdeQXVyNjc3MjQzNTI@._V1_.jpg", "https://www.nme.com/wp-content/uploads/2023/01/demon-slayer-season-3-swordsmith-village-arc-key-art@2000x1270.jpg", "https://m.media-amazon.com/images/M/MV5BZGVlNzJkN2QtYmQ2YS00MmUzLTk0MjYtOWQ2YmVhZjMyNGZjXkEyXkFqcGdeQXVyOTA2OTk0MDg@._V1_.jpg"]
 
       case "Ben 10":
         return ["https://i.pinimg.com/originals/56/81/f2/5681f244b6d26283fa5e535e176613e9.jpg"]
@@ -436,16 +461,22 @@ function App() {
               <div>
                 <Characters
                   charactersFiltered={charactersFiltered}
+                  manageFavorite={manageFavorite}
+                  favorites={favorites}
                 />
               </div>
         }
       </div>
 
 
-      <SuccessChanged
-        heroSection={heroSection}
-        charactersFiltered={charactersFiltered}
-      />
+      {
+        isLoading === false ?
+          <SuccessChanged
+            heroSection={heroSection}
+            charactersFiltered={charactersFiltered}
+          /> :
+          null
+      }
 
       <ModalChangeCharacters
         characterName={characterName}
@@ -462,6 +493,8 @@ function App() {
         setGender={setGender}
         race={race}
         setRace={setRace}
+        viewFavorites={viewFavorites}
+
 
         filterCharacters={filterCharacters}
         resetCharactersSelection={resetCharactersSelection}

@@ -48,6 +48,34 @@ export default {
         },
       },
 
+      {
+        mytheme2: {
+          "primary": "#8bd354",
+          "secondary": "#cc2a73",
+          "accent": "#2821f2",
+          "neutral": "#24202D",
+          "base-100": "#374C5C",
+          "info": "#1659E9",
+          "success": "#4BD89D",
+          "warning": "#C16F0B",
+          "error": "#F4153A",
+        },
+      },
+
+      {
+        mytheme3: {
+          "primary": "#3b82f6",
+          "secondary": "#6ee9f4",
+          "accent": "#20bf6f",
+          "neutral": "#221924",
+          "base-100": "#374151",
+          "info": "#9EB9EA",
+          "success": "#1AC77C",
+          "warning": "#AF6504",
+          "error": "#EA413E",
+        },
+      },
+
       "light", "dark", "cupcake", "bumblebee", "emerald", "corporate", "synthwave", "retro", "cyberpunk", "valentine", "halloween", "garden", "forest", "aqua", "lofi", "pastel", "fantasy", "wireframe", "black", "luxury", "dracula", "cmyk", "autumn", "business", "acid", "lemonade", "night", "coffee", "winter"],
     base: true,
     utils: true,
