@@ -15,6 +15,8 @@ type ModalChangeCharactersProps = {
     race: string;
     setRace: React.Dispatch<React.SetStateAction<string>>
     viewFavorites: () => void
+    includeNameOrExactName: boolean;
+    setIncludeNameOrExactName: React.Dispatch<React.SetStateAction<boolean>>
 
     filterCharacters: () => void
     resetCharactersSelection: () => void
@@ -36,6 +38,8 @@ function ModalChangeCharacters({
     race,
     setRace,
     viewFavorites,
+    includeNameOrExactName,
+    setIncludeNameOrExactName,
 
     filterCharacters,
     resetCharactersSelection
@@ -363,20 +367,32 @@ function ModalChangeCharacters({
                         <label className="label">
                             <span className="label-text">Type the name or names</span>
                         </label>
-                        <input
-                            value={characterName ?? ""}
-                            onChange={(event) => setCharacterName(event.target.value)}
-                            type="text"
-                            placeholder="Batman / batman, robin..."
-                            className="input input-bordered w-full"
-                        />
+                        <div className="input-group w-full">
+                            <input
+                                value={characterName === null ? "" : characterName}
+                                onChange={(event) => setCharacterName(event.target.value)}
+                                type="text"
+                                placeholder="Batman / batman, robin..."
+                                className="input input-bordered w-full"
+                            />
+                            <label className="swap swap-flip text-4xl">
+                                <input 
+                                    type="checkbox" 
+                                    onChange={() => setIncludeNameOrExactName(prev => !prev)} 
+                                    checked={includeNameOrExactName}   
+                                />
+
+                                <div className="swap-on tooltip" data-tip="includes name">🔄</div>
+                                <div className="swap-off tooltip" data-tip="exact name">🎯</div>
+                            </label>
+                        </div>
                     </div>
 
                     <div className="form-control w-full">
                         <label className="label">
                             <span className="label-text">Select how many characters | [0 means All]</span>
                         </label>
-                        <input value={howMany} onChange={(event) => setHowMany(parseInt(event.target.value))} type="number" placeholder="Type how many characters to show" className="input input-bordered w-full" min={1} />
+                        <input value={howMany ?? ""} onChange={(event) => setHowMany(parseInt(event.target.value))} type="number" placeholder="Type how many characters to show" className="input input-bordered w-full" min={1} />
                     </div>
 
                     <div className="form-control w-full">

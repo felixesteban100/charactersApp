@@ -7,12 +7,13 @@ import ModalChangeCharacters from './Components/ModalChangeCharacters';
 import Footer from './Components/Footer';
 import Loading from './Components/Loading';
 import useLocalStorage from './customComponents/useLocalStorage';
-import Hero from './Components/Hero';
+import HeroSelector from './Components/Hero';
 import ModalTeamMembers from './Components/ModalTeamMembers';
 import SuccessChanged from './Components/SuccessChanged';
 import Error from './Components/Error';
 import ModalSettings from './Components/ModalSettings';
 import { useEffect } from 'react';
+import LoadingCard from './Components/LoadingCard';
 
 
 type Character = {
@@ -79,12 +80,13 @@ function App() {
   const [favorites, setFavorites] = useLocalStorage<Character[] | []>("CHARACTERS_APP_FAVORITES", [])
 
   const [characterName, setCharacterName] = useLocalStorage<string>("CHARACTERS_APP_NAME", "")
-  const [howMany, setHowMany] = useLocalStorage<number>("CHARACTERS_APP_HOWMANY", 0)
+  const [howMany, setHowMany] = useLocalStorage<number>("CHARACTERS_APP_HOWMANY", 6)
   const [side, setSide] = useLocalStorage<string>("CHARACTERS_APP_SIDE", "All")
   const [universe, setUniverse] = useLocalStorage<string>("CHARACTERS_APP_UNIVERSE", "All")
   const [team, setTeam] = useLocalStorage<string>("CHARACTERS_APP_TEAM", "All")
   const [gender, setGender] = useLocalStorage<string>("CHARACTERS_APP_GENDER", "All")
   const [race, setRace] = useLocalStorage<string>("CHARACTERS_APP_RACE", "All")
+  const [includeNameOrExactName, setIncludeNameOrExactName] = useLocalStorage("CHARACTERS_APP_INCLUDENAMEOREXACTNAME", false)
 
   const [heroSection, setHeroSection] = useLocalStorage("CHARACTERS_APP_HEROSECTION", {
     imgs: ["https://media.tenor.com/TY1HfJK5qQYAAAAC/galaxy-pixel-art.gif"],
@@ -111,7 +113,7 @@ function App() {
   })
 
   useEffect(() => {
-    if(favorites.length === charactersFiltered.length - 1){
+    if (favorites.length === charactersFiltered.length - 1) {
       setCharactersFiltered(favorites)
     }
   }, [favorites])
@@ -151,9 +153,17 @@ function App() {
 
         name.forEach((currentName) => {
           randomizedArray.forEach(charac => {
-            if (charac.name.toLowerCase().includes(currentName.toLowerCase())) {
-              resultArr.push(charac)
+            if (includeNameOrExactName === true) {
+              if (charac.name.toLowerCase().includes(currentName.toLowerCase())) {
+                resultArr.push(charac)
+              }
+            } else {
+              if (charac.name.toLowerCase() === currentName.toLowerCase()) {
+                resultArr.push(charac)
+              }
             }
+
+
           })
         })
         firstFilter = resultArr
@@ -303,7 +313,7 @@ function App() {
 
     if (allCharactersSAVED) setCharactersFiltered(allCharactersSAVED.sort(() => 0.5 - Math.random()).slice(0, 6))
     setCharacterName("")
-    setHowMany(0)
+    setHowMany(6)
     setSide("All")
     setUniverse("All")
     setTeam("All")
@@ -313,7 +323,7 @@ function App() {
   }
 
   /* teams */
-  const listOfTeams = [
+  const listOfTeamsWithImgInTheHeroSection = [
     "Avengers",
     "Justice League",
     "Fantastic Four(Original)",
@@ -332,7 +342,8 @@ function App() {
     "Demon Slayer",
     "Ben 10",
     "New Guardians",
-    "Lantern Corps"
+    "Lantern Corps",
+    "Hulk Family"
   ]
   function teamIMG(teamName: string) {
     // change these for comics images like the guardians of the galaxy one (for a more responsive design)
@@ -394,6 +405,9 @@ function App() {
       case "Lantern Corps":
         return ["https://qph.cf2.quoracdn.net/main-qimg-2673d6d36ab6b962fecea97a8dc6f231-lq"]
 
+      case "Hulk Family":
+        return ["https://i.pinimg.com/originals/c4/6b/4c/c46b4cad4416a382de72896f9e0d5b9f.jpg", "https://comicvine.gamespot.com/a/uploads/original/11134/111347244/7079315-4150626068-96446.jpg", "https://i.pinimg.com/736x/4e/e0/1f/4ee01f483be7ac031996b51e30e8e8e1--hulk-hulk-walter-obrien.jpg"]
+
       default:
         return ["https://media.tenor.com/TY1HfJK5qQYAAAAC/galaxy-pixel-art.gif"]
     }
@@ -401,57 +415,28 @@ function App() {
   /* teams */
 
 
+
+
   return (
     <div data-theme={theme} className={`min-h-screen transition-colors duration-500 bg-base-200`}>
       <Header />
 
-      <div>
-        {
-          universe === "Marvel Comics" && !listOfTeams.includes(team) ?
-            <Hero
-              imgs={["https://i.chzbgr.com/full/8448259840/h26325623/superheroes-the-avengers-marvel-spider-man-8-bit-gif-art"]}
-              title="MARVEL COMICS"
-              description="Look for all the characters possible ever creaded"
-            />
-            : universe === "DC Comics" && !listOfTeams.includes(team) ?
-              <Hero
-                imgs={["https://i.gifer.com/XtUG.gif"]}
-                title="DC COMICS"
-                description="Look for all the characters possible ever creaded"
-              />
-              : universe === "George Lucas" && !listOfTeams.includes(team) ?
-                <Hero
-                  imgs={["https://mir-s3-cdn-cf.behance.net/project_modules/max_632/10c76f30299121.561ce8fba1cb0.gif"]}
-                  title="GEORGE LUCAS"
-                  description="Look for all the characters possible ever creaded"
-                />
-                : universe === "Shueisha" && !listOfTeams.includes(team) ?
-                  <Hero
-                    imgs={["https://wallpapercave.com/wp/wp5104275.jpg", "https://i.pinimg.com/736x/f7/23/10/f72310b21418359a9c7e3922fbafb4a5.jpg", "https://e1.pxfuel.com/desktop-wallpaper/479/745/desktop-wallpaper-manga-iphone-posted-by-ethan-sellers-shonen-jump-iphone.jpg", "https://e1.pxfuel.com/desktop-wallpaper/872/47/desktop-wallpaper-shonen-jump-vs-anime-all-stars-by-supersaiyancrash-manga-anime-digital-4961x3508-for-your-mobile-tablet-shonen-jump-iphone.jpg"]}
-                    title="ANIME - MANGA - SHUEISHA"
-                    description="Look for all the anime | manga characters possible ever creaded"
-                  />
-                  : team !== "All" && listOfTeams.includes(team) ?
-                    <Hero
-                      imgs={heroSection.imgs}
-                      title={heroSection.title}
-                      description={heroSection.description}
-                    />
-                    :
-                    <Hero
-                      imgs={["https://media.tenor.com/TY1HfJK5qQYAAAAC/galaxy-pixel-art.gif"]}
-                      title="Characters App"
-                      description="Look for all the characters possible ever creaded"
-                    />
-        }
-      </div>
-
+      <HeroSelector
+        selectedOne={`${team !== "All" ? universe : team} ${(!listOfTeamsWithImgInTheHeroSection.includes(team) && team !== "All") ? "WithOutImage" : ""}`}
+        heroSection={heroSection}
+      />
 
       <div>
         {
           isLoading ?
-            <div>
-              <Loading />
+            <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-[90%] gap-10 mx-auto pt-[2rem] '>
+              {charactersFiltered.map((current) => {
+                return (
+                  <div key={current._id}>
+                    <LoadingCard />
+                  </div>
+                )
+              })}
             </div>
             : isError || allCharactersSAVED === undefined ?
               <Error
@@ -494,6 +479,8 @@ function App() {
         race={race}
         setRace={setRace}
         viewFavorites={viewFavorites}
+        includeNameOrExactName={includeNameOrExactName}
+        setIncludeNameOrExactName={setIncludeNameOrExactName}
 
 
         filterCharacters={filterCharacters}

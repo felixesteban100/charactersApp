@@ -1,5 +1,5 @@
-import useImageColorPalette from '../customComponents/useImageColorPalette';
-import { useEffect, useState } from 'react'
+// import useImageColorPalette from '../customComponents/useImageColorPalette';
+import { /* useEffect, */ useState } from 'react'
 // import { motion, stagger, useAnimate, usePresence } from "framer-motion"
 // import { useInView } from "react-intersection-observer";
 
@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react'
 
 type CharactersProps = {
     charactersFiltered: Character[]
-    manageFavorite: (action:string, characterSelected: Character) => void
+    manageFavorite: (action: string, characterSelected: Character) => void
     favorites: Character[]
 }
 
@@ -59,7 +59,7 @@ type Character = {
     comics?: string[];
 }
 
-const characterEmpty: Character = {
+/* const characterEmpty: Character = {
     powerstats: {
         intelligence: 0,
         strength: 0,
@@ -104,7 +104,7 @@ const characterEmpty: Character = {
     name: "",
     slug: "",
     comics: [""]
-}
+} */
 
 function Characters({ charactersFiltered, manageFavorite, favorites }: CharactersProps) {
     /* const [isPresent, safeToRemove] = usePresence()
@@ -177,64 +177,64 @@ function Characters({ charactersFiltered, manageFavorite, favorites }: Character
     }
 
     return (
-        <div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-[90%] gap-10 mx-auto pt-[2rem] ">
-                {
-                    charactersFiltered.map((currentCharacter, index) => {
-                        return (
-                            <div key={currentCharacter.slug}>
-                                {/* <label onClick={() => setSelectedCharacter(currentCharacter)} className="cursor-pointer" htmlFor="my-modal-specificCharacter"> */}
-                                <label /* onClick={() => setSelectedCharacter(currentCharacter)} */ className="cursor-pointer" htmlFor={`my-modal-${currentCharacter.slug}`}>
-                                    <div
-                                    // ref={scope}
-                                    >
-                                        <div className="card image-full hover:opacity-1 inset-0 object-cover w-full h-[20rem] md:h-[25rem] lg:h-[35rem] bg-base-100 shadow-xl hover:scale-110 group/item">
-                                            <figure>
-                                                <img className="w-full h-full" src={currentCharacter.images.md} alt={currentCharacter.name} />
-                                            </figure>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-[90%] gap-10 mx-auto pt-[2rem] ">
+            {
+                charactersFiltered.map((currentCharacter) => {
+                    return (
+                        <div key={`${currentCharacter._id}`}>
+                            {/* <label onClick={() => setSelectedCharacter(currentCharacter)} className="cursor-pointer" htmlFor="my-modal-specificCharacter"> */}
+                            <label /* onClick={() => setSelectedCharacter(currentCharacter)} */ className="cursor-pointer" htmlFor={`my-modal-${currentCharacter.slug}`}>
+                                <div
+                                // ref={scope}
+                                >
+                                    <div className="card image-full hover:opacity-1 inset-0 object-cover w-full h-[20rem] md:h-[25rem] lg:h-[35rem] bg-base-100 shadow-xl hover:scale-110 group/item">
+                                        <figure>
+                                            <img className="w-full h-full" src={currentCharacter.images.md} alt={currentCharacter.name} loading="lazy" />
+                                        </figure>
 
-                                            <div className="card-body group/edit invisible group-hover/item:visible transition delay-150 duration-300 ease-in-out flex flex-col justify-between">
-                                                <div>
-                                                    <h2 className="card-title text-xl md:text-2xl lg:text-3xl">{currentCharacter.name}</h2>
-
-                                                </div>
-
-                                                <div className="card-actions justify-end">
-                                                    <div className='flex w-full justify-between'>
-                                                        <img className='h-[7vw] w-[15vw] sm:h-[7vw] sm:w-[15vw] md:h-[3rem] md:w-[7rem] lg:h-[3rem] lg:w-[7rem] self-center' src={publisherIMG(currentCharacter.biography.publisher)} alt="" />
-                                                        <div className="tooltip" data-tip={currentCharacter.biography.alignment === "good" ? "Hero" : currentCharacter.biography.alignment === "bad" ? "Villain" : "Anti-hero"}>
-                                                            {getAligmentIMG(currentCharacter.biography.alignment)}
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                        <div className="card-body group/edit invisible group-hover/item:visible transition delay-150 duration-300 ease-in-out flex flex-col justify-between">
+                                            <div>
+                                                <h2 className="card-title text-xl md:text-2xl lg:text-3xl">{currentCharacter.name}</h2>
 
                                             </div>
+
+                                            <div className="card-actions justify-end">
+                                                <div className='flex w-full justify-between'>
+                                                    <img className='h-[7vw] w-[15vw] sm:h-[7vw] sm:w-[15vw] md:h-[3rem] md:w-[7rem] lg:h-[3rem] lg:w-[7rem] self-center' src={publisherIMG(currentCharacter.biography.publisher)} alt="" loading="lazy" />
+                                                    <div className="tooltip" data-tip={currentCharacter.biography.alignment === "good" ? "Hero" : currentCharacter.biography.alignment === "bad" ? "Villain" : "Anti-hero"}>
+                                                        {getAligmentIMG(currentCharacter.biography.alignment)}
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </div>
-                                </label>
-                                <ModalCharacter
-                                    selectedCharacter={currentCharacter}
-                                    manageFavorite={manageFavorite}
-                                    favorites={favorites}
-                                />
-                            </div>
-                        )
-                    })
-                }
-            </div>
-        </div >
+                                </div>
+                            </label>
+                            <ModalCharacter
+                                key={currentCharacter._id}
+                                selectedCharacter={currentCharacter}
+                                manageFavorite={manageFavorite}
+                                favorites={favorites}
+                            />
+                        </div>
+                    )
+                })
+            }
+        </div>
     )
 }
 
 type ModalCharacterProps = {
     selectedCharacter: Character
-    manageFavorite: (action:string, characterSelected: Character) => void
+    manageFavorite: (action: string, characterSelected: Character) => void
     favorites: Character[]
 }
 
-// const numColors = 1
+
 
 function ModalCharacter({ selectedCharacter, manageFavorite, favorites }: ModalCharacterProps) {
+    // const numColors = 1
     // const [colors] = useImageColorPalette(selectedCharacter.images.md, numColors)
     // console.log(selectedCharacter.name, colors)
 
@@ -306,7 +306,7 @@ function ModalCharacter({ selectedCharacter, manageFavorite, favorites }: ModalC
     }
 
     return (
-        <div key={selectedCharacter.slug}>
+        <div key={selectedCharacter._id}>
             <input type="checkbox" id={`my-modal-${selectedCharacter.slug}`} className="modal-toggle" value="" />
             <label htmlFor={`my-modal-${selectedCharacter.slug}`} className="modal">
                 <label className="" htmlFor="">
@@ -316,9 +316,29 @@ function ModalCharacter({ selectedCharacter, manageFavorite, favorites }: ModalC
                             <div className='flex justify-between mb-5 mx-5'>
                                 <label htmlFor={`my-modal-${selectedCharacter.slug}`} className="btn btn-sm btn-circle right-2 top-2">✕</label>
                                 <label className="swap swap-flip text-2xl">
-                                    <input /* id={selectedCharacter.slug} */ type="checkbox" checked={favorites.includes(selectedCharacter) ? true : false} />
-                                        <div onClick={() => manageFavorite("remove", selectedCharacter)} className="swap-on tooltip tooltip-left" data-tip="favorite">🌟</div>
-                                        <div onClick={() => manageFavorite("add", selectedCharacter)} className="swap-off tooltip tooltip-left" data-tip="not favorite">⭐</div>
+                                    <input
+                                        onChange={() => {
+                                            if (favorites.includes(selectedCharacter)) {
+                                                manageFavorite("remove", selectedCharacter)
+                                            } else {
+                                                manageFavorite("add", selectedCharacter)
+                                            }
+                                        }}
+                                        type="checkbox"
+                                        checked={favorites.includes(selectedCharacter) ? true : false}
+                                    />
+                                    <div /* onClick={() => manageFavorite("remove", selectedCharacter)} */ 
+                                        className="swap-on tooltip tooltip-left" 
+                                        data-tip="favorite"
+                                    >
+                                        🌟
+                                    </div>
+                                    <div /* onClick={() => manageFavorite("add", selectedCharacter)} */ 
+                                        className="swap-off tooltip tooltip-left" 
+                                        data-tip="not favorite"
+                                    >
+                                        ⭐
+                                    </div>
                                 </label>
                             </div>
                             <div className='flex flex-col gap-5'>
@@ -328,7 +348,7 @@ function ModalCharacter({ selectedCharacter, manageFavorite, favorites }: ModalC
                                         <div className='flex flex-col items-center align-middle gap-3 mx-auto max-w-screen-lg'>
                                             <div className="relative w-64 md:w-72 lg:w-96 h-[25rem] md:h-[25rem] lg:h-[35rem] bg-base-100 shadow-xl">
                                                 <figure>
-                                                    <img className="absolute w-full h-full object-cover rounded-md" src={selectedCharacter.images.md} alt={selectedCharacter.name} />
+                                                    <img className="absolute w-full h-full object-cover rounded-md" src={selectedCharacter.images.md} alt={selectedCharacter.name} loading="lazy" />
                                                 </figure>
                                             </div>
                                             {/* <div className='image-full inset-0 object-cover w-full h-[20rem] md:h-[25rem] lg:h-[35rem] shadow-xl'>
@@ -499,7 +519,9 @@ function ModalCharacter({ selectedCharacter, manageFavorite, favorites }: ModalC
                                                                         }
                                                                     </div>
                                                                     <div className="stat-title">Alignment</div>
-                                                                    <div className="stat-value text-sm md:text-xl lg:text-xl">{selectedCharacter.biography.alignment}</div>
+                                                                    <div className="stat-value text-sm md:text-xl lg:text-xl">
+                                                                        {selectedCharacter.biography.alignment === "good" ? "Hero" : selectedCharacter.biography.alignment === "bad" ? "Villain" : "Anti-Hero"}
+                                                                    </div>
                                                                 </div>
                                                                 <div className="stat">
                                                                     <div className="stat-figure text-primary">
@@ -613,7 +635,7 @@ function ModalCharacter({ selectedCharacter, manageFavorite, favorites }: ModalC
                                                 {organizedComicsProperty(selectedCharacter.comics, selectedCharacter.biography.publisher).map((comic) => {
                                                     return (
                                                         <div className="carousel-item lg:py-2">
-                                                            <img src={comic} className="rounded-box" />
+                                                            <img className="rounded-box h-full w-full" src={comic}  loading="lazy" />
                                                         </div>
                                                     )
                                                 })}

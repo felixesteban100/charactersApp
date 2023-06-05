@@ -7,13 +7,13 @@ function Footer() {
           <span className="footer-title">Featured</span>
           <div className="flex flex-col gap-2 justify-center align-middle">
             <a className="w-full" href="https://www.marvel.com">
-              <img className="h-10 w-full" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Marvel_Logo.svg/2560px-Marvel_Logo.svg.png" alt="" />
+              <img className="h-10 w-full" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Marvel_Logo.svg/2560px-Marvel_Logo.svg.png" alt="" loading="lazy" />
             </a>
             <a href="https://www.dc.com">
-              <img className="h-10 mx-auto" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/DC_Comics_logo.svg/1200px-DC_Comics_logo.svg.png" alt="" />
+              <img className="h-10 mx-auto" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/DC_Comics_logo.svg/1200px-DC_Comics_logo.svg.png" alt="" loading="lazy" />
             </a>
             <a href="https://www.starwars.com">
-              <img className="h-10 mx-auto" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Star_Wars_Logo.svg/2560px-Star_Wars_Logo.svg.png" alt="" />
+              <img className="h-10 mx-auto" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Star_Wars_Logo.svg/2560px-Star_Wars_Logo.svg.png" alt="" loading="lazy" />
             </a>
             <a className="link link-hover mx-auto">And More...</a>
             {/* <a href="">
