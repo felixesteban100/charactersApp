@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import LoadingCard from '../Components/LoadingCard';
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 //https://heroes-backend.onrender.com/
 
@@ -270,6 +271,7 @@ type ModalCharacterProps = {
     favorites: Character[]
     charactersFiltered: Character[]
 }
+
 function ModalCharacter({ manageFavorite, favorites, charactersFiltered }: ModalCharacterProps) {
     const [selectedOption, setSelectedOption] = useState<"Stats" | "Appereance" | "Biography">("Stats")
 
@@ -376,6 +378,7 @@ function ModalCharacter({ manageFavorite, favorites, charactersFiltered }: Modal
                                                 </div>
                                             </label>
                                         </div>
+
                                         <div className='flex flex-col gap-5'>
                                             <div className="w-full bg-base-200 p-5">
                                                 <div className="flex flex-col md:flex-row lg:flex-row justify-center">
@@ -648,13 +651,27 @@ function ModalCharacter({ manageFavorite, favorites, charactersFiltered }: Modal
                                                         <div className="carousel lg:carousel-vertical carousel-center h-full max-w-md lg:max-w-md p-4 space-x-4 bg-base-100 rounded-box">
                                                             {organizedComicsProperty(selectedCharacter.comics, selectedCharacter.biography.publisher).map((comic, index) => {
                                                                 return (
-                                                                    <div key={`${comic}-${index}`} className="carousel-item lg:py-2">
+                                                                    <label key={`${selectedCharacter._id}-${index}`} className="carousel-item lg:py-2" htmlFor={`my-modal-comic-${selectedCharacter.name}-${index}`}>
                                                                         <img className="rounded-box h-full w-full" src={comic} loading="lazy" />
-                                                                    </div>
+                                                                    </label>
                                                                 )
                                                             })}
                                                         </div>
                                                     </div>
+
+                                                    {organizedComicsProperty(selectedCharacter.comics, selectedCharacter.biography.publisher).map((comic, index) => {
+                                                        return (
+                                                            <div key={`comic-${selectedCharacter.name}-${index}`} className=''>
+                                                                <ComicZoom
+                                                                    comic={comic}
+                                                                    character={selectedCharacter.name}
+                                                                    index={index}
+                                                                />
+                                                            </div>
+                                                        )
+                                                    })}
+
+
 
                                                 </div>
                                             </div>
@@ -666,6 +683,46 @@ function ModalCharacter({ manageFavorite, favorites, charactersFiltered }: Modal
                     </div>
                 )
             })}
+        </div>
+    )
+}
+
+type comicZoomProps = {
+    comic: string,
+    character: string,
+    index: number
+}
+
+function ComicZoom({ comic, character, index }: comicZoomProps) {
+    return (
+        <div className='w-full h-auto'>
+            <input type="checkbox" id={`my-modal-comic-${character}-${index}`} className="modal-toggle"  />
+            <label htmlFor={`my-modal-comic-${character}-${index}`} className="modal">
+                <label className="" htmlFor="">
+                    <div className="rounded-md bg-base-100 w-[90vw] max-w-[40rem] overflow-y-auto overflow-x-hidden flex justify-center p-5">
+                        <TransformWrapper
+                            /* initialScale={1}
+                            initialPositionX={100}
+                            initialPositionY={100} */
+                        >
+                            {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
+                                <React.Fragment >
+                                    <div className="tools absolute z-10 bottom-10 ">
+                                        <button className='btn btn-circle hover:bg-primary' onClick={() => zoomIn()}>+</button>
+                                        <button className='btn btn-circle hover:bg-primary' onClick={() => zoomOut()}>-</button>
+                                        <button className='btn btn-circle hover:bg-primary' onClick={() => resetTransform()}>x</button>
+                                    </div>
+                                    <TransformComponent>
+                                        <img /* className="w-full h-full object-cover rounded-md" */ src={comic} alt={`Comic of ${character}`} loading="lazy" />
+                                        {/* <div>Comic of {character}</div> */}
+                                    </TransformComponent>
+                                </React.Fragment>
+                            )}
+                        </TransformWrapper>
+                    </div>
+                </label>
+            </label>
+
         </div>
     )
 }
