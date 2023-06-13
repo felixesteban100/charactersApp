@@ -17,6 +17,8 @@ type ModalChangeCharactersProps = {
     viewFavorites: () => void
     includeNameOrExactName: boolean;
     setIncludeNameOrExactName: React.Dispatch<React.SetStateAction<boolean>>
+    characterOrFullName: boolean,
+    setCharacterOrFullName: React.Dispatch<React.SetStateAction<boolean>>,
 
     filterCharacters: () => void
     resetCharactersSelection: () => void
@@ -40,6 +42,8 @@ function ModalChangeCharacters({
     viewFavorites,
     includeNameOrExactName,
     setIncludeNameOrExactName,
+    characterOrFullName,
+    setCharacterOrFullName,
 
     filterCharacters,
     resetCharactersSelection
@@ -372,18 +376,29 @@ function ModalChangeCharacters({
                                 value={characterName === null ? "" : characterName}
                                 onChange={(event) => setCharacterName(event.target.value)}
                                 type="text"
-                                placeholder="Batman / batman, robin..."
+                                placeholder={characterOrFullName === false ? "Batman / Batman, Ironman..." : "Bruce Wayne, Tony Stark..."}
                                 className="input input-bordered w-full"
                             />
                             <label className="swap swap-flip text-4xl">
-                                <input 
-                                    type="checkbox" 
-                                    onChange={() => setIncludeNameOrExactName(prev => !prev)} 
-                                    checked={includeNameOrExactName}   
+                                <input
+                                    type="checkbox"
+                                    onChange={() => setIncludeNameOrExactName(prev => !prev)}
+                                    checked={includeNameOrExactName}
                                 />
 
                                 <div className="swap-on tooltip" data-tip="includes name">🔄</div>
                                 <div className="swap-off tooltip" data-tip="exact name">🎯</div>
+                            </label>
+
+                            <label className="swap swap-flip text-4xl">
+                                <input
+                                    type="checkbox"
+                                    onChange={() => setCharacterOrFullName(prev => !prev)}
+                                    checked={characterOrFullName}
+                                />
+
+                                <div className="swap-on tooltip" data-tip="person name">😀</div>
+                                <div className="swap-off tooltip" data-tip="character name">🦸‍♂️</div>
                             </label>
                         </div>
                     </div>

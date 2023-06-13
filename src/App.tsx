@@ -77,6 +77,7 @@ function App() {
 
   const [favorites, setFavorites] = useLocalStorage<Character[] | []>("CHARACTERS_APP_FAVORITES", [])
 
+
   const [characterName, setCharacterName] = useLocalStorage<string>("CHARACTERS_APP_NAME", "")
   const [howMany, setHowMany] = useLocalStorage<number>("CHARACTERS_APP_HOWMANY", 6)
   const [side, setSide] = useLocalStorage<string>("CHARACTERS_APP_SIDE", "All")
@@ -85,6 +86,7 @@ function App() {
   const [gender, setGender] = useLocalStorage<string>("CHARACTERS_APP_GENDER", "All")
   const [race, setRace] = useLocalStorage<string>("CHARACTERS_APP_RACE", "All")
   const [includeNameOrExactName, setIncludeNameOrExactName] = useLocalStorage("CHARACTERS_APP_INCLUDENAMEOREXACTNAME", false)
+  const [characterOrFullName, setCharacterOrFullName] = useLocalStorage("CHARACTERS_APP_CHARACTERORFULLNAME", false)
 
   const [heroSection, setHeroSection] = useLocalStorage("CHARACTERS_APP_HEROSECTION", {
     imgs: ["https://media.tenor.com/TY1HfJK5qQYAAAAC/galaxy-pixel-art.gif"],
@@ -146,26 +148,33 @@ function App() {
       if (characterName !== "") {
         let resultArr: Character[] = []
         let name = [characterName]
+        
 
         if (characterName.includes(",")) name = characterName.split(",").map(current => current.trim())
 
         name.forEach((currentName) => {
           randomizedArray.forEach(charac => {
+            let comparison
+            
             if (includeNameOrExactName === true) {
-              if (charac.name.toLowerCase().includes(currentName.toLowerCase())) {
-                resultArr.push(charac)
-              }
+              comparison = characterOrFullName === false
+              ? charac.name.toLowerCase().includes(currentName.toLowerCase())
+              : charac.biography.fullName.toLowerCase().includes(currentName.toLowerCase())
             } else {
-              if (charac.name.toLowerCase() === currentName.toLowerCase()) {
-                resultArr.push(charac)
-              }
+              comparison = characterOrFullName === false
+              ? charac.name.toLowerCase() === currentName.toLowerCase()
+              : charac.biography.fullName.toLowerCase() === currentName.toLowerCase()
             }
 
-
+            
+            if (comparison === true) {
+              resultArr.push(charac)
+            }
           })
         })
         firstFilter = resultArr
       }
+
 
       /* filter attributes */
       if (team === "All") {
@@ -467,6 +476,8 @@ function App() {
         viewFavorites={viewFavorites}
         includeNameOrExactName={includeNameOrExactName}
         setIncludeNameOrExactName={setIncludeNameOrExactName}
+        characterOrFullName={characterOrFullName}
+        setCharacterOrFullName={setCharacterOrFullName}
 
 
         filterCharacters={filterCharacters}
