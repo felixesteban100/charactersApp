@@ -53,7 +53,7 @@ const heroSelectorLookUp: heroSelectorLookUp = {
 }
 
 function HeroSelector({ selectedOne, heroSection }: HeroSelectorProps) {
-    console.log(selectedOne)
+    // console.log(selectedOne)
 
     const selectedHero = heroSelectorLookUp[selectedOne]
 

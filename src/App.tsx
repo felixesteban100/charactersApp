@@ -1,11 +1,9 @@
 import { useQuery } from 'react-query';
 import axios from "axios"
-// import { useState , useEffect } from 'react';
 import Characters from "./Components/Characters"
 import Header from './Components/Header';
 import ModalChangeCharacters from './Components/ModalChangeCharacters';
 import Footer from './Components/Footer';
-import Loading from './Components/Loading';
 import useLocalStorage from './customComponents/useLocalStorage';
 import HeroSelector from './Components/Hero';
 import ModalTeamMembers from './Components/ModalTeamMembers';
@@ -13,7 +11,6 @@ import SuccessChanged from './Components/SuccessChanged';
 import Error from './Components/Error';
 import ModalSettings from './Components/ModalSettings';
 import { useEffect } from 'react';
-import LoadingCard from './Components/LoadingCard';
 
 
 type Character = {
@@ -414,9 +411,6 @@ function App() {
   }
   /* teams */
 
-
-
-
   return (
     <div data-theme={theme} className={`min-h-screen transition-colors duration-500 bg-base-200`}>
       <Header />
@@ -428,28 +422,19 @@ function App() {
 
       <div>
         {
-          isLoading ?
-            <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-[90%] gap-10 mx-auto pt-[2rem] '>
-              {charactersFiltered.map((current) => {
-                return (
-                  <div key={current._id}>
-                    <LoadingCard />
-                  </div>
-                )
-              })}
-            </div>
-            : isError || allCharactersSAVED === undefined ?
-              <Error
-                message="Opps.... something happend please try again."
+          isError || allCharactersSAVED === undefined ?
+            <Error
+              message="Opps.... something happend please try again."
+            />
+            :
+            <div>
+              <Characters
+                charactersFiltered={charactersFiltered}
+                manageFavorite={manageFavorite}
+                favorites={favorites}
+                isLoading={isLoading}
               />
-              :
-              <div>
-                <Characters
-                  charactersFiltered={charactersFiltered}
-                  manageFavorite={manageFavorite}
-                  favorites={favorites}
-                />
-              </div>
+            </div>
         }
       </div>
 
@@ -505,52 +490,3 @@ function App() {
 }
 
 export default App
-
-// return axios.get<Character[]>('https://heroes-backend.onrender.com/').then((response) => {
-//     // const characters = response.data
-//     // return characters.filter((current) => current.name.toLowerCase().includes(characterName.toLowerCase()))
-
-
-//     //const characters = response.data
-//     // const result: Character[] = []
-//     // let count = 0
-//     // const indices: number[] = []
-//     // while (count < 6) {
-//     //     const index = Math.floor(Math.random() * characters.length);
-
-//     //     if (!indices.includes(index)) {
-//     //         indices.push(index);
-//     //         result.push(characters[index]);
-//     //         count++;
-//     //     }
-//     // } 
-//     // console.log(result)
-//     // return result;
-
-{/* <div key={currentCharacter.slug} className="card h-fit inset-0 object-cover w-full self-center bg-base-100 shadow-xl">
-                            <div className="group/item hover:image-full">
-                                <figure>
-                                    <img src={currentCharacter.images.md} alt={currentCharacter.name} />
-                                </figure>
-                            </div>
-
-                            <div className="card-body group/edit invisible group-hover/item:visible transition delay-150 duration-300 ease-in-out">
-                                <h2 className="card-title">{currentCharacter.name}</h2>
-                                <div className='flex flex-col gap-1'>
-                                    <p>Combat: {currentCharacter.powerstats.combat}</p>
-                                    <p>Durability: {currentCharacter.powerstats.durability}</p>
-                                    <p>Intelligence: {currentCharacter.powerstats.intelligence}</p>
-                                    <p>Power: {currentCharacter.powerstats.power}</p>
-                                    <p>Speed: {currentCharacter.powerstats.speed}</p>
-                                    <p>Strength: {currentCharacter.powerstats.strength}</p>
-                                </div>
-                                <br />
-                                <br />
-                                <div className="card-actions justify-end">
-                                    <div className='flex w-full justify-between'>
-                                        <img className='h-8 w-15 self-center' src={publisherIMG(currentCharacter.biography.publisher)} alt="" />
-                                        <button className="btn btn-primary">More...</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> */}

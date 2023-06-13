@@ -1,8 +1,5 @@
-// import useImageColorPalette from '../customComponents/useImageColorPalette';
-import { /* useEffect, */ useState } from 'react'
-// import { motion, stagger, useAnimate, usePresence } from "framer-motion"
-// import { useInView } from "react-intersection-observer";
-
+import { useState } from 'react'
+import LoadingCard from '../Components/LoadingCard';
 
 //https://heroes-backend.onrender.com/
 
@@ -10,6 +7,7 @@ type CharactersProps = {
     charactersFiltered: Character[]
     manageFavorite: (action: string, characterSelected: Character) => void
     favorites: Character[]
+    isLoading: boolean
 }
 
 type Character = {
@@ -106,37 +104,7 @@ type Character = {
     comics: [""]
 } */
 
-function Characters({ charactersFiltered, manageFavorite, favorites }: CharactersProps) {
-    /* const [isPresent, safeToRemove] = usePresence()
-    const [scope, animate] = useAnimate()
-
-    useEffect(() => {
-        if (isPresent) {
-            const enterAnimation = async () => {
-                await animate(
-                    scope.current,
-                    // "h1",
-                    { opacity: [0, 1] },
-                    { duration: 0.5, delay: stagger(0.2) }
-                )
-            }
-            enterAnimation()
-        } else {
-            const exitAnimation = async () => {
-                await animate(
-                    // scope.current,
-                    "figure",
-                    { opacity: [1, 0] },
-                    { duration: 0.5, delay: stagger(0.2) }
-                )
-                safeToRemove()
-            }
-            exitAnimation()
-        }
-    }) */
-
-
-    // const [selectedCharacter, setSelectedCharacter] = useState<Character>(characterEmpty)
+function Characters({ charactersFiltered, manageFavorite, favorites, isLoading }: CharactersProps) {
 
     function publisherIMG(publisher: string) {
         switch (publisher) {
@@ -176,26 +144,100 @@ function Characters({ charactersFiltered, manageFavorite, favorites }: Character
         }
     }
 
+    const randomImagesArray = [
+        // 'https://static.wikia.nocookie.net/marveldatabase/images/9/98/Hulk_Main_Page_Icon.jpg/revision/latest/scale-to-width-down/90?cb=20190428013057',
+        // 'https://static.wikia.nocookie.net/marvel_dc/images/3/34/Teen_Titans_Vol_6_20_Textless.jpg/revision/latest/scale-to-width-down/150?cb=20180726070928',
+        // 'https://static.wikia.nocookie.net/marveldatabase/images/9/90/Warlock_Main_Page_Icon.jpg/revision/latest/scale-to-width-down/90?cb=20230516103920',
+        // 'https://static.wikia.nocookie.net/marveldatabase/images/d/d8/Wolverine_Main_Page_Icon.jpg/revision/latest/scale-to-width-down/90?cb=20230516113350',
+        // 'https://static.wikia.nocookie.net/marveldatabase/images/b/b9/Spider-Man_Main_Page_Icon.jpg/revision/latest/scale-to-width-down/90?cb=20180216053121',
+        // 'https://static.wikia.nocookie.net/marveldatabase/images/1/13/Avengers_Main_Page_Icon.jpg/revision/latest/scale-to-width-down/90?cb=20180530082529',
+        // 'https://static.wikia.nocookie.net/marveldatabase/images/9/9a/Fantastic_Four_Main_Page_Icon.jpg/revision/latest/scale-to-width-down/90?cb=20130101030841',
+        // 'https://static.wikia.nocookie.net/marveldatabase/images/0/06/Guardians_of_the_Galaxy_Main_Page_Icon.jpg/revision/latest/scale-to-width-down/90?cb=20140529215102',
+        // 'https://static.wikia.nocookie.net/marveldatabase/images/4/40/X-Men_Main_Page_Icon.jpg/revision/latest/scale-to-width-down/90?cb=20130101030859',
+        // 'https://static.wikia.nocookie.net/marvel_dc/images/3/34/Teen_Titans_Vol_6_20_Textless.jpg/revision/latest/scale-to-width-down/150?cb=20180726070928',
+        // 'https://static.wikia.nocookie.net/marvel_dc/images/2/21/Action_Comics_Vol_1_977_Textless.jpg/revision/latest/scale-to-width-down/150?cb=20170413041035',
+        // 'https://static.wikia.nocookie.net/marvel_dc/images/5/57/Justice_Society_of_America_Prime_Earth_0003.jpg/revision/latest/scale-to-width-down/150?cb=20190907203102',
+        // 'https://static.wikia.nocookie.net/marvel_dc/images/b/b3/Justice_League_Vol_4_40_Textless_Variant.jpg/revision/latest/scale-to-width-down/150?cb=20200421212518',
+        // 'https://static.wikia.nocookie.net/marvel_dc/images/d/d5/Suicide_Squad_Vol_6_9_Textless_Variant.jpg/revision/latest/scale-to-width-down/150?cb=20200922043238',
+
+        "https://i.pinimg.com/222x/89/e6/bd/89e6bdf2b46971a60b20cfd714364273.jpg",
+        "https://i.pinimg.com/564x/ab/7e/05/ab7e05dbab4bd3198ebd033d931ca712.jpg",
+        "https://i.pinimg.com/564x/76/8d/d9/768dd930831c7898f0377d3c493b1a57.jpg",
+        "https://i.pinimg.com/564x/82/b0/de/82b0de3dd7bac14970397e8f09e27f83.jpg",
+        "https://i.pinimg.com/564x/fb/be/d7/fbbed74e1fb034b647aea0a319701e49.jpg",
+        "https://i.pinimg.com/564x/78/32/83/7832839ad65916993e1519ce9211495b.jpg",
+        "https://i.pinimg.com/564x/7b/36/fa/7b36fac139e067c3ad9c80769be1fe3e.jpg",
+        "https://i.pinimg.com/564x/f3/c9/d1/f3c9d1ef8d3e0fb800e868bd78e77b8f.jpg",
+        "https://i.pinimg.com/564x/6f/da/4e/6fda4e7db350b2177c5f30fa456c36aa.jpg",
+        "https://i.pinimg.com/564x/fa/03/de/fa03de3f6c00ad4ac796958651bfc1a1.jpg",
+        "https://i.pinimg.com/750x/7c/a9/51/7ca951ff8b9c82ec809d490165a51c7b.jpg",
+    ]
+
+    function getRandomImage(images: string[]) {
+        const randomIndex = Math.floor(Math.random() * images.length);
+        return images[randomIndex];
+    }
+
+    //https://www.npmjs.com/package/react-lazy-load-image-component
+    //https://www.youtube.com/watch?v=QAR9VIqx1qQ&ab_channel=MichaelBreitung
+    //https://www.youtube.com/watch?v=2U7yZ3wvFBM&ab_channel=SonnySangha
+    //https://www.youtube.com/watch?v=4nYsbm8N4EQ&ab_channel=CyberPotato
+
+    function transitionImageCard() {
+        const imageElements = document.querySelectorAll('.imageCard')
+
+        imageElements.forEach((image) => {
+            setTimeout(() => {
+                image.classList.replace('opacity-0', 'opacity-100')
+            }, 3000)
+        })
+    }
+
+
     return (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-[90%] gap-10 mx-auto pt-[2rem] ">
             {
                 charactersFiltered.map((currentCharacter) => {
+                    if (isLoading) {
+                        return (
+                            <div key={currentCharacter._id}>
+                                <LoadingCard />
+                            </div>
+                        )
+                    }
                     return (
-                        <div key={`${currentCharacter._id}`}>
-                            {/* <label onClick={() => setSelectedCharacter(currentCharacter)} className="cursor-pointer" htmlFor="my-modal-specificCharacter"> */}
-                            <label /* onClick={() => setSelectedCharacter(currentCharacter)} */ className="cursor-pointer" htmlFor={`my-modal-${currentCharacter.slug}`}>
-                                <div
-                                // ref={scope}
-                                >
-                                    <div className="card image-full hover:opacity-1 inset-0 object-cover w-full h-[20rem] md:h-[25rem] lg:h-[35rem] bg-base-100 shadow-xl hover:scale-110 group/item">
-                                        <figure>
-                                            <img className="w-full h-full" src={currentCharacter.images.md} alt={currentCharacter.name} loading="lazy" />
+                        <div key={currentCharacter._id}>
+                            <label className="cursor-pointer" htmlFor={`my-modal-${currentCharacter.slug}`}>
+                                <div>
+                                    <div
+                                        //bg-base-100
+                                        // bg-cover bg-[url('${currentCharacter.images.xs !== '' ? currentCharacter.images.xs : getRandomImage(randomImagesArray)}')] 
+                                        className={`
+                                            card image-full hover:opacity-1 inset-0 object-cover w-full h-[20rem] md:h-[25rem] lg:h-[35rem] shadow-xl hover:scale-110 group/item
+                                        `}
+                                    >
+                                        <figure className='relative rounded-md'>
+                                            <img
+                                                className="w-full h-full animate-pulse blur-lg rounded-md"
+                                                src={(currentCharacter.images.xs !== '' && currentCharacter.images.xs !== '-')
+                                                    ? currentCharacter.images.xs
+                                                    : getRandomImage(randomImagesArray)}
+                                                alt={currentCharacter.name}
+                                                loading="lazy"
+                                            />
+
+                                            <img
+                                                className={`imageCard absolute w-full h-full transition-opacity duration-200 ease-in-out rounded-md opacity-0 `}
+                                                src={currentCharacter.images.md}
+                                                alt={currentCharacter.name}
+                                                loading='lazy'
+                                                onLoadCapture={transitionImageCard}
+                                            />
                                         </figure>
 
                                         <div className="card-body group/edit invisible group-hover/item:visible transition delay-150 duration-300 ease-in-out flex flex-col justify-between">
                                             <div>
                                                 <h2 className="card-title text-xl md:text-2xl lg:text-3xl">{currentCharacter.name}</h2>
-
                                             </div>
 
                                             <div className="card-actions justify-end">
@@ -206,38 +248,29 @@ function Characters({ charactersFiltered, manageFavorite, favorites }: Character
                                                     </div>
                                                 </div>
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
                             </label>
-                            <ModalCharacter
-                                key={currentCharacter._id}
-                                selectedCharacter={currentCharacter}
-                                manageFavorite={manageFavorite}
-                                favorites={favorites}
-                            />
                         </div>
                     )
                 })
             }
+            <ModalCharacter
+                charactersFiltered={charactersFiltered}
+                manageFavorite={manageFavorite}
+                favorites={favorites}
+            />
         </div>
     )
 }
 
 type ModalCharacterProps = {
-    selectedCharacter: Character
     manageFavorite: (action: string, characterSelected: Character) => void
     favorites: Character[]
+    charactersFiltered: Character[]
 }
-
-
-
-function ModalCharacter({ selectedCharacter, manageFavorite, favorites }: ModalCharacterProps) {
-    // const numColors = 1
-    // const [colors] = useImageColorPalette(selectedCharacter.images.md, numColors)
-    // console.log(selectedCharacter.name, colors)
-
+function ModalCharacter({ manageFavorite, favorites, charactersFiltered }: ModalCharacterProps) {
     const [selectedOption, setSelectedOption] = useState<"Stats" | "Appereance" | "Biography">("Stats")
 
     function organizedComicsProperty(comics: string[] | null | undefined, publisher: string): string[] {
@@ -306,349 +339,333 @@ function ModalCharacter({ selectedCharacter, manageFavorite, favorites }: ModalC
     }
 
     return (
-        <div key={selectedCharacter._id}>
-            <input type="checkbox" id={`my-modal-${selectedCharacter.slug}`} className="modal-toggle" value="" />
-            <label htmlFor={`my-modal-${selectedCharacter.slug}`} className="modal">
-                <label className="" htmlFor="">
-                    <div className="rounded-md bg-base-100 h-[95vh] w-[80vw] max-w-[80rem] overflow-y-auto overflow-x-hidden">
-                        {/* <div className='flex flex-col justify-center mx-5 my-5'> */}
-                        <div className='flex flex-col justify-center mt-5'>
-                            <div className='flex justify-between mb-5 mx-5'>
-                                <label htmlFor={`my-modal-${selectedCharacter.slug}`} className="btn btn-sm btn-circle right-2 top-2">✕</label>
-                                <label className="swap swap-flip text-2xl">
-                                    <input
-                                        onChange={() => {
-                                            if (favorites.includes(selectedCharacter)) {
-                                                manageFavorite("remove", selectedCharacter)
-                                            } else {
-                                                manageFavorite("add", selectedCharacter)
-                                            }
-                                        }}
-                                        type="checkbox"
-                                        checked={favorites.includes(selectedCharacter) ? true : false}
-                                    />
-                                    <div /* onClick={() => manageFavorite("remove", selectedCharacter)} */ 
-                                        className="swap-on tooltip tooltip-left" 
-                                        data-tip="favorite"
-                                    >
-                                        🌟
-                                    </div>
-                                    <div /* onClick={() => manageFavorite("add", selectedCharacter)} */ 
-                                        className="swap-off tooltip tooltip-left" 
-                                        data-tip="not favorite"
-                                    >
-                                        ⭐
-                                    </div>
-                                </label>
-                            </div>
-                            <div className='flex flex-col gap-5'>
-                                <div className="w-full bg-base-200 p-5">
-                                    <div className="flex flex-col md:flex-row lg:flex-row justify-center">
-
-                                        <div className='flex flex-col items-center align-middle gap-3 mx-auto max-w-screen-lg'>
-                                            <div className="relative w-64 md:w-72 lg:w-96 h-[25rem] md:h-[25rem] lg:h-[35rem] bg-base-100 shadow-xl">
-                                                <figure>
-                                                    <img className="absolute w-full h-full object-cover rounded-md" src={selectedCharacter.images.md} alt={selectedCharacter.name} loading="lazy" />
-                                                </figure>
-                                            </div>
-                                            {/* <div className='image-full inset-0 object-cover w-full h-[20rem] md:h-[25rem] lg:h-[35rem] shadow-xl'>
-                                                <figure>
-                                                    <img
-                                                        src={selectedCharacter.images.md}
-                                                        className={`w-full h-full rounded-lg shadow-lg `}
-                                                        // style={colors !== null ? { boxShadow: `0 0 10px 0 ${colors[Math.floor(Math.random() * numColors)]}` } : {}}
-                                                    />
-                                                </figure>
-                                            </div> */}
-                                            <div className='self-center'>
-                                                <h1 className={`text-5xl font-bold`} /* style={colors !== null ? {color: colors[1]} : {}} */>{selectedCharacter.name}</h1>
-                                                <p className={`py-2`} /* style={colors !== null ? {color: colors[1]} : {}} */>{selectedCharacter.biography.fullName}</p>
-                                            </div>
+        <div>
+            {charactersFiltered.map((selectedCharacter, index) => {
+                return (
+                    <div key={`${selectedCharacter._id}-${index}`}>
+                        <input type="checkbox" id={`my-modal-${selectedCharacter.slug}`} className="modal-toggle" value="" />
+                        <label htmlFor={`my-modal-${selectedCharacter.slug}`} className="modal">
+                            <label className="" htmlFor="">
+                                <div className="rounded-md bg-base-100 h-[95vh] w-[80vw] max-w-[80rem] overflow-y-auto overflow-x-hidden">
+                                    <div className='flex flex-col justify-center mt-5'>
+                                        <div className='flex justify-between mb-5 mx-5'>
+                                            <label htmlFor={`my-modal-${selectedCharacter.slug}`} className="btn btn-sm btn-circle right-2 top-2">✕</label>
+                                            <label className="swap swap-flip text-2xl">
+                                                <input
+                                                    onChange={() => {
+                                                        if (favorites.includes(selectedCharacter)) {
+                                                            manageFavorite("remove", selectedCharacter)
+                                                        } else {
+                                                            manageFavorite("add", selectedCharacter)
+                                                        }
+                                                    }}
+                                                    type="checkbox"
+                                                    checked={favorites.includes(selectedCharacter) ? true : false}
+                                                />
+                                                <div
+                                                    className="swap-on tooltip tooltip-left"
+                                                    data-tip="favorite"
+                                                >
+                                                    🌟
+                                                </div>
+                                                <div
+                                                    className="swap-off tooltip tooltip-left"
+                                                    data-tip="not favorite"
+                                                >
+                                                    ⭐
+                                                </div>
+                                            </label>
                                         </div>
+                                        <div className='flex flex-col gap-5'>
+                                            <div className="w-full bg-base-200 p-5">
+                                                <div className="flex flex-col md:flex-row lg:flex-row justify-center">
 
-                                        <div className='mx-auto flex flex-col justify-center gap-3 items-center w-[90%] md:w-[50%] lg:w-[50%]'>
-                                            <div className="w-full grid grid-flow-col grid-col-3">
-                                                <div onClick={() => setSelectedOption("Stats")} className={`text-md md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Stats" ? "tab-active" : ""}`}>Stats</div>
-                                                <div onClick={() => setSelectedOption("Appereance")} className={`text-md md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Appereance" ? "tab-active" : ""}`}>Appereance</div>
-                                                <div onClick={() => setSelectedOption("Biography")} className={`text-md md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Biography" ? "tab-active" : ""}`}>Biography</div>
-                                            </div>
-
-                                            {
-                                                selectedOption === "Stats" ?
-                                                    <div className="stats stats-vertical shadow self-center w-full h-full">
-                                                        <div className="stat">
-                                                            <div className="stat-figure text-primary">
-                                                                <p className='text-2xl md:text-5xl lg:text-5xl'>👊</p>
-                                                            </div>
-                                                            <div className="stat-title">Combat</div>
-                                                            <div className="stat-value">{selectedCharacter.powerstats.combat}</div>
-                                                        </div>
-                                                        <div className="stat">
-                                                            <div className="stat-figure text-primary">
-                                                                <p className='text-2xl md:text-5xl lg:text-5xl'>❤</p>
-                                                            </div>
-                                                            <div className="stat-title">Durability</div>
-                                                            <div className="stat-value">{selectedCharacter.powerstats.durability}</div>
-                                                        </div>
-                                                        <div className="stat">
-                                                            <div className="stat-figure text-primary">
-                                                                <p className='text-2xl md:text-5xl lg:text-5xl'>🧠</p>
-                                                            </div>
-                                                            <div className="stat-title">Intelligence</div>
-                                                            <div className="stat-value">{selectedCharacter.powerstats.intelligence}</div>
+                                                    <div className='flex flex-col items-center align-middle gap-3 mx-auto max-w-screen-lg'>
+                                                        <div className="relative w-64 md:w-72 lg:w-96 h-[25rem] md:h-[25rem] lg:h-[35rem] bg-base-100 shadow-xl">
+                                                            <figure>
+                                                                <img className="absolute w-full h-full object-cover rounded-md" src={selectedCharacter.images.md} alt={selectedCharacter.name} loading="lazy" />
+                                                            </figure>
                                                         </div>
 
-                                                        <div className="stat">
-                                                            <div className="stat-figure text-secondary">
-                                                                <p className='text-2xl md:text-5xl lg:text-5xl'>🔆</p>
-                                                            </div>
-                                                            <div className="stat-title">Power</div>
-                                                            <div className="stat-value">{selectedCharacter.powerstats.power}</div>
-                                                        </div>
-                                                        <div className="stat">
-                                                            <div className="stat-figure text-secondary">
-                                                                <p className='text-2xl md:text-5xl lg:text-5xl'>⚡</p>
-                                                            </div>
-                                                            <div className="stat-title">Speed</div>
-                                                            <div className="stat-value">{selectedCharacter.powerstats.speed}</div>
-                                                        </div>
-                                                        <div className="stat">
-                                                            <div className="stat-figure text-secondary">
-                                                                <p className='text-2xl md:text-5xl lg:text-5xl'>💪</p>
-                                                            </div>
-                                                            <div className="stat-title">Strength</div>
-                                                            <div className="stat-value">{selectedCharacter.powerstats.strength}</div>
+                                                        <div className='self-center'>
+                                                            <h1 className={`text-5xl font-bold`} >{selectedCharacter.name}</h1>
+                                                            <p className={`py-2`} >{selectedCharacter.biography.fullName}</p>
                                                         </div>
                                                     </div>
-                                                    :
-                                                    selectedOption === "Appereance" ?
-                                                        <div className="stats stats-vertical shadow self-center w-full h-full">
-                                                            <div className="stat">
-                                                                <div className="stat-figure text-primary">
-                                                                    <p className='text-2xl md:text-5xl lg:text-5xl'>👁</p>
-                                                                </div>
-                                                                <div className="stat-title">EyeColor</div>
-                                                                <div className="stat-value text-sm md:text-xl lg:text-xl">{selectedCharacter.appearance.eyeColor}</div>
-                                                            </div>
-                                                            <div className="stat">
-                                                                <div className="stat-figure text-primary text-2xl md:text-5xl lg:text-5xl">
-                                                                    {
-                                                                        selectedCharacter.appearance.gender?.toLowerCase() === "male" ?
-                                                                            <p>🚹</p>
-                                                                            :
-                                                                            selectedCharacter.appearance.gender?.toLowerCase() === "female" ?
-                                                                                <p>🚺</p>
-                                                                                :
-                                                                                null
-                                                                    }
-                                                                </div>
-                                                                <div className="stat-title">Gender</div>
-                                                                <div className="stat-value text-sm md:text-xl lg:text-xl">{selectedCharacter.appearance.gender}</div>
-                                                            </div>
-                                                            <div className="stat">
-                                                                <div className="stat-figure text-primary text-2xl md:text-5xl lg:text-5xl">
-                                                                    {
-                                                                        selectedCharacter.appearance.gender?.toLowerCase() === "male" ?
-                                                                            <p>👱‍♂️</p>
-                                                                            :
-                                                                            selectedCharacter.appearance.gender?.toLowerCase() === "female" ?
-                                                                                <p>👱‍♀️</p>
-                                                                                :
-                                                                                null
-                                                                    }
 
+                                                    <div className='mx-auto flex flex-col justify-center gap-3 items-center w-[90%] md:w-[50%] lg:w-[50%]'>
+                                                        <div className="w-full grid grid-flow-col grid-col-3">
+                                                            <div onClick={() => setSelectedOption("Stats")} className={`text-md md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Stats" ? "tab-active" : ""}`}>Stats</div>
+                                                            <div onClick={() => setSelectedOption("Appereance")} className={`text-md md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Appereance" ? "tab-active" : ""}`}>Appereance</div>
+                                                            <div onClick={() => setSelectedOption("Biography")} className={`text-md md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Biography" ? "tab-active" : ""}`}>Biography</div>
+                                                        </div>
+
+                                                        {
+                                                            selectedOption === "Stats" ?
+                                                                <div className="stats stats-vertical shadow self-center w-full h-full">
+                                                                    <div className="stat">
+                                                                        <div className="stat-figure text-primary">
+                                                                            <p className='text-2xl md:text-5xl lg:text-5xl'>👊</p>
+                                                                        </div>
+                                                                        <div className="stat-title">Combat</div>
+                                                                        <div className="stat-value">{selectedCharacter.powerstats.combat}</div>
+                                                                    </div>
+                                                                    <div className="stat">
+                                                                        <div className="stat-figure text-primary">
+                                                                            <p className='text-2xl md:text-5xl lg:text-5xl'>❤</p>
+                                                                        </div>
+                                                                        <div className="stat-title">Durability</div>
+                                                                        <div className="stat-value">{selectedCharacter.powerstats.durability}</div>
+                                                                    </div>
+                                                                    <div className="stat">
+                                                                        <div className="stat-figure text-primary">
+                                                                            <p className='text-2xl md:text-5xl lg:text-5xl'>🧠</p>
+                                                                        </div>
+                                                                        <div className="stat-title">Intelligence</div>
+                                                                        <div className="stat-value">{selectedCharacter.powerstats.intelligence}</div>
+                                                                    </div>
+
+                                                                    <div className="stat">
+                                                                        <div className="stat-figure text-secondary">
+                                                                            <p className='text-2xl md:text-5xl lg:text-5xl'>🔆</p>
+                                                                        </div>
+                                                                        <div className="stat-title">Power</div>
+                                                                        <div className="stat-value">{selectedCharacter.powerstats.power}</div>
+                                                                    </div>
+                                                                    <div className="stat">
+                                                                        <div className="stat-figure text-secondary">
+                                                                            <p className='text-2xl md:text-5xl lg:text-5xl'>⚡</p>
+                                                                        </div>
+                                                                        <div className="stat-title">Speed</div>
+                                                                        <div className="stat-value">{selectedCharacter.powerstats.speed}</div>
+                                                                    </div>
+                                                                    <div className="stat">
+                                                                        <div className="stat-figure text-secondary">
+                                                                            <p className='text-2xl md:text-5xl lg:text-5xl'>💪</p>
+                                                                        </div>
+                                                                        <div className="stat-title">Strength</div>
+                                                                        <div className="stat-value">{selectedCharacter.powerstats.strength}</div>
+                                                                    </div>
                                                                 </div>
-                                                                <div className="stat-title">Hair color</div>
-                                                                <div className="stat-value text-sm md:text-xl lg:text-xl">{selectedCharacter.appearance.hairColor}</div>
-                                                            </div>
-                                                            <div className="stat">
-                                                                <div className="stat-figure text-secondary">
-                                                                    <p className='text-2xl md:text-5xl lg:text-5xl'>📏</p>
-                                                                </div>
-                                                                <div className="stat-title">Height</div>
-                                                                <div className="stat-value text-sm md:text-xl lg:text-xl">{selectedCharacter.appearance.height[0]} | {selectedCharacter.appearance.height[1]}</div>
-                                                            </div>
-                                                            <div className="stat">
-                                                                <div className="stat-figure text-secondary text-2xl md:text-5xl lg:text-5xl">
-                                                                    {
-                                                                        selectedCharacter.appearance.race?.toLowerCase().includes("meta") ?
-                                                                            <p>🧬</p>
-                                                                            :
-                                                                            selectedCharacter.appearance.race?.toLowerCase() === "human" ?
-                                                                                <p>🌎</p>
-                                                                                :
-                                                                                selectedCharacter.appearance.race?.toLowerCase() === "mutant" ?
-                                                                                    <p>🧬</p>
-                                                                                    :
-                                                                                    selectedCharacter.appearance.race?.toLowerCase() === "android" || selectedCharacter.appearance.race?.toLowerCase() === "cyborg" && (selectedCharacter.appearance.race !== null) ?
-                                                                                        <p>🤖</p>
+                                                                :
+                                                                selectedOption === "Appereance" ?
+                                                                    <div className="stats stats-vertical shadow self-center w-full h-full">
+                                                                        <div className="stat">
+                                                                            <div className="stat-figure text-primary">
+                                                                                <p className='text-2xl md:text-5xl lg:text-5xl'>👁</p>
+                                                                            </div>
+                                                                            <div className="stat-title">EyeColor</div>
+                                                                            <div className="stat-value text-sm md:text-xl lg:text-xl">{selectedCharacter.appearance.eyeColor}</div>
+                                                                        </div>
+                                                                        <div className="stat">
+                                                                            <div className="stat-figure text-primary text-2xl md:text-5xl lg:text-5xl">
+                                                                                {
+                                                                                    selectedCharacter.appearance.gender?.toLowerCase() === "male" ?
+                                                                                        <p>🚹</p>
                                                                                         :
-                                                                                        selectedCharacter.appearance.race?.toLowerCase() === "alien" || selectedCharacter.appearance.race?.toLowerCase() === "eternal" || selectedCharacter.appearance.race?.toLowerCase() === "asgardian" || selectedCharacter.appearance.race?.toLowerCase() === "kryptonian" && (selectedCharacter.appearance.race !== null) ?
-                                                                                            <p>👽</p>
+                                                                                        selectedCharacter.appearance.gender?.toLowerCase() === "female" ?
+                                                                                            <p>🚺</p>
                                                                                             :
-                                                                                            <p>🌎</p>
-                                                                    }
-                                                                </div>
-                                                                <div className="stat-title">Race</div>
-                                                                <div className="stat-value text-sm md:text-xl lg:text-xl">{selectedCharacter.appearance.race}</div>
-                                                            </div>
-                                                            <div className="stat">
-                                                                <div className="stat-figure text-secondary">
-                                                                    <p className='text-2xl md:text-5xl lg:text-5xl'>⚖</p>
-                                                                </div>
-                                                                <div className="stat-title">Weigth</div>
-                                                                <div className="stat-value text-sm md:text-xl lg:text-xl">{selectedCharacter.appearance.weight[0]} | {selectedCharacter.appearance.weight[1]}</div>
-                                                            </div>
-                                                        </div>
-                                                        :
-                                                        selectedOption === "Biography" ?
-                                                            <div className="stats stats-vertical shadow self-center w-full h-full">
-                                                                <div className="stat">
-                                                                    <div className="stat-figure text-primary text-2xl md:text-5xl lg:text-5xl">
-                                                                        {
-                                                                            selectedCharacter.biography.alignment === "good" ?
-                                                                                <p>😃</p>
-                                                                                :
-                                                                                selectedCharacter.biography.alignment === "bad" ?
-                                                                                    <p>😡</p>
-                                                                                    :
-                                                                                    selectedCharacter.biography.alignment === "neutral" ?
-                                                                                        <p>😐</p>
+                                                                                            null
+                                                                                }
+                                                                            </div>
+                                                                            <div className="stat-title">Gender</div>
+                                                                            <div className="stat-value text-sm md:text-xl lg:text-xl">{selectedCharacter.appearance.gender}</div>
+                                                                        </div>
+                                                                        <div className="stat">
+                                                                            <div className="stat-figure text-primary text-2xl md:text-5xl lg:text-5xl">
+                                                                                {
+                                                                                    selectedCharacter.appearance.gender?.toLowerCase() === "male" ?
+                                                                                        <p>👱‍♂️</p>
                                                                                         :
-                                                                                        null
-                                                                        }
-                                                                    </div>
-                                                                    <div className="stat-title">Alignment</div>
-                                                                    <div className="stat-value text-sm md:text-xl lg:text-xl">
-                                                                        {selectedCharacter.biography.alignment === "good" ? "Hero" : selectedCharacter.biography.alignment === "bad" ? "Villain" : "Anti-Hero"}
-                                                                    </div>
-                                                                </div>
-                                                                <div className="stat">
-                                                                    <div className="stat-figure text-primary">
-                                                                        <p className='text-2xl md:text-5xl lg:text-5xl'>📅</p>
-                                                                    </div>
-                                                                    <div className="stat-title">First Appearance</div>
-                                                                    <div className='flex tooltip' data-tip={selectedCharacter.biography.firstAppearance}>
-                                                                        <span className="stat-value whitespace-pre text-sm md:text-xl lg:text-xl">{selectedCharacter.biography.firstAppearance.slice(0, 10)}...</span>
-                                                                    </div>
-                                                                </div>
-                                                                <div className="stat">
-                                                                    <div className="stat-figure text-primary">
-                                                                        <p className='text-2xl md:text-5xl lg:text-5xl'>🗺</p>
-                                                                    </div>
-                                                                    <div className="stat-title">Place Of Birth</div>
-                                                                    <p className="stat-value text-sm md:text-xl lg:text-xl tooltip flex" data-tip={selectedCharacter.biography.placeOfBirth}>{selectedCharacter.biography.placeOfBirth.slice(0, 10)}...</p>
-                                                                </div>
-                                                                <div className="stat">
-                                                                    <div className="stat-figure text-secondary">
-                                                                        <p className='text-2xl md:text-5xl lg:text-5xl'>📚</p>
-                                                                    </div>
-                                                                    <div className="stat-title">Publisher</div>
-                                                                    <div className="stat-value text-sm md:text-xl lg:text-xl">{selectedCharacter.biography.publisher}</div>
-                                                                </div>
-                                                                <div className="stat">
-                                                                    <div className="stat-figure text-secondary">
-                                                                        <p className='text-2xl md:text-5xl lg:text-5xl'>🔠</p>
-                                                                    </div>
-                                                                    <div className="stat-title">Aliases</div>
-                                                                    {/* <div className="stat-value text-sm md:text-xl lg:text-xl">
-                                                                        {selectedCharacter.biography.aliases.map((currentAlias => {
-                                                                            return (
-                                                                                <p className='tooltip flex flex-col items-start' data-tip={currentAlias}>{currentAlias.slice(0, 10)}...</p>
-                                                                            )
-                                                                        }))}
-                                                                    </div> */}
-                                                                    <div tabIndex={0} className="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box">
-                                                                        <div className="collapse-title text-xl font-medium">
-                                                                            Aliases...
-                                                                        </div>
-                                                                        <div className="collapse-content">
-                                                                            {selectedCharacter.biography.aliases.map((currentAlias => {
-                                                                                return (
-                                                                                    <p>{currentAlias}</p>
-                                                                                )
-                                                                            }))}
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div className="stat">
-                                                                    <div className="stat-figure text-secondary">
-                                                                        <p className='text-2xl md:text-5xl lg:text-5xl'>🆎</p>
-                                                                    </div>
-                                                                    <div className="stat-title">Alter Egos</div>
-                                                                    {
-                                                                        selectedCharacter.biography.alterEgos ?
-                                                                            <div className="stat-value text-sm md:text-xl lg:text-xl tooltip flex" data-tip={selectedCharacter.biography.alterEgos}>{selectedCharacter.biography.alterEgos === "No alter egos found." ? "Unknown" : selectedCharacter.biography.alterEgos.slice(0, 15)}</div>
-                                                                            : null
-                                                                    }
+                                                                                        selectedCharacter.appearance.gender?.toLowerCase() === "female" ?
+                                                                                            <p>👱‍♀️</p>
+                                                                                            :
+                                                                                            null
+                                                                                }
 
-                                                                </div>
-                                                                <div className="stat">
-                                                                    <div className="stat-figure text-secondary">
-                                                                        <p className='text-2xl md:text-5xl lg:text-5xl'>👪</p>
-                                                                    </div>
-                                                                    <div className="stat-title">Group Affiliation</div>
-                                                                    {/* <div className="stat-value text-sm md:text-xl lg:text-xl tooltip" data-tip={selectedCharacter.connections.groupAffiliation.split(",")}>{selectedCharacter.connections.groupAffiliation.split(",").map(((currentGroup, index) => { */}
-                                                                    {/* <div className="stat-value text-sm md:text-xl lg:text-xl tooltip flex flex-col items-start" data-tip={selectedCharacter.connections.groupAffiliation.split(",")[0]}>{selectedCharacter.connections.groupAffiliation.split(",").map(((currentGroup, index) => {
-                                                                            if (index < 2) {
-                                                                                return (
-                                                                                    <p>{currentGroup}</p>
-                                                                                )
-                                                                            }
-                                                                    }))}...</div> */}
-                                                                    <div tabIndex={0} className="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box">
-                                                                        <div className="collapse-title text-xl font-medium">
-                                                                            Teams...
+                                                                            </div>
+                                                                            <div className="stat-title">Hair color</div>
+                                                                            <div className="stat-value text-sm md:text-xl lg:text-xl">{selectedCharacter.appearance.hairColor}</div>
                                                                         </div>
-                                                                        <div className="collapse-content">
-                                                                            <p>{selectedCharacter.connections.groupAffiliation}</p>
+                                                                        <div className="stat">
+                                                                            <div className="stat-figure text-secondary">
+                                                                                <p className='text-2xl md:text-5xl lg:text-5xl'>📏</p>
+                                                                            </div>
+                                                                            <div className="stat-title">Height</div>
+                                                                            <div className="stat-value text-sm md:text-xl lg:text-xl">{selectedCharacter.appearance.height[0]} | {selectedCharacter.appearance.height[1]}</div>
+                                                                        </div>
+                                                                        <div className="stat">
+                                                                            <div className="stat-figure text-secondary text-2xl md:text-5xl lg:text-5xl">
+                                                                                {
+                                                                                    selectedCharacter.appearance.race?.toLowerCase().includes("meta") ?
+                                                                                        <p>🧬</p>
+                                                                                        :
+                                                                                        selectedCharacter.appearance.race?.toLowerCase() === "human" ?
+                                                                                            <p>🌎</p>
+                                                                                            :
+                                                                                            selectedCharacter.appearance.race?.toLowerCase() === "mutant" ?
+                                                                                                <p>🧬</p>
+                                                                                                :
+                                                                                                selectedCharacter.appearance.race?.toLowerCase() === "android" || selectedCharacter.appearance.race?.toLowerCase() === "cyborg" && (selectedCharacter.appearance.race !== null) ?
+                                                                                                    <p>🤖</p>
+                                                                                                    :
+                                                                                                    selectedCharacter.appearance.race?.toLowerCase() === "alien" || selectedCharacter.appearance.race?.toLowerCase() === "eternal" || selectedCharacter.appearance.race?.toLowerCase() === "asgardian" || selectedCharacter.appearance.race?.toLowerCase() === "kryptonian" && (selectedCharacter.appearance.race !== null) ?
+                                                                                                        <p>👽</p>
+                                                                                                        :
+                                                                                                        <p>🌎</p>
+                                                                                }
+                                                                            </div>
+                                                                            <div className="stat-title">Race</div>
+                                                                            <div className="stat-value text-sm md:text-xl lg:text-xl">{selectedCharacter.appearance.race}</div>
+                                                                        </div>
+                                                                        <div className="stat">
+                                                                            <div className="stat-figure text-secondary">
+                                                                                <p className='text-2xl md:text-5xl lg:text-5xl'>⚖</p>
+                                                                            </div>
+                                                                            <div className="stat-title">Weigth</div>
+                                                                            <div className="stat-value text-sm md:text-xl lg:text-xl">{selectedCharacter.appearance.weight[0]} | {selectedCharacter.appearance.weight[1]}</div>
                                                                         </div>
                                                                     </div>
-                                                                </div>
-                                                                <div className="stat">
-                                                                    <div className="stat-figure text-secondary">
-                                                                        <p className='text-2xl md:text-5xl lg:text-5xl'>🧾</p>
+                                                                    :
+                                                                    selectedOption === "Biography" ?
+                                                                        <div className="stats stats-vertical shadow self-center w-full h-full">
+                                                                            <div className="stat">
+                                                                                <div className="stat-figure text-primary text-2xl md:text-5xl lg:text-5xl">
+                                                                                    {
+                                                                                        selectedCharacter.biography.alignment === "good" ?
+                                                                                            <p>😃</p>
+                                                                                            :
+                                                                                            selectedCharacter.biography.alignment === "bad" ?
+                                                                                                <p>😡</p>
+                                                                                                :
+                                                                                                selectedCharacter.biography.alignment === "neutral" ?
+                                                                                                    <p>😐</p>
+                                                                                                    :
+                                                                                                    null
+                                                                                    }
+                                                                                </div>
+                                                                                <div className="stat-title">Alignment</div>
+                                                                                <div className="stat-value text-sm md:text-xl lg:text-xl">
+                                                                                    {selectedCharacter.biography.alignment === "good" ? "Hero" : selectedCharacter.biography.alignment === "bad" ? "Villain" : "Anti-Hero"}
+                                                                                </div>
+                                                                            </div>
+                                                                            <div className="stat">
+                                                                                <div className="stat-figure text-primary">
+                                                                                    <p className='text-2xl md:text-5xl lg:text-5xl'>📅</p>
+                                                                                </div>
+                                                                                <div className="stat-title">First Appearance</div>
+                                                                                <div className='flex tooltip' data-tip={selectedCharacter.biography.firstAppearance}>
+                                                                                    <span className="stat-value whitespace-pre text-sm md:text-xl lg:text-xl">{selectedCharacter.biography.firstAppearance.slice(0, 10)}...</span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div className="stat">
+                                                                                <div className="stat-figure text-primary">
+                                                                                    <p className='text-2xl md:text-5xl lg:text-5xl'>🗺</p>
+                                                                                </div>
+                                                                                <div className="stat-title">Place Of Birth</div>
+                                                                                <p className="stat-value text-sm md:text-xl lg:text-xl tooltip flex" data-tip={selectedCharacter.biography.placeOfBirth}>{selectedCharacter.biography.placeOfBirth.slice(0, 10)}...</p>
+                                                                            </div>
+                                                                            <div className="stat">
+                                                                                <div className="stat-figure text-secondary">
+                                                                                    <p className='text-2xl md:text-5xl lg:text-5xl'>📚</p>
+                                                                                </div>
+                                                                                <div className="stat-title">Publisher</div>
+                                                                                <div className="stat-value text-sm md:text-xl lg:text-xl">{selectedCharacter.biography.publisher}</div>
+                                                                            </div>
+                                                                            <div className="stat">
+                                                                                <div className="stat-figure text-secondary">
+                                                                                    <p className='text-2xl md:text-5xl lg:text-5xl'>🔠</p>
+                                                                                </div>
+                                                                                <div className="stat-title">Aliases</div>
+
+                                                                                <div tabIndex={0} className="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box">
+                                                                                    <div className="collapse-title text-xl font-medium">
+                                                                                        Aliases...
+                                                                                    </div>
+                                                                                    <div className="collapse-content">
+                                                                                        {selectedCharacter.biography.aliases.map((currentAlias => {
+                                                                                            return (
+                                                                                                <p key={currentAlias} >{currentAlias}</p>
+                                                                                            )
+                                                                                        }))}
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div className="stat">
+                                                                                <div className="stat-figure text-secondary">
+                                                                                    <p className='text-2xl md:text-5xl lg:text-5xl'>🆎</p>
+                                                                                </div>
+                                                                                <div className="stat-title">Alter Egos</div>
+                                                                                {
+                                                                                    selectedCharacter.biography.alterEgos ?
+                                                                                        <div className="stat-value text-sm md:text-xl lg:text-xl tooltip flex" data-tip={selectedCharacter.biography.alterEgos}>{selectedCharacter.biography.alterEgos === "No alter egos found." ? "Unknown" : selectedCharacter.biography.alterEgos.slice(0, 15)}</div>
+                                                                                        : null
+                                                                                }
+
+                                                                            </div>
+                                                                            <div className="stat">
+                                                                                <div className="stat-figure text-secondary">
+                                                                                    <p className='text-2xl md:text-5xl lg:text-5xl'>👪</p>
+                                                                                </div>
+                                                                                <div className="stat-title">Group Affiliation</div>
+
+                                                                                <div tabIndex={0} className="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box">
+                                                                                    <div className="collapse-title text-xl font-medium">
+                                                                                        Teams...
+                                                                                    </div>
+                                                                                    <div className="collapse-content">
+                                                                                        <p>{selectedCharacter.connections.groupAffiliation}</p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div className="stat">
+                                                                                <div className="stat-figure text-secondary">
+                                                                                    <p className='text-2xl md:text-5xl lg:text-5xl'>🧾</p>
+                                                                                </div>
+                                                                                <div className="stat-title">Occupation</div>
+                                                                                <div className="stat-value flex text-sm md:text-xl lg:text-xl tooltip" data-tip={selectedCharacter.work.occupation.split(",")[0]}>{selectedCharacter.work.occupation.slice(0, 15)}...</div>
+                                                                            </div>
+                                                                        </div>
+                                                                        :
+                                                                        null
+                                                        }
+                                                    </div>
+
+                                                </div>
+                                                <div className='flex flex-col justify-center items-center my-10'>
+                                                    <br />
+                                                    <div className='w-48 md:w-60 lg:w-96 h-[5px] bg-current rounded-md' />
+                                                    <br />
+                                                </div>
+
+                                                <div className='my-5'>
+                                                    <div className='flex flex-col items-center justify-center'>
+                                                        <p className='text-2xl font-bold'>Comics</p>
+                                                        <p className='text-2xl font-bold mb-2'>💥💨💢💫💠💭💬</p>
+                                                    </div>
+                                                    <div className='h-[35vh] md:h-[50vh] lg:h-[80vh] flex justify-center'>
+                                                        <div className="carousel lg:carousel-vertical carousel-center h-full max-w-md lg:max-w-md p-4 space-x-4 bg-base-100 rounded-box">
+                                                            {organizedComicsProperty(selectedCharacter.comics, selectedCharacter.biography.publisher).map((comic, index) => {
+                                                                return (
+                                                                    <div key={`${comic}-${index}`} className="carousel-item lg:py-2">
+                                                                        <img className="rounded-box h-full w-full" src={comic} loading="lazy" />
                                                                     </div>
-                                                                    <div className="stat-title">Occupation</div>
-                                                                    <div className="stat-value flex text-sm md:text-xl lg:text-xl tooltip" data-tip={selectedCharacter.work.occupation.split(",")[0]}>{selectedCharacter.work.occupation.slice(0, 15)}...</div>
-                                                                </div>
-                                                            </div>
-                                                            :
-                                                            null
-                                            }
-                                        </div>
-
-                                    </div>
-                                    <div className='flex flex-col justify-center items-center my-10'>
-                                        <br />
-                                        <div className='w-48 md:w-60 lg:w-96 h-[5px] bg-current rounded-md' />
-                                        <br />
-                                    </div>
-
-                                    <div className='my-5'>
-                                        <div className='flex flex-col items-center justify-center'>
-                                            <p className='text-2xl font-bold'>Comics</p>
-                                            <p className='text-2xl font-bold mb-2'>💥💨💢💫💠💭💬</p>
-                                        </div>
-                                        <div className='h-[35vh] md:h-[50vh] lg:h-[80vh] flex justify-center'>
-                                            <div className="carousel lg:carousel-vertical carousel-center h-full max-w-md lg:max-w-md p-4 space-x-4 bg-base-100 rounded-box">
-                                                {organizedComicsProperty(selectedCharacter.comics, selectedCharacter.biography.publisher).map((comic) => {
-                                                    return (
-                                                        <div className="carousel-item lg:py-2">
-                                                            <img className="rounded-box h-full w-full" src={comic}  loading="lazy" />
+                                                                )
+                                                            })}
                                                         </div>
-                                                    )
-                                                })}
+                                                    </div>
+
+                                                </div>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
-                            </div>
-                        </div>
+                            </label>
+                        </label>
                     </div>
-                </label>
-            </label>
+                )
+            })}
         </div>
     )
 }
