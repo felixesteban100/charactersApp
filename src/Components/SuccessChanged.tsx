@@ -1,58 +1,7 @@
 import { useState, useEffect } from 'react'
+import { SuccessChangedProps } from '../types';
 
-type SuccessChangedpProps = {
-    heroSection: { imgs: string[], title: string, description: string }
-    charactersFiltered: Character[]
-}
-
-type Character = {
-    powerstats: {
-        intelligence: number;
-        strength: number;
-        speed: number;
-        durability: number;
-        power: number;
-        combat: number;
-    };
-    appearance: {
-        gender: string;
-        race: string | null;
-        height: [string, string];
-        weight: [string, string];
-        eyeColor: string;
-        hairColor: string;
-    };
-    biography: {
-        fullName: string;
-        alterEgos: string;
-        aliases: string[];
-        placeOfBirth: string;
-        firstAppearance: string;
-        publisher: string;
-        alignment: string;
-    };
-    work: {
-        occupation: string;
-        base: string;
-    };
-    connections: {
-        groupAffiliation: string;
-        relatives: string;
-    };
-    images: {
-        xs: string;
-        sm: string;
-        md: string;
-        lg: string;
-    };
-    _id: string;
-    id: number;
-    name: string;
-    slug: string;
-    comics?: string[];
-}
-
-function SuccessChanged({ heroSection, charactersFiltered}: SuccessChangedpProps) {
+function SuccessChanged({ heroSection, charactersFiltered}: SuccessChangedProps) {
     const [show, setShow] = useState(false);
 
     useEffect(() => {

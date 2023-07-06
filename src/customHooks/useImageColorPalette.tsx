@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
+import { ColorPalette } from "../types";
 
-type ColorPalette = string[];
+
 
 const useImageColorPalette = (imageUrl: string, numColors: number): [ColorPalette | null, boolean] => {
   const [colorPalette, setColorPalette] = useState<ColorPalette | null>(null);

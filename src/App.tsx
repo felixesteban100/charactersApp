@@ -2,63 +2,17 @@ import { useQuery } from 'react-query';
 import axios from "axios"
 import Characters from "./Components/Characters"
 import Header from './Components/Header';
-import ModalChangeCharacters from './Components/ModalChangeCharacters';
+import ModalChangeCharacters from './Components/Modals/ModalChangeCharacters';
 import Footer from './Components/Footer';
-import useLocalStorage from './customComponents/useLocalStorage';
-import HeroSelector from './Components/Hero';
-import ModalTeamMembers from './Components/ModalTeamMembers';
+import useLocalStorage from './customHooks/useLocalStorage';
+import HeroSelector from './Components/HeroSelector';
+import ModalTeamMembers from './Components/Modals/ModalTeamMembers';
 import SuccessChanged from './Components/SuccessChanged';
 import Error from './Components/Error';
-import ModalSettings from './Components/ModalSettings';
+import ModalSettings from './Components/Modals/ModalSettings';
 import { useEffect } from 'react';
+import { Character } from './types';
 
-
-type Character = {
-  powerstats: {
-    intelligence: number;
-    strength: number;
-    speed: number;
-    durability: number;
-    power: number;
-    combat: number;
-  };
-  appearance: {
-    gender: string;
-    race: string | null;
-    height: [string, string];
-    weight: [string, string];
-    eyeColor: string;
-    hairColor: string;
-  };
-  biography: {
-    fullName: string;
-    alterEgos: string;
-    aliases: string[];
-    placeOfBirth: string;
-    firstAppearance: string;
-    publisher: string;
-    alignment: string;
-  };
-  work: {
-    occupation: string;
-    base: string;
-  };
-  connections: {
-    groupAffiliation: string;
-    relatives: string;
-  };
-  images: {
-    xs: string;
-    sm: string;
-    md: string;
-    lg: string;
-  };
-  _id: string;
-  id: number;
-  name: string;
-  slug: string;
-  comics?: string[];
-}
 
 // if you want the API to work you should turn off the adblock extention
 
@@ -70,13 +24,14 @@ type Character = {
 //https://www.youtube.com/watch?v=0MOF_QPcgxs&list=PLTxN-M601XkQrncbxuDKY-zo9jNj6XhUe&index=32&t=10s
 
 
+//change the publisher for these
+// jason bourne, chuck, rambo, Kool-Aid Man, the cape, Ethan Hunt
 
 function App() {
   const [allCharactersSAVED, setAllCharactersSAVED] = useLocalStorage<Character[] | []>("CHARACTERS_APP_ALLCHARACTERS", [])
   const [charactersFiltered, setCharactersFiltered] = useLocalStorage<Character[] | []>("CHARACTERS_APP_CHARACTERSFILTERED", [])
 
   const [favorites, setFavorites] = useLocalStorage<Character[] | []>("CHARACTERS_APP_FAVORITES", [])
-
 
   const [characterName, setCharacterName] = useLocalStorage<string>("CHARACTERS_APP_NAME", "")
   const [howMany, setHowMany] = useLocalStorage<number>("CHARACTERS_APP_HOWMANY", 6)
@@ -134,6 +89,7 @@ function App() {
     }
   }
 
+  /* see if I can use the Array.prototype.reduce() method instead of this function, an modify the functions below to adapt them to the reduce pattern, i mean to use them in this function as a comparison statement */
   function filterCharacters() {
     if (allCharactersSAVED !== undefined) {
       let result: Character[] = []
@@ -148,25 +104,25 @@ function App() {
       if (characterName !== "") {
         let resultArr: Character[] = []
         let name = [characterName]
-        
+
 
         if (characterName.includes(",")) name = characterName.split(",").map(current => current.trim())
 
         name.forEach((currentName) => {
           randomizedArray.forEach(charac => {
             let comparison
-            
+
             if (includeNameOrExactName === true) {
               comparison = characterOrFullName === false
-              ? charac.name.toLowerCase().includes(currentName.toLowerCase())
-              : charac.biography.fullName.toLowerCase().includes(currentName.toLowerCase())
+                ? charac.name.toLowerCase().includes(currentName.toLowerCase())
+                : charac.biography.fullName.toLowerCase().includes(currentName.toLowerCase())
             } else {
               comparison = characterOrFullName === false
-              ? charac.name.toLowerCase() === currentName.toLowerCase()
-              : charac.biography.fullName.toLowerCase() === currentName.toLowerCase()
+                ? charac.name.toLowerCase() === currentName.toLowerCase()
+                : charac.biography.fullName.toLowerCase() === currentName.toLowerCase()
             }
 
-            
+
             if (comparison === true) {
               resultArr.push(charac)
             }
@@ -183,7 +139,6 @@ function App() {
       }
       if (team !== "All") {
         result = getCharactersByTeamSended(firstFilter)
-
       }
 
       /* filter how Many */
@@ -198,6 +153,7 @@ function App() {
 
       if (team === "All") setTeamMembers(result)
       if (team !== "All") setTeamMembers(allCharactersSAVED!.filter((currentCharacter) => currentCharacter.connections.groupAffiliation.includes(team)))
+
     }
   }
 
@@ -327,6 +283,7 @@ function App() {
     setGender("All")
     setHeroSection({ imgs: ["https://media.tenor.com/TY1HfJK5qQYAAAAC/galaxy-pixel-art.gif"], title: "", description: "" })
     setTeamMembers([])
+
   }
 
   /* teams */
@@ -457,6 +414,7 @@ function App() {
           /> :
           null
       }
+
 
       <ModalChangeCharacters
         characterName={characterName}

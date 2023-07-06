@@ -1,28 +1,6 @@
+import { ButtonChangeCharacterProps, ModalChangeCharactersProps, SelectInputProps } from "../../types";
 
-type ModalChangeCharactersProps = {
-    characterName: string;
-    setCharacterName: React.Dispatch<React.SetStateAction<string>>
-    howMany: string | number
-    setHowMany: React.Dispatch<React.SetStateAction<number>>
-    side: string
-    setSide: React.Dispatch<React.SetStateAction<string>>
-    universe: string;
-    setUniverse: React.Dispatch<React.SetStateAction<string>>
-    team: string;
-    setTeam: React.Dispatch<React.SetStateAction<string>>
-    gender: string;
-    setGender: React.Dispatch<React.SetStateAction<string>>
-    race: string;
-    setRace: React.Dispatch<React.SetStateAction<string>>
-    viewFavorites: () => void
-    includeNameOrExactName: boolean;
-    setIncludeNameOrExactName: React.Dispatch<React.SetStateAction<boolean>>
-    characterOrFullName: boolean,
-    setCharacterOrFullName: React.Dispatch<React.SetStateAction<boolean>>,
 
-    filterCharacters: () => void
-    resetCharactersSelection: () => void
-}
 
 function ModalChangeCharacters({
     characterName,
@@ -410,116 +388,200 @@ function ModalChangeCharacters({
                         <input value={howMany ?? ""} onChange={(event) => setHowMany(parseInt(event.target.value))} type="number" placeholder="Type how many characters to show" className="input input-bordered w-full" min={1} />
                     </div>
 
-                    <div className="form-control w-full">
-                        <label className="label">
-                            <span className="label-text">Pick the gender</span>
-                        </label>
-                        <select value={gender} onChange={(event) => setGender(event.target.value)} className="select select-bordered">
-                            <option value={"All"}>Both genders</option>
-                            <option value={"Female"}>Female</option>
-                            <option value={"Male"}>Male</option>
-                        </select>
-                    </div>
 
-                    <div className="form-control w-full">
-                        <label className="label">
-                            <span className="label-text">Pick the characters race</span>
-                        </label>
-                        <select value={race} onChange={(event) => setRace(event.target.value)} className="select select-bordered">
-                            <option value="All">All races</option>
-                            <option value="Human">Human</option>
-                            <option value="Metahuman">Metahuman</option>
-                            <option value="Alien">Alien</option>
-                            <option value="Kryptonian">Kryptonian</option>
-                            <option value="Symbiote">Symbiote</option>
-                            <option value="Mutant">Mutant</option>
-                            <option value="Atlantean">Atlantean</option>
-                            <option value="Demon">Demon</option>
-                            <option value="Android">Android</option>
-                            <option value="Cyborg">Cyborg</option>
-                            <option value="Animal">Animal</option>
-                            <option value="Zombie">Zombie</option>
-                            <option value="Amazon">Amazon</option>
-                            <option value="Eternal">Eternal</option>
-                            <option value="Inhuman">Inhuman</option>
-                            <option value="Asgardian">Asgardian </option>
-                            <option value="Cosmic Entity">Cosmic Entity</option>
-                        </select>
-                    </div>
+                    <SelectInput
+                        value={gender}
+                        options={[
+                            {
+                                value: "All",
+                                name: "Both genders"
+                            },
+                            {
+                                value: "Female",
+                                name: "Female"
+                            },
+                            {
+                                value: "Male",
+                                name: "Male"
+                            },
+                        ]}
+                        onChangeFunction={(event) => setGender(event.target.value)}
+                        forWhat={'gender'}
+                    />
 
-                    <div className="form-control w-full">
-                        <label className="label">
-                            <span className="label-text">Pick the character alignment</span>
-                        </label>
-                        <select value={side} onChange={(event) => setSide(event.target.value)} className="select select-bordered">
-                            <option value="All">All aligments</option>
-                            <option value="good">Hero</option>
-                            <option value="bad">Villain</option>
-                            <option value="neutral">Anti-hero</option>
-                        </select>
-                    </div>
+                    <SelectInput
+                        value={race}
+                        options={[
+                            { value: "All", name: "All races" },
+                            { value: "Human", name: "Human" },
+                            { value: "Metahuman", name: "Metahuman" },
+                            { value: "Alien", name: "Alien" },
+                            { value: "Kryptonian", name: "Kryptonian" },
+                            { value: "Symbiote", name: "Symbiote" },
+                            { value: "Mutant", name: "Mutant" },
+                            { value: "Atlantean", name: "Atlantean" },
+                            { value: "Demon", name: "Demon" },
+                            { value: "Android", name: "Android" },
+                            { value: "Cyborg", name: "Cyborg" },
+                            { value: "Animal", name: "Animal" },
+                            { value: "Zombie", name: "Zombie" },
+                            { value: "Amazon", name: "Amazon" },
+                            { value: "Eternal", name: "Eternal" },
+                            { value: "Inhuman", name: "Inhuman" },
+                            { value: "Asgardian", name: "Asgardian" },
+                            { value: "Cosmic Entity", name: "Cosmic Entity" },
+                        ]}
+                        onChangeFunction={(event) => setRace(event.target.value)}
+                        forWhat={'characters race'}
+                    />
 
-                    <div className="form-control w-full">
-                        <label className="label">
-                            <span className="label-text">Pick the characters universe</span>
-                        </label>
-                        <select value={universe} onChange={(event) => {
+                    <SelectInput
+                        value={side}
+                        options={[
+                            {
+                                value: "All",
+                                name: "All aligments"
+                            },
+                            {
+                                value: "good",
+                                name: "Hero"
+                            },
+                            {
+                                value: "bad",
+                                name: "Villain"
+                            },
+                            {
+                                value: "neutral",
+                                name: "Anti-hero"
+                            },
+                        ]}
+                        onChangeFunction={(event) => setSide(event.target.value)}
+                        forWhat={'character alignment'}
+                    />
+
+                    <SelectInput
+                        value={universe}
+                        options={[
+                            { value: "All", name: "All universes" },
+                            { value: "Marvel Comics", name: "Marvel" },
+                            { value: "DC Comics", name: "DC" },
+                            { value: "Shueisha", name: "Shueisha" },
+                            { value: "Dark Horse Comics", name: "Dark Horse Comics" },
+                            { value: "George Lucas", name: "George Lucas" },
+                            { value: "IDW Publishing", name: "IDW Publishing" },
+                            { value: "Image Comics", name: "Image Comics" },
+                            { value: "Warner Bros", name: "Warner Bros" },
+                            { value: "Angel", name: "Angel" },
+                            { value: "NBC - Heroes", name: "NBC - Heroes" },
+                            { value: "Tempest", name: "Tempest" },
+                            { value: "SyFy", name: "SyFy" },
+                            { value: "ABC Studios", name: "ABC Studios" },
+                            { value: "Icon Comics", name: "Icon Comics" },
+                            { value: "Universal Studios", name: "Universal Studios" },
+                            { value: "Gemini V", name: "Gemini V" },
+                            { value: "Star Trek", name: "Star Trek" },
+                            { value: "Goliath", name: "Goliath" },
+                            { value: "Deadpool", name: "Deadpool" },
+                            { value: "Wildstorm", name: "Wildstorm" },
+                            { value: "South Park", name: "South Park" },
+                            { value: "Sony Pictures", name: "Sony Pictures" },
+                            { value: "Vindicator II", name: "Vindicator II" },
+                            { value: "Image Comics", name: "Image Comics" },
+                            { value: "Titan Books", name: "Titan Books" },
+                            { value: "J. K. Rowling", name: "J. K. Rowling" },
+                            { value: "Microsoft", name: "Microsoft" },
+                            { value: "She-Thing", name: "She-Thing" },
+                            { value: "Rebellion", name: "Rebellion" },
+                            { value: "J. R. R. Tolkien", name: "J. R. R. Tolkien" },
+                            { value: "-", name: "-" },
+                            // { value: null, name: "null" },
+                            
+                        ]}
+                        onChangeFunction={(event) => {
                             setUniverse(event.target.value)
                             setTeam("All")
-                        }} className="select select-bordered">
-                            <option value="All">All universes</option>
-                            <option value="Marvel Comics">Marvel</option>
-                            <option value="DC Comics">DC</option>
-                            <option value="Shueisha">Shueisha</option>
-                            <option value="Dark Horse Comics">Dark Horse Comics</option>
-                            <option value="George Lucas">George Lucas</option>
-                            <option value="IDW Publishing">IDW Publishing</option>
-                            <option value="Image Comics">Image Comics</option>
-                            <option value="Warner Bros">Warner Bros</option>
-                        </select>
-                    </div>
+                        }}
+                        forWhat={'characters universe'}
+                    />
 
-                    <div className="form-control w-full">
-                        <label className="label">
-                            <span className="label-text">Pick the team</span>
-                        </label>
-                        <select value={team} onChange={(event) => setTeam(event.target.value)} className="select select-bordered">
-                            <option>All teams</option>
-                            {
-                                teamByUniverse.map((current, index) => (
-                                    <option key={index} value={current.value}>{current.name}</option>
-                                ))
-                            }
-                        </select>
-                    </div>
+                    <SelectInput
+                        value={team}
+                        options={[
+                            { value: "All", name: "All teams" },
+                            ...teamByUniverse.map((current) => {
+                                return {
+                                    value: current.value,
+                                    name: current.name,
+                                }
+                            })
+                        ]}
+                        onChangeFunction={(event) => setTeam(event.target.value)}
+                        forWhat={'the team'}
+                    />
 
                     <div className="flex flex-col md:flex-row gap-5 justify-around">
-                        <label
-                            htmlFor="my-modal-change"
-                            className="btn btn-primary"
-                            onClick={() => filterCharacters()}
-                        >
-                            Find by filters
-                        </label>
-                        <label
-                            htmlFor="my-modal-change"
-                            className="btn btn-warning"
-                            onClick={() => viewFavorites()}
-                        >
-                            Favorites
-                        </label>
-                        <label
-                            htmlFor="my-modal-change"
-                            className="btn btn-danger"
-                            onClick={() => resetCharactersSelection()}
-                        >
-                            Reset filters
-                        </label>
-                    </div>
+                        <ButtonChangeCharacter
+                            htmlFor={"my-modal-change"}
+                            classNameSended="btn-primary"
+                            functionSended={() => { filterCharacters() }}
+                            forWhat="Find by filters"
+                        />
 
+                        <ButtonChangeCharacter
+                            htmlFor={"my-modal-change"}
+                            classNameSended="btn-warning"
+                            functionSended={() => { viewFavorites() }}
+                            forWhat="Favorites"
+                        />
+
+                        <ButtonChangeCharacter
+                            htmlFor={"my-modal-change"}
+                            classNameSended="btn-danger"
+                            functionSended={() => { resetCharactersSelection() }}
+                            forWhat="Reset filters"
+                        />
+                    </div>
                 </label>
             </label>
         </div>
+    )
+}
+
+
+
+function SelectInput({ value, options, onChangeFunction, forWhat }: SelectInputProps) {
+    return (
+        <div className="form-control w-full">
+            <label className="label">
+                <span className="label-text">Pick the {forWhat}</span>
+            </label>
+            <select
+                value={value}
+                onChange={onChangeFunction}
+                className="select select-bordered"
+            >
+                {
+                    options.map((current, index) => (
+                        <option key={index} value={typeof current.value === "string" ? current.value : "null"}>{current.name}</option>
+                    ))
+                }
+            </select>
+        </div>
+    )
+}
+
+
+function ButtonChangeCharacter({ htmlFor, classNameSended, functionSended, forWhat }: ButtonChangeCharacterProps) {
+    return (
+        <>
+            <label
+                htmlFor={htmlFor}
+                className={`btn ${classNameSended}`}
+                onClick={functionSended}
+            >
+                {forWhat}
+            </label>
+        </>
     )
 }
 

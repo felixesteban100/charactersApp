@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+@import 'tailwindcss/dist/tailwind.css';
 
 @layer utilities {
     .card.image-full::before {
@@ -11,8 +12,9 @@
         left: 0;
         width: 100%;
         height: 100%;
-        /* background-color: var(--bg-current); */
-        background-color: black;
+        /* @apply bg-gradient-to-r from-base-100 to-base-300; */
+        @apply bg-base-200;
+        /* background-color: black; */
         opacity: 0;
         transition: opacity 0.3s ease-in-out;
     }

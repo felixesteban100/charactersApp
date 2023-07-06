@@ -1,8 +1,4 @@
-
-type ModalSettingsProps = {
-    theme: string;
-    setTheme: React.Dispatch<React.SetStateAction<string>>
-}
+import { ModalSettingsProps } from "../../types"
 
 function ModalSettings({theme, setTheme}: ModalSettingsProps) {
     const themes = ["mytheme1", "mytheme2", "light", "dark", "cupcake", "bumblebee", "emerald", "corporate", "synthwave", "retro", "cyberpunk", "valentine", "halloween", "garden", "forest", "aqua", "lofi", "pastel", "fantasy", "wireframe", "black", "luxury", "dracula", "cmyk", "autumn", "business", "acid", "lemonade", "night", "coffee", "winter"]

@@ -1,111 +1,64 @@
-import React, { useState } from 'react'
 import LoadingCard from '../Components/LoadingCard';
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import { CharactersProps } from '../types';
+import ModalCharacter from './Modals/ModalCharacter';
+import Pagination from './Pagination';
+import { useEffect, useState } from 'react'
+
+// import ReactImageZoom from 'react-image-zoom';
+
+// import { Controlled as ControlledZoom } from 'react-medium-image-zoom'
+// import Zoom from 'react-medium-image-zoom'
+// import 'react-medium-image-zoom/dist/styles.css'
+
+// import InnerImageZoom from 'react-inner-image-zoom';
+// import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css'
 
 //https://heroes-backend.onrender.com/
 
-type CharactersProps = {
-    charactersFiltered: Character[]
-    manageFavorite: (action: string, characterSelected: Character) => void
-    favorites: Character[]
-    isLoading: boolean
-}
-
-type Character = {
-    powerstats: {
-        intelligence: number;
-        strength: number;
-        speed: number;
-        durability: number;
-        power: number;
-        combat: number;
-    };
-    appearance: {
-        gender: string;
-        race: string | null;
-        height: [string, string];
-        weight: [string, string];
-        eyeColor: string;
-        hairColor: string;
-    };
-    biography: {
-        fullName: string;
-        alterEgos: string;
-        aliases: string[];
-        placeOfBirth: string;
-        firstAppearance: string;
-        publisher: string;
-        alignment: string;
-    };
-    work: {
-        occupation: string;
-        base: string;
-    };
-    connections: {
-        groupAffiliation: string;
-        relatives: string;
-    };
-    images: {
-        xs: string;
-        sm: string;
-        md: string;
-        lg: string;
-    };
-    _id: string;
-    id: number;
-    name: string;
-    slug: string;
-    comics?: string[];
-}
-
-/* const characterEmpty: Character = {
-    powerstats: {
-        intelligence: 0,
-        strength: 0,
-        speed: 0,
-        durability: 0,
-        power: 0,
-        combat: 0,
-    },
-    appearance: {
-        gender: "",
-        race: "",
-        height: ["", ""],
-        weight: ["", "",],
-        eyeColor: "",
-        hairColor: "",
-    },
-    biography: {
-        fullName: "",
-        alterEgos: "",
-        aliases: [],
-        placeOfBirth: "",
-        firstAppearance: "",
-        publisher: "",
-        alignment: "",
-    },
-    work: {
-        occupation: "",
-        base: "",
-    },
-    connections: {
-        groupAffiliation: "",
-        relatives: "",
-    },
-    images: {
-        xs: "",
-        sm: "",
-        md: "",
-        lg: "",
-    },
-    _id: "",
-    id: 0,
-    name: "",
-    slug: "",
-    comics: [""]
-} */
-
 function Characters({ charactersFiltered, manageFavorite, favorites, isLoading }: CharactersProps) {
+
+
+    // const itemsPerPage = 4; // Number of items to display per page
+    const [itemsPerPage, setItemsPerPage] = useState(4);
+    const [currentPage, setCurrentPage] = useState(1);
+    // const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+    const totalPages = Math.ceil(charactersFiltered.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const displayedItems = charactersFiltered.slice(startIndex, endIndex);
+
+    useEffect(() => {
+        const handleResize = () => {
+            // setScreenWidth(window.innerWidth);
+
+            if (window.innerWidth > 770 && window.innerWidth < 1300) {
+                return setItemsPerPage(6)
+            }
+
+            if (window.innerWidth > 1300) {
+                return setItemsPerPage(8)
+            }
+
+            setItemsPerPage(4)
+        };
+
+        window.addEventListener("resize", handleResize);
+
+        // Cleanup event listener on component unmount
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, [window.innerWidth])
+
+    useEffect(() => {
+        setCurrentPage(1)
+    }, [charactersFiltered])
+
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+    };
 
     function publisherIMG(publisher: string) {
         switch (publisher) {
@@ -113,7 +66,8 @@ function Characters({ charactersFiltered, manageFavorite, favorites, isLoading }
                 return "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Marvel_Logo.svg/1200px-Marvel_Logo.svg.png"
 
             case "DC Comics":
-                return "https://upload.wikimedia.org/wikipedia/commons/3/3d/DC_Comics_logo.svg"
+                // return "https://upload.wikimedia.org/wikipedia/commons/3/3d/DC_Comics_logo.svg"
+                return "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/DC_Comics_logo.svg/1200px-DC_Comics_logo.svg.png"
 
             case "Shueisha":
                 return "https://www.shueisha.co.jp/wp-content/themes/shueisha/image/en/mv/mv_subtitle_01.png"
@@ -122,20 +76,48 @@ function Characters({ charactersFiltered, manageFavorite, favorites, isLoading }
                 return "https://media.comicbook.com/wp-content/uploads/2012/06/120411064621_lucasfilm-logo-640x360-16x9.jpg"
 
             case "Warner Bros":
-                return "https://variety.com/wp-content/uploads/2022/04/IMG_3724.jpg"
+                // return "https://variety.com/wp-content/uploads/2022/04/IMG_3724.jpg"
+                return "https://upload.wikimedia.org/wikipedia/commons/thumb/6/64/Warner_Bros_logo.svg/1965px-Warner_Bros_logo.svg.png"
 
             case "Dark Horse Comics":
                 return "https://i0.wp.com/www.comicsbeat.com/wp-content/uploads/2020/03/dark-horse-logo-banner.png?fit=1200%2C500&ssl=1"
 
+            /**
+             * "Angel"
+             * "NBC - Heroes"
+             * Tempest
+             * SyFy
+             * ABC Studios
+             * Icon Comics
+             * Universal Studios
+             * Gemini V
+             * null
+             * Star Trek
+             * Goliath
+             * Deadpool
+             * Wildstorm
+             * South Park
+             * Sony Pictures
+             * Vindicator II
+             * Image Comics
+             * Titan Books
+             * J. K. Rowling
+             * Microsoft
+             * She-Thing
+             * Rebellion
+             * 
+             */
+
             default:
                 return "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRykZHBER1nS5QMUGvv0qJCJFuqtf5wPrliiiE_1hMMbCwvONjVOaYloiVHMeCyH710z7g&usqp=CAU"
+
         }
     }
 
     function getAligmentIMG(alignment: string) {
         switch (alignment) {
             case "good":
-                return <svg className="fill-current hover:text-success h-10 w-10" /* width="50" height="50" */ viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" clipRule="evenodd" d="M4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12C20 16.4183 16.4183 20 12 20C7.58172 20 4 16.4183 4 12ZM12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM8.03001 15.2425C7.87428 14.6196 8.36619 14.0002 9.00016 13.9998H15.0002C15.6333 14.0002 16.126 14.6172 15.9703 15.24C15.4525 16.9881 13.7854 18 12.0002 18C10.2834 18 8.46902 16.9986 8.03001 15.2425ZM16.5 10C16.5 10.8284 15.8284 11.5 15 11.5C14.1716 11.5 13.5 10.8284 13.5 10C13.5 9.17157 14.1716 8.5 15 8.5C15.8284 8.5 16.5 9.17157 16.5 10ZM9 11.5C9.82843 11.5 10.5 10.8284 10.5 10C10.5 9.17157 9.82843 8.5 9 8.5C8.17157 8.5 7.5 9.17157 7.5 10C7.5 10.8284 8.17157 11.5 9 11.5Z" /></svg>;
+                return <svg className="fill-current hover:text-success h-14 w-14" /* width="50" height="50" */ viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" clipRule="evenodd" d="M4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12C20 16.4183 16.4183 20 12 20C7.58172 20 4 16.4183 4 12ZM12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM8.03001 15.2425C7.87428 14.6196 8.36619 14.0002 9.00016 13.9998H15.0002C15.6333 14.0002 16.126 14.6172 15.9703 15.24C15.4525 16.9881 13.7854 18 12.0002 18C10.2834 18 8.46902 16.9986 8.03001 15.2425ZM16.5 10C16.5 10.8284 15.8284 11.5 15 11.5C14.1716 11.5 13.5 10.8284 13.5 10C13.5 9.17157 14.1716 8.5 15 8.5C15.8284 8.5 16.5 9.17157 16.5 10ZM9 11.5C9.82843 11.5 10.5 10.8284 10.5 10C10.5 9.17157 9.82843 8.5 9 8.5C8.17157 8.5 7.5 9.17157 7.5 10C7.5 10.8284 8.17157 11.5 9 11.5Z" /></svg>;
 
             case "bad":
                 return (<svg className="fill-current hover:text-error h-10 w-10" /* width="40" height="40"  */ version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 106.059 106.059"><g><path d="M15.515,15.512C-5.173,36.198-5.171,69.858,15.517,90.547c20.682,20.684,54.341,20.684,75.027-0.004 c20.687-20.685,20.685-54.342,0.002-75.024C69.858-5.172,36.198-5.172,15.515,15.512z M84.757,84.758 c-17.494,17.494-45.961,17.496-63.455,0.002c-17.498-17.497-17.496-45.966,0-63.46C38.795,3.806,67.261,3.804,84.759,21.301 C102.253,38.795,102.251,67.265,84.757,84.758z M75.639,71.029c0,1.921-1.558,3.479-3.479,3.479H33.902 c-1.921,0-3.479-1.558-3.479-3.479s1.558-3.478,3.479-3.478h38.259C74.081,67.552,75.639,69.108,75.639,71.029z M77.673,31.718 c1.229,1.229,1.229,3.222-0.001,4.451l-9.455,9.456c-1.229,1.229-3.223,1.229-4.451,0s-1.229-3.222,0-4.451l9.456-9.455 C74.451,30.489,76.444,30.489,77.673,31.718z M77.878,47.999c0,2.254-1.827,4.081-4.079,4.081s-4.079-1.827-4.079-4.081 c0-2.252,1.827-4.08,4.079-4.08C76.05,43.919,77.878,45.746,77.878,47.999z M28.385,36.169c-1.229-1.229-1.229-3.222-0.001-4.451 c1.229-1.229,3.222-1.229,4.451,0l9.456,9.455c1.229,1.229,1.229,3.222,0,4.451c-1.229,1.229-3.223,1.229-4.451,0L28.385,36.169z  M32.258,52.08c-2.251,0-4.079-1.827-4.079-4.081c0-2.252,1.827-4.08,4.079-4.08s4.079,1.827,4.079,4.08 C36.337,50.253,34.51,52.08,32.258,52.08z" /></g></svg>);
@@ -179,12 +161,11 @@ function Characters({ charactersFiltered, manageFavorite, favorites, isLoading }
         return images[randomIndex];
     }
 
-    //https://www.npmjs.com/package/react-lazy-load-image-component
-    //https://www.youtube.com/watch?v=QAR9VIqx1qQ&ab_channel=MichaelBreitung
-    //https://www.youtube.com/watch?v=2U7yZ3wvFBM&ab_channel=SonnySangha
-    //https://www.youtube.com/watch?v=4nYsbm8N4EQ&ab_channel=CyberPotato
-
     function transitionImageCard() {
+        //https://www.npmjs.com/package/react-lazy-load-image-component
+        //https://www.youtube.com/watch?v=QAR9VIqx1qQ&ab_channel=MichaelBreitung
+        //https://www.youtube.com/watch?v=2U7yZ3wvFBM&ab_channel=SonnySangha
+        //https://www.youtube.com/watch?v=4nYsbm8N4EQ&ab_channel=CyberPotato
         const imageElements = document.querySelectorAll('.imageCard')
 
         imageElements.forEach((image) => {
@@ -194,30 +175,36 @@ function Characters({ charactersFiltered, manageFavorite, favorites, isLoading }
         })
     }
 
-
     return (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-[90%] gap-10 mx-auto pt-[2rem] ">
-            {
-                charactersFiltered.map((currentCharacter) => {
-                    if (isLoading) {
+        // <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-[90%] gap-10 mx-auto pt-[2rem] ">
+        <div
+            id='section-characters'
+            className='flex flex-col gap-5 min-h-[100vh] items-center justify-center'
+        >
+            <div className="mt-5 -mb-5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 w-[90%] sm:w-[90%] md:w-[90%] lg:w-[70%] gap-10 mx-auto pt-[2rem]">
+                {
+                    displayedItems.map((currentCharacter) => {
+                        if (isLoading) {
+                            return (
+                                <div key={currentCharacter._id}>
+                                    <LoadingCard />
+                                </div>
+                            )
+                        }
                         return (
                             <div key={currentCharacter._id}>
-                                <LoadingCard />
-                            </div>
-                        )
-                    }
-                    return (
-                        <div key={currentCharacter._id}>
-                            <label className="cursor-pointer" htmlFor={`my-modal-${currentCharacter.slug}`}>
-                                <div>
+                                <label className="cursor-pointer" htmlFor={`my-modal-${currentCharacter.slug}`}>
                                     <div
                                         //bg-base-100
                                         // bg-cover bg-[url('${currentCharacter.images.xs !== '' ? currentCharacter.images.xs : getRandomImage(randomImagesArray)}')] 
-                                        className={`
-                                            card image-full hover:opacity-1 inset-0 object-cover w-full h-[20rem] md:h-[25rem] lg:h-[35rem] shadow-xl hover:scale-110 group/item
-                                        `}
+                                        /* className={`
+                                            card image-full hover:opacity-1 inset-0 object-cover w-full h-[20rem] md:h-[25rem] lg:h-[35rem] xl:h-[25rem] xl:w-[15rem] shadow-current shadow-2xl hover:scale-110 group/item overflow-hidden
+                                        `} */
+                                        // className={`card image-full w-full h-[20rem] md:h-[20rem] xl:h-[22rem] bg-base-100 shadow-current shadow-2xl hover:scale-110 group/item`}
+                                        className={`card image-full  hover: object-contain w-full h-[20rem] md:h-[20rem] xl:h-[22rem] bg-base-100 shadow-current shadow-2xl hover:scale-110 group/item`}
+                                        
                                     >
-                                        <figure className='relative rounded-md'>
+                                        <figure className='relative rounded-md w-full'>
                                             <img
                                                 className="w-full h-full animate-pulse blur-lg rounded-md"
                                                 src={(currentCharacter.images.xs !== '' && currentCharacter.images.xs !== '-')
@@ -228,7 +215,9 @@ function Characters({ charactersFiltered, manageFavorite, favorites, isLoading }
                                             />
 
                                             <img
-                                                className={`imageCard absolute w-full h-full transition-opacity duration-200 ease-in-out rounded-md opacity-0 `}
+                                                // className={`imageCard absolute w-full h-full transition-opacity duration-200 ease-in-out rounded-md opacity-0`}
+                                                // className={`imageCard absolute w-full h-full transition-opacity duration-200 ease-in-out rounded-md group-hover/item:blur-sm`}
+                                                className={`imageCard absolute w-full h-full transition-opacity duration-200 ease-in-out rounded-md group-hover/item:blur-sm`}
                                                 src={currentCharacter.images.md}
                                                 alt={currentCharacter.name}
                                                 loading='lazy'
@@ -238,12 +227,26 @@ function Characters({ charactersFiltered, manageFavorite, favorites, isLoading }
 
                                         <div className="card-body group/edit invisible group-hover/item:visible transition delay-150 duration-300 ease-in-out flex flex-col justify-between">
                                             <div>
-                                                <h2 className="card-title text-xl md:text-2xl lg:text-3xl">{currentCharacter.name}</h2>
+                                                <h2 className="card-title text-primary text-xl md:text-2xl lg:text-3xl">{currentCharacter.name}</h2>
                                             </div>
 
                                             <div className="card-actions justify-end">
                                                 <div className='flex w-full justify-between'>
-                                                    <img className='h-[7vw] w-[15vw] sm:h-[7vw] sm:w-[15vw] md:h-[3rem] md:w-[7rem] lg:h-[3rem] lg:w-[7rem] self-center' src={publisherIMG(currentCharacter.biography.publisher)} alt="" loading="lazy" />
+                                                    {
+                                                        (currentCharacter.biography.publisher === "DC Comics" || currentCharacter.biography.publisher === "Warner Bros")
+                                                            ? (<img
+                                                                className='h-[3rem] w-[3rem] sm:h-[5rem] sm:w-[5rem] md:h-[5rem] md:w-[5rem] lg:h-[5rem] lg:w-[5rem] self-center'
+                                                                src={publisherIMG(currentCharacter.biography.publisher)}
+                                                                alt={`Logo ${currentCharacter.biography.publisher}`}
+                                                                loading="lazy"
+                                                            />)
+                                                            : (<img
+                                                                className='h-[7vw] w-[15vw] sm:h-[7vw] sm:w-[15vw] md:h-[3rem] md:w-[7rem] lg:h-[3rem] lg:w-[7rem] self-center'
+                                                                src={publisherIMG(currentCharacter.biography.publisher)}
+                                                                alt={`Logo ${currentCharacter.biography.publisher}`}
+                                                                loading="lazy"
+                                                            />)
+                                                    }
                                                     <div className="tooltip" data-tip={currentCharacter.biography.alignment === "good" ? "Hero" : currentCharacter.biography.alignment === "bad" ? "Villain" : "Anti-hero"}>
                                                         {getAligmentIMG(currentCharacter.biography.alignment)}
                                                     </div>
@@ -251,480 +254,26 @@ function Characters({ charactersFiltered, manageFavorite, favorites, isLoading }
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </label>
-                        </div>
-                    )
-                })
-            }
-            <ModalCharacter
-                charactersFiltered={charactersFiltered}
-                manageFavorite={manageFavorite}
-                favorites={favorites}
+                                </label>
+                            </div>
+                        )
+                    })
+                }
+
+                <ModalCharacter
+                    charactersFiltered={charactersFiltered}
+                    manageFavorite={manageFavorite}
+                    favorites={favorites}
+                />
+            </div>
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
             />
         </div>
     )
 }
 
-type ModalCharacterProps = {
-    manageFavorite: (action: string, characterSelected: Character) => void
-    favorites: Character[]
-    charactersFiltered: Character[]
-}
-
-function ModalCharacter({ manageFavorite, favorites, charactersFiltered }: ModalCharacterProps) {
-    const [selectedOption, setSelectedOption] = useState<"Stats" | "Appereance" | "Biography">("Stats")
-
-    function organizedComicsProperty(comics: string[] | null | undefined, publisher: string): string[] {
-        if (comics === undefined || comics === null) {
-            switch (publisher) {
-                case "Marvel Comics":
-                    return [
-                        "https://i.annihil.us/u/prod/marvel/i/mg/5/04/5d5d4cbf869ff/clean.jpg",
-                        "https://upload.wikimedia.org/wikipedia/en/1/19/Marvel_Universe_%28Civil_War%29.jpg",
-                        "https://cdn.marvel.com/u/prod/marvel/i/mg/f/70/5d5aaf2e85d4d/clean.jpg",
-                        "https://i5.walmartimages.com/asr/4bb4cfc9-ce7f-4d44-821d-dff6eae1f38b.fbf723c17381a38682b8660aaed481d9.jpeg",
-                        "https://images.saymedia-content.com/.image/t_share/MTc0MzA1MTk3OTc4Mjk4MjM2/getting-into-comics-a-general-guide.jpg",
-
-                        "https://i5.walmartimages.com/asr/4bb4cfc9-ce7f-4d44-821d-dff6eae1f38b.fbf723c17381a38682b8660aaed481d9.jpeg",
-                        "https://i5.walmartimages.com/asr/4bb4cfc9-ce7f-4d44-821d-dff6eae1f38b.fbf723c17381a38682b8660aaed481d9.jpeg",
-                        "https://i5.walmartimages.com/asr/4bb4cfc9-ce7f-4d44-821d-dff6eae1f38b.fbf723c17381a38682b8660aaed481d9.jpeg",
-                    ]
-
-                case "DC Comics":
-                    return [
-                        "http://www.moviepostersetc.com/_staticProxy/content/ff808081163c05b001169d6655243ae9/Justice_League_of_America_poster_Issue_1.jpg",
-
-                        "https://cdn.europosters.eu/image/1300/julisteet/dc-comics-collage-i15088.jpg",
-                        "https://d.newsweek.com/en/full/975273/heroes-crisis-tom-king-clay-mann-dc-comics.jpg",
-                        "https://i.pinimg.com/originals/02/fb/e3/02fbe3db4a82b9b15c9afefe2b9799a9.png",
-                        "https://i0.wp.com/batman-news.com/wp-content/uploads/2018/05/9781608878321.jpg?fit=696%2C862&quality=80&strip=info&ssl=1",
-                        "https://www.previewsworld.com/news_images/177217_889486_3.jpg",
-                    ]
-
-                case "Shueisha":
-                    return [
-                        "https://cdn.animenewsnetwork.com/hotlink/thumbnails/max1000x1500/cms/interest/134237/jump_1833_fixw_640_hq.jpg",
-                        "https://cdn.animenewsnetwork.com/hotlink/thumbnails/max1000x1500/cms/interest/134237/jump_1833_fixw_640_hq.jpg",
-                        "https://cdn.animenewsnetwork.com/hotlink/thumbnails/max1000x1500/cms/interest/134237/jump_1833_fixw_640_hq.jpg",
-                        "https://cdn.animenewsnetwork.com/hotlink/thumbnails/max1000x1500/cms/interest/134237/jump_1833_fixw_640_hq.jpg"
-                    ]
-
-                case "IDW Publishing":
-                    return [
-                        "https://images.squarespace-cdn.com/content/v1/593f201de3df288fc6465e6f/1643902801105-VUT092WGQWT7VUD66Y8M/Teenage+Mutant+Ninja+Turtles+Reborn+Vol.+1.jpg?format=1000w",
-                        "https://d1466nnw0ex81e.cloudfront.net/n_iv/600/2066186.jpg",
-                        "https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/81j8N4V4pIL.jpg",
-                        "https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/91L4+Vf8YWL._AC_UF1000,1000_QL80_.jpg"
-                    ]
-
-                case "George Lucas":
-                    return [
-                        "https://cdn.marvel.com/u/prod/marvel/i/mg/c/00/5ff32d6aad522/clean.jpg",
-                        "https://tools.toywiz.com/_images/_webp/_products/lg/apr221023.webp",
-                        "https://i0.wp.com/MynockManor.com/wp-content/uploads/2020/11/Star-Wars-11-Full-Cover-Vol-2.jpeg?ssl=1",
-                        "https://storage.googleapis.com/hipcomic/p/007ce152f644d7971541cb74253b82cf.jpg"
-                    ]
-
-                default:
-                    return [
-                        "https://img.freepik.com/free-vector/comics-poster-template_225004-800.jpg?w=2000",
-                        "https://img.freepik.com/free-vector/comics-poster-template_225004-800.jpg?w=2000",
-                        "https://img.freepik.com/free-vector/comics-poster-template_225004-800.jpg?w=2000",
-                        "https://img.freepik.com/free-vector/comics-poster-template_225004-800.jpg?w=2000"
-                    ]
-
-            }
-        }
-
-        return comics
-    }
-
-    return (
-        <div>
-            {charactersFiltered.map((selectedCharacter, index) => {
-                return (
-                    <div key={`${selectedCharacter._id}-${index}`}>
-                        <input type="checkbox" id={`my-modal-${selectedCharacter.slug}`} className="modal-toggle" value="" />
-                        <label htmlFor={`my-modal-${selectedCharacter.slug}`} className="modal">
-                            <label className="" htmlFor="">
-                                <div className="rounded-md bg-base-100 h-[95vh] w-[80vw] max-w-[80rem] overflow-y-auto overflow-x-hidden">
-                                    <div className='flex flex-col justify-center mt-5'>
-                                        <div className='flex justify-between mb-5 mx-5'>
-                                            <label htmlFor={`my-modal-${selectedCharacter.slug}`} className="btn btn-sm btn-circle right-2 top-2">✕</label>
-                                            <label className="swap swap-flip text-2xl">
-                                                <input
-                                                    onChange={() => {
-                                                        if (favorites.includes(selectedCharacter)) {
-                                                            manageFavorite("remove", selectedCharacter)
-                                                        } else {
-                                                            manageFavorite("add", selectedCharacter)
-                                                        }
-                                                    }}
-                                                    type="checkbox"
-                                                    checked={favorites.includes(selectedCharacter) ? true : false}
-                                                />
-                                                <div
-                                                    className="swap-on tooltip tooltip-left"
-                                                    data-tip="favorite"
-                                                >
-                                                    🌟
-                                                </div>
-                                                <div
-                                                    className="swap-off tooltip tooltip-left"
-                                                    data-tip="not favorite"
-                                                >
-                                                    ⭐
-                                                </div>
-                                            </label>
-                                        </div>
-
-                                        <div className='flex flex-col gap-5'>
-                                            <div className="w-full bg-base-200 p-5">
-                                                <div className="flex flex-col md:flex-row lg:flex-row justify-center">
-
-                                                    <div className='flex flex-col items-center align-middle gap-3 mx-auto max-w-screen-lg'>
-                                                        <div className="relative w-64 md:w-72 lg:w-96 h-[25rem] md:h-[25rem] lg:h-[35rem] bg-base-100 shadow-xl">
-                                                            <figure>
-                                                                <img className="absolute w-full h-full object-cover rounded-md" src={selectedCharacter.images.md} alt={selectedCharacter.name} loading="lazy" />
-                                                            </figure>
-                                                        </div>
-
-                                                        <div className='self-center'>
-                                                            <h1 className={`text-5xl font-bold`} >{selectedCharacter.name}</h1>
-                                                            <p className={`py-2`} >{selectedCharacter.biography.fullName}</p>
-                                                        </div>
-                                                    </div>
-
-                                                    <div className='mx-auto flex flex-col justify-center gap-3 items-center w-[90%] md:w-[50%] lg:w-[50%]'>
-                                                        <div className="w-full grid grid-flow-col grid-col-3">
-                                                            <div onClick={() => setSelectedOption("Stats")} className={`text-md md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Stats" ? "tab-active" : ""}`}>Stats</div>
-                                                            <div onClick={() => setSelectedOption("Appereance")} className={`text-md md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Appereance" ? "tab-active" : ""}`}>Appereance</div>
-                                                            <div onClick={() => setSelectedOption("Biography")} className={`text-md md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Biography" ? "tab-active" : ""}`}>Biography</div>
-                                                        </div>
-
-                                                        {
-                                                            selectedOption === "Stats" ?
-                                                                <div className="stats stats-vertical shadow self-center w-full h-full">
-                                                                    <div className="stat">
-                                                                        <div className="stat-figure text-primary">
-                                                                            <p className='text-2xl md:text-5xl lg:text-5xl'>👊</p>
-                                                                        </div>
-                                                                        <div className="stat-title">Combat</div>
-                                                                        <div className="stat-value">{selectedCharacter.powerstats.combat}</div>
-                                                                    </div>
-                                                                    <div className="stat">
-                                                                        <div className="stat-figure text-primary">
-                                                                            <p className='text-2xl md:text-5xl lg:text-5xl'>❤</p>
-                                                                        </div>
-                                                                        <div className="stat-title">Durability</div>
-                                                                        <div className="stat-value">{selectedCharacter.powerstats.durability}</div>
-                                                                    </div>
-                                                                    <div className="stat">
-                                                                        <div className="stat-figure text-primary">
-                                                                            <p className='text-2xl md:text-5xl lg:text-5xl'>🧠</p>
-                                                                        </div>
-                                                                        <div className="stat-title">Intelligence</div>
-                                                                        <div className="stat-value">{selectedCharacter.powerstats.intelligence}</div>
-                                                                    </div>
-
-                                                                    <div className="stat">
-                                                                        <div className="stat-figure text-secondary">
-                                                                            <p className='text-2xl md:text-5xl lg:text-5xl'>🔆</p>
-                                                                        </div>
-                                                                        <div className="stat-title">Power</div>
-                                                                        <div className="stat-value">{selectedCharacter.powerstats.power}</div>
-                                                                    </div>
-                                                                    <div className="stat">
-                                                                        <div className="stat-figure text-secondary">
-                                                                            <p className='text-2xl md:text-5xl lg:text-5xl'>⚡</p>
-                                                                        </div>
-                                                                        <div className="stat-title">Speed</div>
-                                                                        <div className="stat-value">{selectedCharacter.powerstats.speed}</div>
-                                                                    </div>
-                                                                    <div className="stat">
-                                                                        <div className="stat-figure text-secondary">
-                                                                            <p className='text-2xl md:text-5xl lg:text-5xl'>💪</p>
-                                                                        </div>
-                                                                        <div className="stat-title">Strength</div>
-                                                                        <div className="stat-value">{selectedCharacter.powerstats.strength}</div>
-                                                                    </div>
-                                                                </div>
-                                                                :
-                                                                selectedOption === "Appereance" ?
-                                                                    <div className="stats stats-vertical shadow self-center w-full h-full">
-                                                                        <div className="stat">
-                                                                            <div className="stat-figure text-primary">
-                                                                                <p className='text-2xl md:text-5xl lg:text-5xl'>👁</p>
-                                                                            </div>
-                                                                            <div className="stat-title">EyeColor</div>
-                                                                            <div className="stat-value text-sm md:text-xl lg:text-xl">{selectedCharacter.appearance.eyeColor}</div>
-                                                                        </div>
-                                                                        <div className="stat">
-                                                                            <div className="stat-figure text-primary text-2xl md:text-5xl lg:text-5xl">
-                                                                                {
-                                                                                    selectedCharacter.appearance.gender?.toLowerCase() === "male" ?
-                                                                                        <p>🚹</p>
-                                                                                        :
-                                                                                        selectedCharacter.appearance.gender?.toLowerCase() === "female" ?
-                                                                                            <p>🚺</p>
-                                                                                            :
-                                                                                            null
-                                                                                }
-                                                                            </div>
-                                                                            <div className="stat-title">Gender</div>
-                                                                            <div className="stat-value text-sm md:text-xl lg:text-xl">{selectedCharacter.appearance.gender}</div>
-                                                                        </div>
-                                                                        <div className="stat">
-                                                                            <div className="stat-figure text-primary text-2xl md:text-5xl lg:text-5xl">
-                                                                                {
-                                                                                    selectedCharacter.appearance.gender?.toLowerCase() === "male" ?
-                                                                                        <p>👱‍♂️</p>
-                                                                                        :
-                                                                                        selectedCharacter.appearance.gender?.toLowerCase() === "female" ?
-                                                                                            <p>👱‍♀️</p>
-                                                                                            :
-                                                                                            null
-                                                                                }
-
-                                                                            </div>
-                                                                            <div className="stat-title">Hair color</div>
-                                                                            <div className="stat-value text-sm md:text-xl lg:text-xl">{selectedCharacter.appearance.hairColor}</div>
-                                                                        </div>
-                                                                        <div className="stat">
-                                                                            <div className="stat-figure text-secondary">
-                                                                                <p className='text-2xl md:text-5xl lg:text-5xl'>📏</p>
-                                                                            </div>
-                                                                            <div className="stat-title">Height</div>
-                                                                            <div className="stat-value text-sm md:text-xl lg:text-xl">{selectedCharacter.appearance.height[0]} | {selectedCharacter.appearance.height[1]}</div>
-                                                                        </div>
-                                                                        <div className="stat">
-                                                                            <div className="stat-figure text-secondary text-2xl md:text-5xl lg:text-5xl">
-                                                                                {
-                                                                                    selectedCharacter.appearance.race?.toLowerCase().includes("meta") ?
-                                                                                        <p>🧬</p>
-                                                                                        :
-                                                                                        selectedCharacter.appearance.race?.toLowerCase() === "human" ?
-                                                                                            <p>🌎</p>
-                                                                                            :
-                                                                                            selectedCharacter.appearance.race?.toLowerCase() === "mutant" ?
-                                                                                                <p>🧬</p>
-                                                                                                :
-                                                                                                selectedCharacter.appearance.race?.toLowerCase() === "android" || selectedCharacter.appearance.race?.toLowerCase() === "cyborg" && (selectedCharacter.appearance.race !== null) ?
-                                                                                                    <p>🤖</p>
-                                                                                                    :
-                                                                                                    selectedCharacter.appearance.race?.toLowerCase() === "alien" || selectedCharacter.appearance.race?.toLowerCase() === "eternal" || selectedCharacter.appearance.race?.toLowerCase() === "asgardian" || selectedCharacter.appearance.race?.toLowerCase() === "kryptonian" && (selectedCharacter.appearance.race !== null) ?
-                                                                                                        <p>👽</p>
-                                                                                                        :
-                                                                                                        <p>🌎</p>
-                                                                                }
-                                                                            </div>
-                                                                            <div className="stat-title">Race</div>
-                                                                            <div className="stat-value text-sm md:text-xl lg:text-xl">{selectedCharacter.appearance.race}</div>
-                                                                        </div>
-                                                                        <div className="stat">
-                                                                            <div className="stat-figure text-secondary">
-                                                                                <p className='text-2xl md:text-5xl lg:text-5xl'>⚖</p>
-                                                                            </div>
-                                                                            <div className="stat-title">Weigth</div>
-                                                                            <div className="stat-value text-sm md:text-xl lg:text-xl">{selectedCharacter.appearance.weight[0]} | {selectedCharacter.appearance.weight[1]}</div>
-                                                                        </div>
-                                                                    </div>
-                                                                    :
-                                                                    selectedOption === "Biography" ?
-                                                                        <div className="stats stats-vertical shadow self-center w-full h-full">
-                                                                            <div className="stat">
-                                                                                <div className="stat-figure text-primary text-2xl md:text-5xl lg:text-5xl">
-                                                                                    {
-                                                                                        selectedCharacter.biography.alignment === "good" ?
-                                                                                            <p>😃</p>
-                                                                                            :
-                                                                                            selectedCharacter.biography.alignment === "bad" ?
-                                                                                                <p>😡</p>
-                                                                                                :
-                                                                                                selectedCharacter.biography.alignment === "neutral" ?
-                                                                                                    <p>😐</p>
-                                                                                                    :
-                                                                                                    null
-                                                                                    }
-                                                                                </div>
-                                                                                <div className="stat-title">Alignment</div>
-                                                                                <div className="stat-value text-sm md:text-xl lg:text-xl">
-                                                                                    {selectedCharacter.biography.alignment === "good" ? "Hero" : selectedCharacter.biography.alignment === "bad" ? "Villain" : "Anti-Hero"}
-                                                                                </div>
-                                                                            </div>
-                                                                            <div className="stat">
-                                                                                <div className="stat-figure text-primary">
-                                                                                    <p className='text-2xl md:text-5xl lg:text-5xl'>📅</p>
-                                                                                </div>
-                                                                                <div className="stat-title">First Appearance</div>
-                                                                                <div className='flex tooltip' data-tip={selectedCharacter.biography.firstAppearance}>
-                                                                                    <span className="stat-value whitespace-pre text-sm md:text-xl lg:text-xl">{selectedCharacter.biography.firstAppearance.slice(0, 10)}...</span>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div className="stat">
-                                                                                <div className="stat-figure text-primary">
-                                                                                    <p className='text-2xl md:text-5xl lg:text-5xl'>🗺</p>
-                                                                                </div>
-                                                                                <div className="stat-title">Place Of Birth</div>
-                                                                                <p className="stat-value text-sm md:text-xl lg:text-xl tooltip flex" data-tip={selectedCharacter.biography.placeOfBirth}>{selectedCharacter.biography.placeOfBirth.slice(0, 10)}...</p>
-                                                                            </div>
-                                                                            <div className="stat">
-                                                                                <div className="stat-figure text-secondary">
-                                                                                    <p className='text-2xl md:text-5xl lg:text-5xl'>📚</p>
-                                                                                </div>
-                                                                                <div className="stat-title">Publisher</div>
-                                                                                <div className="stat-value text-sm md:text-xl lg:text-xl">{selectedCharacter.biography.publisher}</div>
-                                                                            </div>
-                                                                            <div className="stat">
-                                                                                <div className="stat-figure text-secondary">
-                                                                                    <p className='text-2xl md:text-5xl lg:text-5xl'>🔠</p>
-                                                                                </div>
-                                                                                <div className="stat-title">Aliases</div>
-
-                                                                                <div tabIndex={0} className="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box">
-                                                                                    <div className="collapse-title text-xl font-medium">
-                                                                                        Aliases...
-                                                                                    </div>
-                                                                                    <div className="collapse-content">
-                                                                                        {selectedCharacter.biography.aliases.map((currentAlias => {
-                                                                                            return (
-                                                                                                <p key={currentAlias} >{currentAlias}</p>
-                                                                                            )
-                                                                                        }))}
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div className="stat">
-                                                                                <div className="stat-figure text-secondary">
-                                                                                    <p className='text-2xl md:text-5xl lg:text-5xl'>🆎</p>
-                                                                                </div>
-                                                                                <div className="stat-title">Alter Egos</div>
-                                                                                {
-                                                                                    selectedCharacter.biography.alterEgos ?
-                                                                                        <div className="stat-value text-sm md:text-xl lg:text-xl tooltip flex" data-tip={selectedCharacter.biography.alterEgos}>{selectedCharacter.biography.alterEgos === "No alter egos found." ? "Unknown" : selectedCharacter.biography.alterEgos.slice(0, 15)}</div>
-                                                                                        : null
-                                                                                }
-
-                                                                            </div>
-                                                                            <div className="stat">
-                                                                                <div className="stat-figure text-secondary">
-                                                                                    <p className='text-2xl md:text-5xl lg:text-5xl'>👪</p>
-                                                                                </div>
-                                                                                <div className="stat-title">Group Affiliation</div>
-
-                                                                                <div tabIndex={0} className="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box">
-                                                                                    <div className="collapse-title text-xl font-medium">
-                                                                                        Teams...
-                                                                                    </div>
-                                                                                    <div className="collapse-content">
-                                                                                        <p>{selectedCharacter.connections.groupAffiliation}</p>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div className="stat">
-                                                                                <div className="stat-figure text-secondary">
-                                                                                    <p className='text-2xl md:text-5xl lg:text-5xl'>🧾</p>
-                                                                                </div>
-                                                                                <div className="stat-title">Occupation</div>
-                                                                                <div className="stat-value flex text-sm md:text-xl lg:text-xl tooltip" data-tip={selectedCharacter.work.occupation.split(",")[0]}>{selectedCharacter.work.occupation.slice(0, 15)}...</div>
-                                                                            </div>
-                                                                        </div>
-                                                                        :
-                                                                        null
-                                                        }
-                                                    </div>
-
-                                                </div>
-                                                <div className='flex flex-col justify-center items-center my-10'>
-                                                    <br />
-                                                    <div className='w-48 md:w-60 lg:w-96 h-[5px] bg-current rounded-md' />
-                                                    <br />
-                                                </div>
-
-                                                <div className='my-5'>
-                                                    <div className='flex flex-col items-center justify-center'>
-                                                        <p className='text-2xl font-bold'>Comics</p>
-                                                        <p className='text-2xl font-bold mb-2'>💥💨💢💫💠💭💬</p>
-                                                    </div>
-                                                    <div className='h-[35vh] md:h-[50vh] lg:h-[80vh] flex justify-center'>
-                                                        <div className="carousel lg:carousel-vertical carousel-center h-full max-w-md lg:max-w-md p-4 space-x-4 bg-base-100 rounded-box">
-                                                            {organizedComicsProperty(selectedCharacter.comics, selectedCharacter.biography.publisher).map((comic, index) => {
-                                                                return (
-                                                                    <label key={`${selectedCharacter._id}-${index}`} className="carousel-item lg:py-2" htmlFor={`my-modal-comic-${selectedCharacter.name}-${index}`}>
-                                                                        <img className="rounded-box h-full w-full" src={comic} loading="lazy" />
-                                                                    </label>
-                                                                )
-                                                            })}
-                                                        </div>
-                                                    </div>
-
-                                                    {organizedComicsProperty(selectedCharacter.comics, selectedCharacter.biography.publisher).map((comic, index) => {
-                                                        return (
-                                                            <div key={`comic-${selectedCharacter.name}-${index}`} className=''>
-                                                                <ComicZoom
-                                                                    comic={comic}
-                                                                    character={selectedCharacter.name}
-                                                                    index={index}
-                                                                />
-                                                            </div>
-                                                        )
-                                                    })}
-
-
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </label>
-                        </label>
-                    </div>
-                )
-            })}
-        </div>
-    )
-}
-
-type comicZoomProps = {
-    comic: string,
-    character: string,
-    index: number
-}
-
-function ComicZoom({ comic, character, index }: comicZoomProps) {
-    return (
-        <div className='w-full h-auto'>
-            <input type="checkbox" id={`my-modal-comic-${character}-${index}`} className="modal-toggle"  />
-            <label htmlFor={`my-modal-comic-${character}-${index}`} className="modal">
-                <label className="" htmlFor="">
-                    <div className="rounded-md bg-base-100 w-[90vw] max-w-[40rem] overflow-y-auto overflow-x-hidden flex justify-center p-5">
-                        <TransformWrapper
-                            /* initialScale={1}
-                            initialPositionX={100}
-                            initialPositionY={100} */
-                        >
-                            {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
-                                <React.Fragment >
-                                    <div className="tools absolute z-10 bottom-10 ">
-                                        <button className='btn btn-circle hover:bg-primary' onClick={() => zoomIn()}>+</button>
-                                        <button className='btn btn-circle hover:bg-primary' onClick={() => zoomOut()}>-</button>
-                                        <button className='btn btn-circle hover:bg-primary' onClick={() => resetTransform()}>x</button>
-                                    </div>
-                                    <TransformComponent>
-                                        <img /* className="w-full h-full object-cover rounded-md" */ src={comic} alt={`Comic of ${character}`} loading="lazy" />
-                                        {/* <div>Comic of {character}</div> */}
-                                    </TransformComponent>
-                                </React.Fragment>
-                            )}
-                        </TransformWrapper>
-                    </div>
-                </label>
-            </label>
-
-        </div>
-    )
-}
 
 export default Characters
