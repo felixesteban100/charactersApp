@@ -12,6 +12,8 @@ import Error from './Components/Error';
 import ModalSettings from './Components/Modals/ModalSettings';
 import { useEffect } from 'react';
 import { Character } from './types';
+import { listOfTeamsWithImgInTheHeroSection, teamIMG } from './constants';
+import { filterAttributes, filterName, resetLocalStorage } from './constants/filterCharacters';
 
 
 // if you want the API to work you should turn off the adblock extention
@@ -52,7 +54,12 @@ function App() {
 
   const [theme, setTheme] = useLocalStorage("CHARACTERS_APP_THEME", "dark")
 
+  // try to use the useMemo hook
   const { isLoading, isError } = useQuery<Character[]>({
+    enabled: allCharactersSAVED.length < 0,
+    refetchOnMount: false,      // Disable refetch on component mount
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
     queryKey: ["Characters"],
     queryFn: async () => {
       const result = await axios.get<Character[]>('https://heroes-backend.onrender.com/').then((response) => response.data)
@@ -89,7 +96,6 @@ function App() {
     }
   }
 
-  /* see if I can use the Array.prototype.reduce() method instead of this function, an modify the functions below to adapt them to the reduce pattern, i mean to use them in this function as a comparison statement */
   function filterCharacters() {
     if (allCharactersSAVED !== undefined) {
       let result: Character[] = []
@@ -97,49 +103,10 @@ function App() {
       const randomizedArray = allCharactersSAVED.sort(() => Math.random() - 0.5);
 
       /* filter name */
-      if (characterName === "") {
-        firstFilter = randomizedArray
-      }
-
-      if (characterName !== "") {
-        let resultArr: Character[] = []
-        let name = [characterName]
-
-
-        if (characterName.includes(",")) name = characterName.split(",").map(current => current.trim())
-
-        name.forEach((currentName) => {
-          randomizedArray.forEach(charac => {
-            let comparison
-
-            if (includeNameOrExactName === true) {
-              comparison = characterOrFullName === false
-                ? charac.name.toLowerCase().includes(currentName.toLowerCase())
-                : charac.biography.fullName.toLowerCase().includes(currentName.toLowerCase())
-            } else {
-              comparison = characterOrFullName === false
-                ? charac.name.toLowerCase() === currentName.toLowerCase()
-                : charac.biography.fullName.toLowerCase() === currentName.toLowerCase()
-            }
-
-
-            if (comparison === true) {
-              resultArr.push(charac)
-            }
-          })
-        })
-        firstFilter = resultArr
-      }
-
+      firstFilter = filterName(firstFilter, randomizedArray, characterName, includeNameOrExactName, characterOrFullName);
 
       /* filter attributes */
-      if (team === "All") {
-        result = getCharactersByTeamNotSended(firstFilter)
-
-      }
-      if (team !== "All") {
-        result = getCharactersByTeamSended(firstFilter)
-      }
+      result = filterAttributes(result, firstFilter, team, side, universe, gender, race);
 
       /* filter how Many */
       if (howMany > 0) result = result.slice(0, howMany)
@@ -153,125 +120,11 @@ function App() {
 
       if (team === "All") setTeamMembers(result)
       if (team !== "All") setTeamMembers(allCharactersSAVED!.filter((currentCharacter) => currentCharacter.connections.groupAffiliation.includes(team)))
-
     }
   }
 
-  function getCharactersByTeamNotSended(firstFilter: Character[]) {
-    let resultArr: Character[] = []
-    firstFilter.forEach((current: Character) => {
-      const currentReturned = confirmConditions(current)
-      if (currentReturned !== undefined) resultArr.push(currentReturned)
-    })
-    return resultArr
-  }
-
-  function getCharactersByTeamSended(firstFilter: Character[]) {
-    let resultArr: Character[] = []
-    firstFilter.forEach((current: Character) => {
-      if (current.connections.groupAffiliation.includes(team)) {
-        let currentReturned = confirmConditions(current)
-        if (currentReturned !== undefined) resultArr.push(currentReturned)
-      }
-    })
-    return resultArr
-  }
-
-  function confirmConditions(current: Character) {
-    if (side === "All"
-      && universe === "All"
-      && gender === "All"
-      && race === "All") return current
-
-    if (side !== 'All'
-      && universe === "All"
-      && gender === "All"
-      && race === "All"
-      && (current.biography.alignment === side)) return current
-
-    if (side !== 'All'
-      && universe !== "All"
-      && gender === "All"
-      && race === "All"
-      && (current.biography.alignment === side)
-      && (current.biography.publisher === universe)) return current
-
-    if (side === 'All'
-      && universe !== "All"
-      && gender === "All"
-      && race === "All"
-      && (current.biography.publisher === universe)) return current
-
-    if (side === 'All'
-      && universe !== "All"
-      && gender !== "All"
-      && race === "All"
-      && (current.biography.publisher === universe)
-      && (current.appearance.gender === gender)) return current
-
-    if (side === 'All'
-      && universe === "All"
-      && gender !== "All"
-      && race === "All"
-      && (current.appearance.gender === gender)) return current
-
-    if (side === 'All'
-      && universe === "All"
-      && gender !== "All"
-      && race !== "All"
-      && (current.appearance.gender === gender)
-      // && (current.appearance.race === race)) return current
-      && (current.appearance.race?.toLowerCase().includes(race.toLowerCase()))) return current
-
-    if (side === 'All'
-      && universe === "All"
-      && gender === "All"
-      && race !== "All"
-      // && (current.appearance.race === race)) return current
-      && (current.appearance.race?.toLowerCase().includes(race.toLowerCase()))) return current
-
-    if (side !== 'All'
-      && universe === "All"
-      && gender === "All"
-      && race !== "All"
-      && (current.appearance.race === race)
-      && (current.biography.alignment === side)) return current
-
-    if (side !== 'All'
-      && universe === "All"
-      && gender !== "All"
-      && race === "All"
-      && (current.biography.alignment === side)
-      && (current.appearance.gender === gender)) return current
-
-    if (side === 'All'
-      && universe !== "All"
-      && gender === "All"
-      && race !== "All"
-      && (current.biography.publisher === universe)
-      // && (current.appearance.race === race)) return current
-      && (current.appearance.race?.toLowerCase().includes(race.toLowerCase()))) return current
-
-
-    if (current.biography.alignment === side
-      && current.biography.publisher === universe
-      && current.appearance.gender === gender
-      // && current.appearance.race === race) return current
-      && (current.appearance.race?.toLowerCase().includes(race.toLowerCase()))) return current
-
-  }
-
   function resetCharactersSelection() {
-    localStorage.removeItem("CHARACTERS_APP_CHARACTERSFILTERED")
-    localStorage.removeItem("CHARACTERS_APP_NAME")
-    localStorage.removeItem("CHARACTERS_APP_HOWMANY")
-    localStorage.removeItem("CHARACTERS_APP_SIDE")
-    localStorage.removeItem("CHARACTERS_APP_UNIVERSE")
-    localStorage.removeItem("CHARACTERS_APP_TEAM")
-    localStorage.removeItem("CHARACTERS_APP_GENDER")
-    localStorage.removeItem("CHARACTERS_APP_RACE")
-    localStorage.removeItem("CHARACTERS_APP_HEROSECTION")
-    localStorage.removeItem("CHARACTERS_APP_TEAMMEMBERS")
+    resetLocalStorage();
     // localStorage.removeItem("CHARACTERS_APP_THEME")
 
     if (allCharactersSAVED) setCharactersFiltered(allCharactersSAVED.sort(() => 0.5 - Math.random()).slice(0, 6))
@@ -283,100 +136,7 @@ function App() {
     setGender("All")
     setHeroSection({ imgs: ["https://media.tenor.com/TY1HfJK5qQYAAAAC/galaxy-pixel-art.gif"], title: "", description: "" })
     setTeamMembers([])
-
   }
-
-  /* teams */
-  const listOfTeamsWithImgInTheHeroSection = [
-    "Avengers",
-    "Justice League",
-    "Fantastic Four(Original)",
-    "X-Men",
-    "Illuminati",
-    "Batman Family",
-    "Teenage Mutant Ninja Turtles",
-    "Guardians of the Galaxy",
-    "Fantastic Four",
-    "Justice League (Original)",
-    "Teen Titans",
-    "Future Foundation",
-    "Symbiotes",
-    "Flash Family",
-    "Suicide Squad",
-    "Demon Slayer",
-    "Ben 10",
-    "New Guardians",
-    "Lantern Corps",
-    "Hulk Family"
-  ]
-  function teamIMG(teamName: string) {
-    // change these for comics images like the guardians of the galaxy one (for a more responsive design)
-    switch (teamName) {
-      case "Avengers":
-        return ["https://comicvine.gamespot.com/a/uploads/scale_small/10/103530/6410591-qwadf.jpg", "https://images.comicbooktreasury.com/wp-content/uploads/2022/04/The-Avengers-100-Avengers-Reading-Order-705x470.jpg"]
-
-      case "Justice League":
-        return ["https://i.pinimg.com/564x/5a/75/4b/5a754b3b2eba4bb6784f682003958383.jpg", "https://images.comicbooktreasury.com/wp-content/uploads/2021/09/DC-Comics-Omnibus.jpg"]
-
-      case "Justice League (Original)":
-        return ["https://i.pinimg.com/564x/5a/75/4b/5a754b3b2eba4bb6784f682003958383.jpg"]
-
-      case "Fantastic Four(Original)":
-        return ["https://www.writeups.org/wp-content/uploads/Ultimate-Fantastic-Four-Marvel-Comics-a.jpg", "https://comicvine.gamespot.com/a/uploads/scale_small/12/124259/8113336-fantastic_four_vol_6_1_dell%27otto_exclusive_variant_textless.jpg", "https://i.pinimg.com/736x/88/73/ab/8873ab9f66f9283d1c5cf08a708818c1--marvel-dc-comics-marvel-art.jpg", "https://comicartcommunity.com/gallery/data/media/248/ULTIMATE_FANTASTIC_FOUR_06_Dale_Keown.jpg"]
-
-      case "Fantastic Four":
-        return ["https://preview.redd.it/amtkskhm6jp71.jpg?width=640&crop=smart&auto=webp&s=5210447223f321889ad6f663e6bf856629c6df0a"]
-
-      case "X-Men":
-        return ["https://kevinreviewsuncannyxmen.files.wordpress.com/2014/06/all-new-x-men-covers.jpg"]
-
-      case "Illuminati":
-        return ["https://static1.moviewebimages.com/wordpress/wp-content/uploads/2022/05/Illuminati.jpg"]
-
-      case "Batman Family":
-        return ["https://i.pinimg.com/736x/93/a9/8b/93a98b6a447c4a394c1d2e670996daf5.jpg"]
-
-      case "Teenage Mutant Ninja Turtles":
-        return ["https://www.entertainmentearth.com/news/wp-content/uploads/2015/03/teenage-mutant-ninja-turtles-660x400.jpg"]
-
-      case "Guardians of the Galaxy":
-        return ["https://cdn.marvel.com/u/prod/marvel/i/mg/6/e0/5c3f94442d3e9/clean.jpg", "https://images5.alphacoders.com/872/872052.jpg"]
-
-      case "Teen Titans":
-        return ["https://13thdimension.com/wp-content/uploads/2016/09/640z.jpg"]
-
-      case "Future Foundation":
-        return ["https://media.wired.com/photos/5932b9ebd80dd005b42b03b1/master/w_2560%2Cc_limit/FF_1_Cover-660.jpg", "https://staticg.sportskeeda.com/editor/2022/07/3d896-16591198229869-1920.jpg", "https://comicaption.files.wordpress.com/2011/11/fantasticfour600a1.jpg"]
-
-      case "Symbiotes":
-        return ["https://celebrity.fm/wp-content/uploads/2022/05/Who-is-the-God-of-symbiote-celebrityfm.jpg", "https://i.pinimg.com/originals/a7/d8/4b/a7d84bf9fe6b44529f3b17555ab07a5d.jpg"]
-
-      case "Flash Family":
-        return ["https://w0.peakpx.com/wallpaper/618/788/HD-wallpaper-flash-family-dceu-arrowverse-dc-dc-comics.jpg", "https://i0.wp.com/www.comicsbeat.com/wp-content/uploads/2020/05/EX_IIaHUYAAE6Aa.jpg?ssl=1"]
-
-      case "Suicide Squad":
-        return ["https://m.media-amazon.com/images/I/A1nLFV0is9L._AC_UF1000,1000_QL80_.jpg", "https://oyster.ignimgs.com/wordpress/stg.ign.com/2019/09/suicide_squad_detail_-_publicity_-_embed_-_2019.jpg"]
-
-      case "Demon Slayer":
-        return ["https://demonslayer-hinokami.sega.com/img/purchase/digital-standard.jpg", "https://m.media-amazon.com/images/M/MV5BZjZjNzI5MDctY2Y4YS00NmM4LTljMmItZTFkOTExNGI3ODRhXkEyXkFqcGdeQXVyNjc3MjQzNTI@._V1_.jpg", "https://www.nme.com/wp-content/uploads/2023/01/demon-slayer-season-3-swordsmith-village-arc-key-art@2000x1270.jpg", "https://m.media-amazon.com/images/M/MV5BZGVlNzJkN2QtYmQ2YS00MmUzLTk0MjYtOWQ2YmVhZjMyNGZjXkEyXkFqcGdeQXVyOTA2OTk0MDg@._V1_.jpg"]
-
-      case "Ben 10":
-        return ["https://i.pinimg.com/originals/56/81/f2/5681f244b6d26283fa5e535e176613e9.jpg"]
-
-      case "New Guardians":
-        return ["https://digitalspyuk.cdnds.net/12/40/comics_new_guardians_2.jpg", "https://e1.pxfuel.com/desktop-wallpaper/769/825/desktop-wallpaper-i-redesigned-kyle-s-white-lantern-suit-original-art-by-tyler-kirkham-from-green-lantern-new-guardians-%E2%80%A6-lantern-corps-suits.jpg"]
-
-      case "Lantern Corps":
-        return ["https://qph.cf2.quoracdn.net/main-qimg-2673d6d36ab6b962fecea97a8dc6f231-lq"]
-
-      case "Hulk Family":
-        return ["https://i.pinimg.com/originals/c4/6b/4c/c46b4cad4416a382de72896f9e0d5b9f.jpg", "https://comicvine.gamespot.com/a/uploads/original/11134/111347244/7079315-4150626068-96446.jpg", "https://i.pinimg.com/736x/4e/e0/1f/4ee01f483be7ac031996b51e30e8e8e1--hulk-hulk-walter-obrien.jpg"]
-
-      default:
-        return ["https://media.tenor.com/TY1HfJK5qQYAAAAC/galaxy-pixel-art.gif"]
-    }
-  }
-  /* teams */
 
   return (
     <div data-theme={theme} className={`min-h-screen transition-colors duration-500 bg-base-200`}>
