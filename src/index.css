@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import 'tailwindcss/dist/tailwind.css';
+/* @import 'tailwindcss/dist/tailwind.css'; */
 
 @layer utilities {
     .card.image-full::before {

@@ -112,7 +112,7 @@ function App() {
 
 
   // try to use the useMemo hook
-  const { isLoading, isError } = useQuery<Character[]>({
+  const { isLoading, isError/* , data: allCharactersSAVED */ } = useQuery<Character[]>({
     enabled: allCharactersSAVED.length === 0,
     refetchOnMount: false,      // Disable refetch on component mount
     refetchOnReconnect: false,

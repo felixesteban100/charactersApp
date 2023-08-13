@@ -241,6 +241,7 @@ export function filterName(firstFilter: Character[], randomizedArray: Character[
 /* filtering characters */
 
 export function resetLocalStorage() {
+    localStorage.removeItem('CHARACTERS_APP_ALLCHARACTERS')
     localStorage.removeItem("CHARACTERS_APP_CHARACTERSFILTERED");
     localStorage.removeItem("CHARACTERS_APP_NAME");
     localStorage.removeItem("CHARACTERS_APP_HOWMANY");
