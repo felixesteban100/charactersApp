@@ -7,10 +7,7 @@ import Footer from './Components/Footer';
 import useLocalStorage from './customHooks/useLocalStorage';
 import HeroSelector from './Components/HeroSelector';
 import ModalTeamMembers from './Components/Modals/ModalTeamMembers';
-import SuccessChanged from './Components/SuccessChanged';
-import Error from './Components/Error';
 import ModalSettings from './Components/Modals/ModalSettings';
-import { useEffect } from 'react';
 import { Character } from './types';
 import { listOfTeamsWithImgInTheHeroSection, teamIMG } from './constants';
 import { filterAttributes, filterName, resetLocalStorage } from './constants/filterCharacters';
@@ -33,7 +30,66 @@ function App() {
   const [allCharactersSAVED, setAllCharactersSAVED] = useLocalStorage<Character[] | []>("CHARACTERS_APP_ALLCHARACTERS", [])
   const [charactersFiltered, setCharactersFiltered] = useLocalStorage<Character[] | []>("CHARACTERS_APP_CHARACTERSFILTERED", [])
 
+  const [selectedCharacter, setSelectedCharacter] = useLocalStorage<Character>("CHARACTERS_APP_CHARACTERSELECTED", {
+    "powerstats": {
+      "intelligence": 88,
+      "strength": 80,
+      "speed": 27,
+      "durability": 84,
+      "power": 91,
+      "combat": 80
+    },
+    "appearance": {
+      "gender": "Male",
+      "race": "Mutant",
+      "height": [
+        "6'2",
+        "188 cm"
+      ],
+      "weight": [
+        "190 lb",
+        "86 kg"
+      ],
+      "eyeColor": "Grey",
+      "hairColor": "White"
+    },
+    "biography": {
+      "fullName": "Erik Magnus Lensherr",
+      "alterEgos": "No alter egos found.",
+      "aliases": [
+        "The Creator",
+        "Erik Magnus Lehnsherr",
+        "Michael Xavier",
+        "White Pilgrim",
+        "Erik the RedThe Master of Magnetism"
+      ],
+      "placeOfBirth": "Unrevealed, probably somewhere in Northern Europe",
+      "firstAppearance": "X-MEN Vol. 1 #1",
+      "publisher": "Marvel Comics",
+      "alignment": "bad"
+    },
+    "work": {
+      "occupation": "Currently Revolutionary and Conqueror, formerly Volunteer Orderly, Secret Agent",
+      "base": "Currently unrevealed, formerly Asteroid M; various hidden bases on Earth including one in Antarctica; an island in the Bermuda Triangle; Professor Xavier's School for Gifted Youngsters, Salem Center, Westchester County, New York"
+    },
+    "connections": {
+      "groupAffiliation": "Currently None, formerly Brotherhood of Evil Mutants I and II, X-Men, teacher of the New Mutants, Lords Cardinal of the Hellfire Club, leader of the Acolytes",
+      "relatives": "Magda (wife, deceased), Anya (daughter, deceased), Pietro Maximoff (Quicksilver, son), Wanda Maximoff (Scarlet Witch, daughter), Lorna Dane (Polaris, daughter), Joseph (clone, deceased), Luna (granddaughter)"
+    },
+    "images": {
+      "xs": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/xs/423-magneto.jpg",
+      "sm": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm/423-magneto.jpg",
+      "md": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/423-magneto.jpg",
+      "lg": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/lg/423-magneto.jpg"
+    },
+    "_id": "63744cef81b33ddcb37e9278",
+    "id": 423,
+    "name": "Magneto",
+    "slug": "423-magneto"
+  })
+
   const [favorites, setFavorites] = useLocalStorage<Character[] | []>("CHARACTERS_APP_FAVORITES", [])
+  const [viewFavorites, setViewFavorites] = useLocalStorage("CHARACTERS_APP_VIEWFAVORITES", false)
 
   const [characterName, setCharacterName] = useLocalStorage<string>("CHARACTERS_APP_NAME", "")
   const [howMany, setHowMany] = useLocalStorage<number>("CHARACTERS_APP_HOWMANY", 6)
@@ -54,9 +110,10 @@ function App() {
 
   const [theme, setTheme] = useLocalStorage("CHARACTERS_APP_THEME", "dark")
 
+
   // try to use the useMemo hook
   const { isLoading, isError } = useQuery<Character[]>({
-    enabled: allCharactersSAVED.length < 0,
+    enabled: allCharactersSAVED.length === 0,
     refetchOnMount: false,      // Disable refetch on component mount
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
@@ -71,18 +128,9 @@ function App() {
       }
       return []
     },
-    onError: (error) => console.log(error)
+    onError: (error) => console.log(error),
   })
 
-  useEffect(() => {
-    if (favorites.length === charactersFiltered.length - 1) {
-      setCharactersFiltered(favorites)
-    }
-  }, [favorites])
-
-  function viewFavorites() {
-    setCharactersFiltered(favorites)
-  }
 
   function manageFavorite(action: string, characterSelected: Character) {
     switch (action) {
@@ -149,31 +197,27 @@ function App() {
 
       <div>
         {
-          isError || allCharactersSAVED === undefined ?
-            <Error
-              message="Opps.... something happend please try again."
-            />
+          isError ?
+            <div
+              id='section-characters'
+              className='flex flex-col gap-5 min-h-[100vh] items-center justify-center'
+            >
+              <p>Opps... something happend please try again.</p>
+            </div>
             :
             <div>
               <Characters
-                charactersFiltered={charactersFiltered}
+                charactersFiltered={viewFavorites ? favorites : charactersFiltered}
                 manageFavorite={manageFavorite}
-                favorites={favorites}
                 isLoading={isLoading}
+                favorites={favorites}
+                viewFavorites={viewFavorites}
+                selectedCharacter={selectedCharacter}
+                setSelectedCharacter={setSelectedCharacter}
               />
             </div>
         }
       </div>
-
-
-      {
-        isLoading === false ?
-          <SuccessChanged
-            heroSection={heroSection}
-            charactersFiltered={charactersFiltered}
-          /> :
-          null
-      }
 
 
       <ModalChangeCharacters
@@ -191,13 +235,12 @@ function App() {
         setGender={setGender}
         race={race}
         setRace={setRace}
-        viewFavorites={viewFavorites}
         includeNameOrExactName={includeNameOrExactName}
         setIncludeNameOrExactName={setIncludeNameOrExactName}
         characterOrFullName={characterOrFullName}
         setCharacterOrFullName={setCharacterOrFullName}
 
-
+        setViewFavorites={setViewFavorites}
         filterCharacters={filterCharacters}
         resetCharactersSelection={resetCharactersSelection}
       />

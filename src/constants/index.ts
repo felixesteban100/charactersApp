@@ -473,7 +473,6 @@ export const ALLRACES = [
     { value: "Cosmic Entity", name: "Cosmic Entity" },
 ] 
 
-
 export const ALLALIGMENTS = [
     {
         value: "All",

@@ -1,8 +1,9 @@
 import LoadingCard from '../Components/LoadingCard';
-import { CharactersProps } from '../types';
+import { Character, CharactersProps } from '../types';
 import ModalCharacter from './Modals/ModalCharacter';
-import Pagination from './Pagination';
 import { useEffect, useState } from 'react'
+import { usePagination } from "@mantine/hooks";
+
 
 // import ReactImageZoom from 'react-image-zoom';
 
@@ -15,50 +16,53 @@ import { useEffect, useState } from 'react'
 
 //https://heroes-backend.onrender.com/
 
-function Characters({ charactersFiltered, manageFavorite, favorites, isLoading }: CharactersProps) {
-
-
-    // const itemsPerPage = 4; // Number of items to display per page
-    const [itemsPerPage, setItemsPerPage] = useState(4);
-    const [currentPage, setCurrentPage] = useState(1);
-    // const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-
-    const totalPages = Math.ceil(charactersFiltered.length / itemsPerPage);
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const displayedItems = charactersFiltered.slice(startIndex, endIndex);
+function Characters({ charactersFiltered, manageFavorite, isLoading, favorites, viewFavorites, selectedCharacter, setSelectedCharacter }: CharactersProps) {
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+    const [charactersPerPage, setCharactersPerPage] = useState(8)
+    const [visibleResults, setVisibleResults] = useState<Character[]>(charactersFiltered.slice(0, charactersPerPage))
 
     useEffect(() => {
-        const handleResize = () => {
-            // setScreenWidth(window.innerWidth);
+        setVisibleResults(charactersFiltered.slice(0, charactersPerPage))
+    }, [charactersFiltered, charactersPerPage])
 
-            if (window.innerWidth > 770 && window.innerWidth < 1300) {
-                return setItemsPerPage(6)
-            }
+    const handleResize = () => { setWindowWidth(window.innerWidth) };
 
-            if (window.innerWidth > 1300) {
-                return setItemsPerPage(8)
-            }
+    useEffect(() => {
+        // Add event listener to track window resize
+        window.addEventListener('resize', handleResize);
 
-            setItemsPerPage(4)
-        };
-
-        window.addEventListener("resize", handleResize);
-
-        // Cleanup event listener on component unmount
+        // Cleanup function to remove the event listener when the component unmounts
         return () => {
-            window.removeEventListener("resize", handleResize);
+            window.removeEventListener('resize', handleResize);
         };
-    }, [window.innerWidth])
+    }); // No dependency array, so this effect runs on every component render
+
 
     useEffect(() => {
-        setCurrentPage(1)
-    }, [charactersFiltered])
+        switch (true) {
+            case windowWidth > 782 && windowWidth < 1110:
+                setCharactersPerPage(6)
+                break;
 
+            case windowWidth < 782:
+                setCharactersPerPage(4)
+                break;
 
-    const handlePageChange = (page: number) => {
-        setCurrentPage(page);
-    };
+            default:
+                setCharactersPerPage(8)
+                break;
+        }
+    }, [windowWidth])
+
+    const pagination = usePagination({
+        total: Math.ceil(charactersFiltered.length / charactersPerPage),
+        initialPage: 1,
+        onChange(page: number) {
+            const start = (page - 1) * charactersPerPage
+            const end = start + charactersPerPage
+            setVisibleResults(charactersFiltered.slice(start, end))
+        }
+    })
 
     function publisherIMG(publisher: string) {
         switch (publisher) {
@@ -176,101 +180,127 @@ function Characters({ charactersFiltered, manageFavorite, favorites, isLoading }
     }
 
     return (
-        // <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-[90%] gap-10 mx-auto pt-[2rem] ">
         <div
             id='section-characters'
             className='flex flex-col gap-5 min-h-[100vh] items-center justify-center'
         >
-            <div className="mt-5 -mb-5 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 w-[90%] sm:w-[90%] md:w-[90%] lg:w-[70%] gap-10 mx-auto pt-[2rem]">
-                {
-                    displayedItems.map((currentCharacter) => {
-                        if (isLoading) {
-                            return (
-                                <div key={currentCharacter._id}>
-                                    <LoadingCard />
-                                </div>
-                            )
+            {
+                visibleResults.length > 0 ?
+                    <div
+                        className={
+                            `mt-5 
+                            grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 
+                            w-[90%] sm:w-[90%] md:w-[90%] lg:w-[70%] 
+                            gap-10 mx-auto 
+                            pt-[5rem] md:pt-[2rem] 
+                            ${visibleResults.length < 3 ? "mb-[25rem] md:mb-[24rem] lg:mb-[27rem]"
+                                : visibleResults.length < 5 ? "mb-0 md:mb-[24rem] lg:mb-[24.5rem]"
+                                    : ""
+                            }`
                         }
-                        return (
-                            <div key={currentCharacter._id}>
-                                <label className="cursor-pointer" htmlFor={`my-modal-${currentCharacter.slug}`}>
-                                    <div
-                                        //bg-base-100
-                                        // bg-cover bg-[url('${currentCharacter.images.xs !== '' ? currentCharacter.images.xs : getRandomImage(randomImagesArray)}')] 
-                                        /* className={`
-                                            card image-full hover:opacity-1 inset-0 object-cover w-full h-[20rem] md:h-[25rem] lg:h-[35rem] xl:h-[25rem] xl:w-[15rem] shadow-current shadow-2xl hover:scale-110 group/item overflow-hidden
-                                        `} */
-                                        // className={`card image-full w-full h-[20rem] md:h-[20rem] xl:h-[22rem] bg-base-100 shadow-current shadow-2xl hover:scale-110 group/item`}
-                                        className={`card image-full  hover: object-contain w-full h-[20rem] md:h-[20rem] xl:h-[22rem] bg-base-100 shadow-current shadow-2xl hover:scale-110 group/item`}
-                                        
-                                    >
-                                        <figure className='relative rounded-md w-full'>
-                                            <img
-                                                className="w-full h-full animate-pulse blur-lg rounded-md"
-                                                src={(currentCharacter.images.xs !== '' && currentCharacter.images.xs !== '-')
-                                                    ? currentCharacter.images.xs
-                                                    : getRandomImage(randomImagesArray)}
-                                                alt={currentCharacter.name}
-                                                loading="lazy"
-                                            />
+                    >
+                        {
+                            visibleResults.map((currentCharacter) => {
+                                if (isLoading) {
+                                    return (
+                                        <div key={currentCharacter._id}>
+                                            <LoadingCard />
+                                        </div>
+                                    )
+                                }
+                                return (
+                                    <div key={currentCharacter._id}>
+                                        <label onClick={() => setSelectedCharacter(currentCharacter)} className="cursor-pointer" htmlFor={`my-modal-selectedCharacter`}>
+                                            <div
+                                                className={`card image-full  hover: object-contain w-full h-[20rem] md:h-[20rem] xl:h-[22rem] bg-base-100 shadow-current shadow-2xl hover:scale-110 group/item`}
 
-                                            <img
-                                                // className={`imageCard absolute w-full h-full transition-opacity duration-200 ease-in-out rounded-md opacity-0`}
-                                                // className={`imageCard absolute w-full h-full transition-opacity duration-200 ease-in-out rounded-md group-hover/item:blur-sm`}
-                                                className={`imageCard absolute w-full h-full transition-opacity duration-200 ease-in-out rounded-md group-hover/item:blur-sm`}
-                                                src={currentCharacter.images.md}
-                                                alt={currentCharacter.name}
-                                                loading='lazy'
-                                                onLoadCapture={transitionImageCard}
-                                            />
-                                        </figure>
+                                            >
+                                                <figure className='relative rounded-md w-full'>
+                                                    <img
+                                                        className="w-full h-full animate-pulse blur-lg rounded-md"
+                                                        src={(currentCharacter.images.xs !== '' && currentCharacter.images.xs !== '-')
+                                                            ? currentCharacter.images.xs
+                                                            : getRandomImage(randomImagesArray)}
+                                                        alt={currentCharacter.name}
+                                                        loading="lazy"
+                                                    />
 
-                                        <div className="card-body group/edit invisible group-hover/item:visible transition delay-150 duration-300 ease-in-out flex flex-col justify-between">
-                                            <div>
-                                                <h2 className="card-title text-primary text-xl md:text-2xl lg:text-3xl">{currentCharacter.name}</h2>
-                                            </div>
+                                                    <img
+                                                        className={`imageCard absolute w-full h-full transition-opacity duration-200 ease-in-out rounded-md group-hover/item:blur-sm`}
+                                                        src={currentCharacter.images.md}
+                                                        alt={currentCharacter.name}
+                                                        loading='lazy'
+                                                        onLoadCapture={transitionImageCard}
+                                                    />
+                                                </figure>
 
-                                            <div className="card-actions justify-end">
-                                                <div className='flex w-full justify-between'>
-                                                    {
-                                                        (currentCharacter.biography.publisher === "DC Comics" || currentCharacter.biography.publisher === "Warner Bros")
-                                                            ? (<img
-                                                                className='h-[3rem] w-[3rem] sm:h-[5rem] sm:w-[5rem] md:h-[5rem] md:w-[5rem] lg:h-[5rem] lg:w-[5rem] self-center'
-                                                                src={publisherIMG(currentCharacter.biography.publisher)}
-                                                                alt={`Logo ${currentCharacter.biography.publisher}`}
-                                                                loading="lazy"
-                                                            />)
-                                                            : (<img
-                                                                className='h-[7vw] w-[15vw] sm:h-[7vw] sm:w-[15vw] md:h-[3rem] md:w-[7rem] lg:h-[3rem] lg:w-[7rem] self-center'
-                                                                src={publisherIMG(currentCharacter.biography.publisher)}
-                                                                alt={`Logo ${currentCharacter.biography.publisher}`}
-                                                                loading="lazy"
-                                                            />)
-                                                    }
-                                                    <div className="tooltip" data-tip={currentCharacter.biography.alignment === "good" ? "Hero" : currentCharacter.biography.alignment === "bad" ? "Villain" : "Anti-hero"}>
-                                                        {getAligmentIMG(currentCharacter.biography.alignment)}
+                                                <div className="card-body group/edit invisible group-hover/item:visible transition delay-150 duration-300 ease-in-out flex flex-col justify-between">
+                                                    <div>
+                                                        <h2 className="card-title text-primary text-xl md:text-2xl lg:text-3xl">{currentCharacter.name}</h2>
+                                                    </div>
+
+                                                    <div className="card-actions justify-end">
+                                                        <div className='flex w-full justify-between'>
+                                                            {
+                                                                (currentCharacter.biography.publisher === "DC Comics" || currentCharacter.biography.publisher === "Warner Bros")
+                                                                    ? (<img
+                                                                        className='h-[3rem] w-[3rem] sm:h-[5rem] sm:w-[5rem] md:h-[5rem] md:w-[5rem] lg:h-[5rem] lg:w-[5rem] self-center'
+                                                                        src={publisherIMG(currentCharacter.biography.publisher)}
+                                                                        alt={`Logo ${currentCharacter.biography.publisher}`}
+                                                                        loading="lazy"
+                                                                    />)
+                                                                    : (<img
+                                                                        className='h-[7vw] w-[15vw] sm:h-[7vw] sm:w-[15vw] md:h-[3rem] md:w-[7rem] lg:h-[3rem] lg:w-[7rem] self-center'
+                                                                        src={publisherIMG(currentCharacter.biography.publisher)}
+                                                                        alt={`Logo ${currentCharacter.biography.publisher}`}
+                                                                        loading="lazy"
+                                                                    />)
+                                                            }
+                                                            <div className="tooltip" data-tip={currentCharacter.biography.alignment === "good" ? "Hero" : currentCharacter.biography.alignment === "bad" ? "Villain" : "Anti-hero"}>
+                                                                {getAligmentIMG(currentCharacter.biography.alignment)}
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </label>
                                     </div>
-                                </label>
-                            </div>
-                        )
-                    })
-                }
+                                )
+                            })
+                        }
+                    </div>
+                    :
+                    <div>
+                        <p className='text-primary text-4xl text-center'>
+                            {
+                                viewFavorites ?
+                                    "No favorites"
+                                    :
+                                    "No characters found"
+                            }
+                        </p>
+                    </div>
+            }
 
-                <ModalCharacter
-                    charactersFiltered={charactersFiltered}
-                    manageFavorite={manageFavorite}
-                    favorites={favorites}
-                />
-            </div>
-            <Pagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={handlePageChange}
+            <ModalCharacter
+                manageFavorite={manageFavorite}
+                favorites={favorites}
+                selectedCharacter={selectedCharacter}
             />
+
+
+            <div className="join w-full flex justify-center">
+                {pagination.range.map((currentPage) => {
+                    return (
+                        <button
+                            key={currentPage}
+                            onClick={() => pagination.setPage(currentPage !== 'dots' ? currentPage : 1)}
+                            className={`join-item btn btn-primary ${pagination.active === currentPage ? "btn-secondary btn-active" : ""} ${currentPage === 'dots' ? "btn-disabled" : ""}`}>
+                            {currentPage === "dots" ? <p className="text-secondary">...</p> : currentPage}
+                        </button>
+                    )
+                })}
+            </div>
         </div>
     )
 }

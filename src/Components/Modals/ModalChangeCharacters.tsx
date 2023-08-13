@@ -16,12 +16,12 @@ function ModalChangeCharacters({
     setTeam,
     race,
     setRace,
-    viewFavorites,
     includeNameOrExactName,
     setIncludeNameOrExactName,
     characterOrFullName,
     setCharacterOrFullName,
 
+    setViewFavorites,
     filterCharacters,
     resetCharactersSelection
 }: ModalChangeCharactersProps) {
@@ -130,21 +130,29 @@ function ModalChangeCharacters({
                         <ButtonChangeCharacter
                             htmlFor={"my-modal-change"}
                             classNameSended="btn-primary"
-                            functionSended={() => { filterCharacters() }}
+                            functionSended={() => { 
+                                filterCharacters(); 
+                                setViewFavorites(false) 
+                            }}
                             forWhat="Find by filters"
                         />
 
                         <ButtonChangeCharacter
                             htmlFor={"my-modal-change"}
                             classNameSended="btn-warning"
-                            functionSended={() => { viewFavorites() }}
+                            functionSended={() => { 
+                                setViewFavorites(true) 
+                            }}
                             forWhat="Favorites"
                         />
 
                         <ButtonChangeCharacter
                             htmlFor={"my-modal-change"}
                             classNameSended="btn-danger"
-                            functionSended={() => { resetCharactersSelection() }}
+                            functionSended={() => { 
+                                resetCharactersSelection() 
+                                setViewFavorites(false) 
+                            }}
                             forWhat="Reset filters"
                         />
                     </div>

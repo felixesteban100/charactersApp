@@ -12,6 +12,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@mantine/core": "^6.0.19",
+    "@mantine/hooks": "^6.0.19",
     "@types/axios": "^0.14.0",
     "@types/get-image-colors": "^4.0.2",
     "@types/react-inner-image-zoom": "^3.0.0",

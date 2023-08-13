@@ -7,6 +7,9 @@ export type CharactersProps = {
     manageFavorite: (action: string, characterSelected: Character) => void
     favorites: Character[]
     isLoading: boolean
+    viewFavorites: boolean
+    selectedCharacter: Character
+    setSelectedCharacter:React.Dispatch<React.SetStateAction<Character>>
 }
 
 export type Character = {
@@ -59,17 +62,12 @@ export type Character = {
 export type ModalCharacterProps = {
     manageFavorite: (action: string, characterSelected: Character) => void
     favorites: Character[]
-    charactersFiltered: Character[]
+    selectedCharacter: Character
 }
 
 export type ImageZoomProps = {
     image: string,
     character: string,
-    index: number | string
-}
-
-export type ErrorProps = {
-    message: string
 }
 
 export type ModalSettingsProps = {
@@ -98,13 +96,12 @@ export type ModalChangeCharactersProps = {
     setGender: React.Dispatch<React.SetStateAction<string>>
     race: string;
     setRace: React.Dispatch<React.SetStateAction<string>>
-    viewFavorites: () => void
     includeNameOrExactName: boolean;
     setIncludeNameOrExactName: React.Dispatch<React.SetStateAction<boolean>>
     characterOrFullName: boolean,
     setCharacterOrFullName: React.Dispatch<React.SetStateAction<boolean>>,
 
-
+    setViewFavorites :React.Dispatch<React.SetStateAction<boolean>>
     filterCharacters: () => void
     resetCharactersSelection: () => void
 }
@@ -151,10 +148,4 @@ export type ButtonChangeCharacterProps = {
     classNameSended: string;
     functionSended: () => void;
     forWhat: string;
-}
-
-export type PaginationProps = {
-    currentPage: number;
-    totalPages: number;
-    onPageChange: (page: number) => void;
 }
