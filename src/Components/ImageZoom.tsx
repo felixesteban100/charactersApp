@@ -5,8 +5,8 @@ export default function ImageZoom({ image, character }: ImageZoomProps) {
 
     return (
         <div className='w-full h-auto'>
-            <input type="checkbox" id={`my-modal-comic`} className="modal-toggle" />
-            <label htmlFor={`my-modal-comic`} className="modal">
+            <input type="checkbox" id={`my-modal-imageZoom`} className="modal-toggle" />
+            <label htmlFor={`my-modal-imageZoom`} className="modal">
                 <label className="relative" htmlFor="">
                     <div className="rounded-md bg-base-100 w-[80vw] max-w-[30rem] h-[60vh] md:h-[80vh] lg:h-[80vh] flex justify-center p-5">
                         <img

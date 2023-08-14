@@ -1,7 +1,8 @@
 /* filtering characters */
 import { Character } from "../../types";
 
-/* see if I can use the Array.prototype.reduce() method instead of this function, an modify the functions below to adapt them to the reduce pattern, i mean to use them in this function as a comparison statement */
+
+/* see if I can refactor these functions using the Array.prototype.reduce() method instead of this function, an modify the functions below to adapt them to the reduce pattern, i mean to use them in this function as a comparison statement */
 
 /* export function filterCharacters(
     allCharactersSAVED: Character[],

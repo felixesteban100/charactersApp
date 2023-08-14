@@ -9,6 +9,7 @@ export default function ModalCharacter({
     selectedCharacter
 }: ModalCharacterProps) {
     const [selectedOption, setSelectedOption] = useState<"Stats" | "Appereance" | "Biography">("Stats")
+    const [selectedImageZoomModal, setSelectedImageZoomModal] = useState<string>('')
 
     return (
         <div>
@@ -54,7 +55,8 @@ export default function ModalCharacter({
                                             {/* IMAGE CHARACTER */}
                                             <div className="relative w-64 md:w-72 lg:w-96 h-[25rem] md:h-[25rem] lg:h-[34rem] bg-base-100 shadow-xl">
                                                 {/* <label className='group cursor-pointer w-full h-full' htmlFor={`my-modal-comic-${selectedCharacter.name}-${index}+${selectedCharacter.slug}`}> */}
-                                                <label className='group cursor-pointer w-full h-full' htmlFor={`my-modal-comic`}>
+                                                {/* <label className='group cursor-pointer w-full h-full' htmlFor={`my-modal-comic-${selectedCharacter.name}-${index}+${selectedCharacter.slug}`}> */}
+                                                <label onClick={() => setSelectedImageZoomModal(selectedCharacter.images.md)} className='group cursor-pointer w-full h-full' htmlFor={`my-modal-imageZoom`}>
                                                     <img className="absolute w-full h-full object-cover blur-sm animate-pulse md:animate-none lg:animate-none group-hover:animate-pulse " src={selectedCharacter.images.md} alt={selectedCharacter.name} loading="lazy" />
                                                     <img className="absolute w-[90%] h-[90%] object-cover rounded-md ml-5 mt-5" src={selectedCharacter.images.md} alt={selectedCharacter.name} loading="lazy" />
                                                 </label>
@@ -322,26 +324,13 @@ export default function ModalCharacter({
                                             <div className="carousel lg:carousel-vertical carousel-center h-full max-w-md lg:max-w-md p-4 space-x-4 bg-base-100 rounded-box">
                                                 {organizedComicsProperty(selectedCharacter.comics, selectedCharacter.biography.publisher).map((comic, index) => {
                                                     return (
-                                                        <label key={`${selectedCharacter._id}-${index}`} className="carousel-item lg:py-2" htmlFor={`my-modal-comic`}>
+                                                        <label onClick={() => setSelectedImageZoomModal(comic)} key={`${selectedCharacter._id}-${index}`} className="carousel-item lg:py-2" htmlFor={`my-modal-imageZoom`}>
                                                             <img className="rounded-box h-full w-full" src={comic} loading="lazy" />
                                                         </label>
                                                     )
                                                 })}
                                             </div>
                                         </div>
-
-                                        {organizedComicsProperty(selectedCharacter.comics, selectedCharacter.biography.publisher).map((comic, index) => {
-                                            return (
-                                                <div key={`comic-${selectedCharacter.name}-${index}`} className=''>
-                                                    <ImageZoom
-                                                        image={comic}
-                                                        character={selectedCharacter.name}
-                                                    />
-                                                </div>
-                                            )
-                                        })}
-
-
 
                                     </div>
                                 </div>
@@ -352,7 +341,7 @@ export default function ModalCharacter({
             </label>
 
             <ImageZoom
-                image={selectedCharacter.images.md}
+                image={selectedImageZoomModal}
                 character={selectedCharacter.name}
             />
         </div>

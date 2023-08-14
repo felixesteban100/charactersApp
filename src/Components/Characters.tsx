@@ -212,7 +212,7 @@ function Characters({ charactersFiltered, manageFavorite, isLoading, favorites, 
                                     <div key={currentCharacter._id}>
                                         <label onClick={() => setSelectedCharacter(currentCharacter)} className="cursor-pointer" htmlFor={`my-modal-selectedCharacter`}>
                                             <div
-                                                className={`card image-full  hover: object-contain w-full h-[20rem] md:h-[20rem] xl:h-[22rem] bg-base-100 shadow-current shadow-2xl hover:scale-110 group/item`}
+                                                className={`card image-full object-contain w-full h-[20rem] md:h-[20rem] xl:h-[22rem] bg-base-100 shadow-current shadow-2xl hover:scale-110 group/item`}
 
                                             >
                                                 <figure className='relative rounded-md w-full'>
