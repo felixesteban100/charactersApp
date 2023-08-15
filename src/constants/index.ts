@@ -510,7 +510,6 @@ export function organizedComicsProperty(comics: string[] | null | undefined, pub
 
     return comics
 }
-
 /* teams */
 
 export const ALLRACES = [

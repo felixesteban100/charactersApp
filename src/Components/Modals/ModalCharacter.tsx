@@ -14,9 +14,9 @@ export default function ModalCharacter({
     return (
         <div>
             <input type="checkbox" id={`my-modal-selectedCharacter`} className="modal-toggle" value="" />
-            <label htmlFor={`my-modal-selectedCharacter`} className="modal">
+            <label  htmlFor={`my-modal-selectedCharacter`} className="modal">
                 <label className="" htmlFor="">
-                    <div className="rounded-md bg-base-100 h-[95vh] w-[80vw] max-w-[80rem] overflow-y-auto overflow-x-hidden">
+                    <div className={`rounded-md bg-base-100 h-[95vh] w-[80vw] max-w-[80rem] overflow-y-auto overflow-x-hidden`}>
                         <div className='flex flex-col justify-center mt-5'>
                             <div className='flex justify-between mb-5 mx-5'>
                                 <label htmlFor={`my-modal-selectedCharacter`} className="btn btn-sm btn-circle right-2 top-2">✕</label>
@@ -52,16 +52,13 @@ export default function ModalCharacter({
                                     <div className="flex flex-col md:flex-row lg:flex-row justify-center">
 
                                         <div className='flex flex-col items-center align-middle gap-3 mx-auto max-w-screen-lg'>
-                                            {/* IMAGE CHARACTER */}
+
                                             <div className="relative w-64 md:w-72 lg:w-96 h-[25rem] md:h-[25rem] lg:h-[34rem] bg-base-100 shadow-xl">
-                                                {/* <label className='group cursor-pointer w-full h-full' htmlFor={`my-modal-comic-${selectedCharacter.name}-${index}+${selectedCharacter.slug}`}> */}
-                                                {/* <label className='group cursor-pointer w-full h-full' htmlFor={`my-modal-comic-${selectedCharacter.name}-${index}+${selectedCharacter.slug}`}> */}
                                                 <label onClick={() => setSelectedImageZoomModal(selectedCharacter.images.md)} className='group cursor-pointer w-full h-full' htmlFor={`my-modal-imageZoom`}>
                                                     <img className="absolute w-full h-full object-cover blur-sm animate-pulse md:animate-none lg:animate-none group-hover:animate-pulse " src={selectedCharacter.images.md} alt={selectedCharacter.name} loading="lazy" />
                                                     <img className="absolute w-[90%] h-[90%] object-cover rounded-md ml-5 mt-5" src={selectedCharacter.images.md} alt={selectedCharacter.name} loading="lazy" />
                                                 </label>
                                             </div>
-                                            {/* IMAGE CHARACTER */}
 
                                             <div className='self-center mt-5'>
                                                 <h1 className={`text-5xl font-bold text-center`} >{selectedCharacter.name}</h1>

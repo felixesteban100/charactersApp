@@ -89,7 +89,7 @@ import { Character } from "../../types";
     }
 } */
 
-export function getCharactersByTeamNotSended(firstFilter: Character[], side: string, universe: string, gender: string, race: string) {
+/* export function getCharactersByTeamNotSended(firstFilter: Character[], side: string, universe: string, gender: string, race: string) {
     let resultArr: Character[] = []
     firstFilter.forEach((current: Character) => {
         const currentReturned = confirmConditions(current, side, universe, gender, race)
@@ -202,7 +202,7 @@ export function filterAttributes(result: Character[], firstFilter: Character[], 
         result = getCharactersByTeamSended(firstFilter, team, side, universe, gender, race);
     }
     return result;
-}
+} */
 
 export function filterName(firstFilter: Character[], randomizedArray: Character[], characterName: string, includeNameOrExactName: boolean, characterOrFullName: boolean) {
     if (characterName === "") {

@@ -29,11 +29,12 @@ function ModalChangeCharacters({
 
     return (
         <div>
-            <input type="checkbox" id="my-modal-change" className="modal-toggle" />
+            {/* <input type="checkbox" id="my-modal-change" className="modal-toggle" /> */}
 
-            <label htmlFor="my-modal-change" className="modal cursor-pointer">
+            {/* <label htmlFor="my-modal-change" className="modal cursor-pointer">
                 <label className="modal-box relative flex flex-col gap-5" htmlFor="">
-                    <label htmlFor="my-modal-change" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+                    <label htmlFor="my-modal-change" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label> */}
+                    
                     <p className="text-lg font-bold">Select characters features</p>
 
                     <div className="form-control w-full">
@@ -126,7 +127,8 @@ function ModalChangeCharacters({
                         forWhat={'the team'}
                     />
 
-                    <div className="flex flex-col md:flex-row gap-5 justify-around">
+                    {/* <div className="flex flex-col md:flex-row gap-5 justify-around"> */}
+                    <div className="flex flex-col gap-5 justify-around mt-5">
                         <ButtonChangeCharacter
                             htmlFor={"my-modal-change"}
                             classNameSended="btn-primary"
@@ -156,9 +158,12 @@ function ModalChangeCharacters({
                             forWhat="Reset filters"
                         />
                     </div>
-                </label>
-            </label>
-        </div>
+
+                {/* </label>
+            </label> */}
+
+            
+        </div> 
     )
 }
 

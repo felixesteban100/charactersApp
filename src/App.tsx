@@ -10,7 +10,7 @@ import ModalTeamMembers from './Components/Modals/ModalTeamMembers';
 import ModalSettings from './Components/Modals/ModalSettings';
 import { Character } from './types';
 import { characterEmpty, listOfTeamsWithImgInTheHeroSection, teamIMG } from './constants';
-import { filterAttributes, filterName, resetLocalStorage } from './constants/filterCharacters';
+import { /* filterAttributes, */ filterName, resetLocalStorage } from './constants/filterCharacters';
 
 
 // if you want the API to work you should turn off the adblock extention
@@ -66,7 +66,7 @@ function App() {
       const result = await axios.get<Character[]>('https://heroes-backend.onrender.com/').then((response) => response.data)
       if (result !== undefined) {
         // select 5 random characters at the beginning (when there's no localstorage yet)
-        if (charactersFiltered.length === 0) setCharactersFiltered(result.sort(() => 0.5 - Math.random()).slice(0, 6))
+        if (charactersFiltered.length === 0) setCharactersFiltered(result.sort(() => 0.5 - Math.random()).slice(0, 8))
         setAllCharactersSAVED(result)
         return result
       }
@@ -94,16 +94,35 @@ function App() {
       let firstFilter: Character[] = []
       const randomizedArray = allCharactersSAVED.sort(() => Math.random() - 0.5);
 
-      /* filter name */
+      // filter name
       firstFilter = filterName(firstFilter, randomizedArray, characterName, includeNameOrExactName, characterOrFullName);
 
-      /* filter attributes */
-      result = filterAttributes(result, firstFilter, team, side, universe, gender, race);
+      // filter attributes
+      // result = filterAttributes(result, firstFilter, team, side, universe, gender, race);
 
-      /* filter how Many */
-      if (howMany > 0) result = result.slice(0, howMany)
+      // filter how Many
+      // if (howMany > 0) result = result.slice(0, howMany)
 
-      setCharactersFiltered(result)
+      console.log(howMany)
+
+      firstFilter = firstFilter.reduce((acc: Character[], current: Character) => {
+        if ((howMany === 0 || howMany === null) || acc.length < howMany) {
+          let isMatched = 0
+
+          isMatched = (team === 'All' || current.connections.groupAffiliation?.toLowerCase().includes(team.toLowerCase())) ? isMatched + 1 : isMatched
+          isMatched = (race === 'All' || (current.appearance.race !== null && current.appearance.race.toLowerCase().includes(race.toLowerCase()))) ? isMatched + 1 : isMatched
+          isMatched = (gender === 'All' || current.appearance.gender === gender) ? isMatched + 1 : isMatched
+          isMatched = (side === 'All' || current.biography.alignment === side) ? isMatched + 1 : isMatched
+          isMatched = (universe === 'All' || current.biography.publisher === universe) ? isMatched + 1 : isMatched
+
+          if (isMatched === 5) acc.push(current)
+        }
+
+        return acc
+      }, [])
+
+      setCharactersFiltered(firstFilter)
+      // setCharactersFiltered(result)
       setHeroSection({
         imgs: teamIMG(team),
         title: team,
@@ -132,76 +151,91 @@ function App() {
 
   return (
     <div data-theme={theme} className={`min-h-screen transition-colors duration-500 bg-base-200`}>
-      <Header />
+      <div className="drawer">
+        <input id="my-drawer-change" type="checkbox" className="drawer-toggle" />
+        
+        <div className="drawer-content">
+          {/* Page content here */}
 
-      <HeroSelector
-        selectedOne={`${team !== "All" ? universe : team} ${(!listOfTeamsWithImgInTheHeroSection.includes(team) && team !== "All") ? "WithOutImage" : ""}`}
-        heroSection={heroSection}
-      />
+          <Header />
 
-      <div>
-        {
-          isError ?
-            <div
-              id='section-characters'
-              className='flex flex-col gap-5 min-h-[100vh] items-center justify-center'
-            >
-              <p>Opps... something happend please try again.</p>
-            </div>
-            :
-            <div>
-              <Characters
-                charactersFiltered={viewFavorites ? favorites : charactersFiltered}
-                manageFavorite={manageFavorite}
-                isLoading={isLoading}
-                favorites={favorites}
-                viewFavorites={viewFavorites}
-                selectedCharacter={selectedCharacter}
-                setSelectedCharacter={setSelectedCharacter}
-              />
-            </div>
-        }
+          <HeroSelector
+            selectedOne={`${team !== "All" ? universe : team} ${(!listOfTeamsWithImgInTheHeroSection.includes(team) && team !== "All") ? "WithOutImage" : ""}`}
+            heroSection={heroSection}
+          />
+
+          <div>
+            {
+              isError ?
+                <div
+                  id='section-characters'
+                  className='flex flex-col gap-5 min-h-[100vh] items-center justify-center'
+                >
+                  <p>Opps... something happend please try again.</p>
+                </div>
+                :
+                <div>
+                  <Characters
+                    charactersFiltered={viewFavorites ? favorites : charactersFiltered}
+                    manageFavorite={manageFavorite}
+                    isLoading={isLoading}
+                    favorites={favorites}
+                    viewFavorites={viewFavorites}
+                    selectedCharacter={selectedCharacter}
+                    setSelectedCharacter={setSelectedCharacter}
+                  />
+                </div>
+            }
+          </div>
+
+          <ModalTeamMembers
+            teamMembers={teamMembers}
+            team={team}
+            universe={universe}
+          />
+
+          <br />
+          <Footer />
+
+          {/* Page content here */}
+        </div>
+
+        <div className="drawer-side">
+          <label htmlFor="my-drawer-change" className="drawer-overlay"></label>
+          <ul className="menu p-4 w-80 h-full bg-base-200 text-base-content">
+            {/* Sidebar content here */}
+            <ModalChangeCharacters
+              characterName={characterName}
+              setCharacterName={setCharacterName}
+              howMany={howMany}
+              setHowMany={setHowMany}
+              side={side}
+              setSide={setSide}
+              universe={universe}
+              setUniverse={setUniverse}
+              team={team}
+              setTeam={setTeam}
+              gender={gender}
+              setGender={setGender}
+              race={race}
+              setRace={setRace}
+              includeNameOrExactName={includeNameOrExactName}
+              setIncludeNameOrExactName={setIncludeNameOrExactName}
+              characterOrFullName={characterOrFullName}
+              setCharacterOrFullName={setCharacterOrFullName}
+
+              setViewFavorites={setViewFavorites}
+              filterCharacters={filterCharacters}
+              resetCharactersSelection={resetCharactersSelection}
+            />
+            <ModalSettings
+              theme={theme}
+              setTheme={setTheme}
+            />
+          </ul>
+        </div>
+
       </div>
-
-
-      <ModalChangeCharacters
-        characterName={characterName}
-        setCharacterName={setCharacterName}
-        howMany={howMany}
-        setHowMany={setHowMany}
-        side={side}
-        setSide={setSide}
-        universe={universe}
-        setUniverse={setUniverse}
-        team={team}
-        setTeam={setTeam}
-        gender={gender}
-        setGender={setGender}
-        race={race}
-        setRace={setRace}
-        includeNameOrExactName={includeNameOrExactName}
-        setIncludeNameOrExactName={setIncludeNameOrExactName}
-        characterOrFullName={characterOrFullName}
-        setCharacterOrFullName={setCharacterOrFullName}
-
-        setViewFavorites={setViewFavorites}
-        filterCharacters={filterCharacters}
-        resetCharactersSelection={resetCharactersSelection}
-      />
-
-      <ModalTeamMembers
-        teamMembers={teamMembers}
-        team={team}
-        universe={universe}
-      />
-
-      <ModalSettings
-        theme={theme}
-        setTheme={setTheme}
-      />
-
-      <br />
-      <Footer />
     </div>
   )
 }
