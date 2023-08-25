@@ -229,7 +229,7 @@ export function filterName(firstFilter: Character[], randomizedArray: Character[
                         : charac.biography.fullName.toLowerCase() === currentName.toLowerCase();
                 }
 
-                if (comparison === true) {
+                if (comparison === true && (!resultArr.some(obj => obj.name === currentName) || includeNameOrExactName === true)) {
                     resultArr.push(charac);
                 }
             });

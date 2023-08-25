@@ -76,11 +76,13 @@ function Characters({ charactersFiltered, manageFavorite, isLoading, favorites, 
     return (
         <div
             id='section-characters'
+            data-test="section-characters"
             className='flex flex-col gap-5 min-h-[100vh] items-center justify-center'
         >
             {
                 visibleResults.length > 0 ?
                     <div
+                        data-test="characters-visible"
                         className={
                             `mt-5 
                             grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 
@@ -94,7 +96,7 @@ function Characters({ charactersFiltered, manageFavorite, isLoading, favorites, 
                         }
                     >
                         {
-                            visibleResults.map((currentCharacter) => {
+                            visibleResults.map((currentCharacter, index) => {
                                 if (isLoading) {
                                     return (
                                         <div key={currentCharacter._id}>
@@ -107,6 +109,7 @@ function Characters({ charactersFiltered, manageFavorite, isLoading, favorites, 
                                         <Character
                                             setSelectedCharacter={setSelectedCharacter}
                                             currentCharacter={currentCharacter}
+                                            number={index}
                                         />
                                     </div>
                                 )
@@ -133,10 +136,11 @@ function Characters({ charactersFiltered, manageFavorite, isLoading, favorites, 
             />
 
 
-            <div className="join w-full flex justify-center">
+            <div data-test="paginationHandler" className="join w-full flex justify-center">
                 {pagination.range.map((currentPage, index) => {
                     return (
                         <button
+                            data-test="paginationBtn"
                             key={`${currentPage}-${index}`}
                             onClick={() => pagination.setPage(currentPage !== 'dots' ? currentPage : 1)}
                             className={`join-item btn btn-primary ${pagination.active === currentPage ? "btn-secondary btn-active" : ""} ${currentPage === 'dots' ? "btn-disabled" : ""}`}>
@@ -153,9 +157,10 @@ function Characters({ charactersFiltered, manageFavorite, isLoading, favorites, 
 type CharacterProps = {
     setSelectedCharacter: React.Dispatch<React.SetStateAction<Character>>
     currentCharacter: Character
+    number: number
 }
 
-function Character({ setSelectedCharacter, currentCharacter }: CharacterProps) {
+function Character({ setSelectedCharacter, currentCharacter, number }: CharacterProps) {
     const { ref, inView/* , entry */ } = useInView({
         /* Optional properties */
         threshold: 0.5,
@@ -277,7 +282,12 @@ function Character({ setSelectedCharacter, currentCharacter }: CharacterProps) {
     }
 
     return (
-        <label onClick={() => setSelectedCharacter(currentCharacter)} className={`cursor-pointer `} htmlFor={`my-modal-selectedCharacter`}>
+        <label
+            data-test={`character`}
+            onClick={() => setSelectedCharacter(currentCharacter)}
+            className={`cursor-pointer`}
+            htmlFor={`my-modal-selectedCharacter`}
+        >
             <div ref={ref} className={`${inView ? "animate-flipInHorBottom" : "animate-flipOutHorTop"} card image-full object-contain w-full h-[20rem] md:h-[20rem] xl:h-[22rem] bg-base-100 shadow-current shadow-2xl hover:scale-110 group/item`}>
                 <figure className='relative rounded-md w-full'>
                     <img className="w-full h-full animate-pulse blur-lg rounded-md" src={currentCharacter.images.xs !== '' && currentCharacter.images.xs !== '-' ? currentCharacter.images.xs : getRandomImage(randomImagesArray)} alt={currentCharacter.name} loading="lazy" />

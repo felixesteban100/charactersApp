@@ -11,12 +11,16 @@ function Header() {
         <div className={`navbar bg-base-100 sticky top-0 z-40 transition duration-500`}>
             <div className="flex-1 gap-2">
                 {/* <label htmlFor="my-modal-change" className="btn btn-ghost normal-case text-xl hover:text-secondary">CHARACTERS APP</label> */}
-                <label htmlFor="my-drawer-change" className="btn btn-ghost normal-case text-xl hover:text-secondary">CHARACTERS APP</label>
-                <a onClick={() => scrollToSection('section-characters')} className="btn btn-square btn-outline flex flex-row w-fit px-4 gap-2">
+                <label data-test="characters-header-btn" htmlFor="my-drawer-change" className="btn btn-ghost normal-case text-xl hover:text-secondary">CHARACTERS APP</label>
+                <div 
+                    data-test="scrooll-tosection-characters" 
+                    onClick={() => scrollToSection('section-characters')} 
+                    className="btn btn-square btn-outline flex flex-row w-fit px-4 gap-2"
+                >
                     {/* <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg> */}
                     <svg xmlns="http://www.w3.org/2000/svg" className="fill-current h-6 w-6" fill="none" viewBox="0 0 234 260" stroke="currentColor" /* enable-background="new 0 0 234 260" */><path d="M232.043,157.557L216.22,2l-32.915,51.122c0,0-28.733-21.024-66.301-21.024c-37.577,0-60.744,17.332-60.744,17.332L9.57,2 L1.957,157.557h4.675C11.901,213.818,59.385,258,117,258s105.099-44.182,110.368-100.443H232.043z M47.147,109.233 c2.105-7.719,11.19-11.065,17.794-6.556l35.635,24.35H42.293L47.147,109.233z M169.194,102.677 c6.604-4.508,15.698-1.163,17.803,6.556l4.845,17.794h-58.283L169.194,102.677z M117,238.185c-46.68,0-85.26-35.314-90.447-80.628 h180.893C202.26,202.871,163.68,238.185,117,238.185z M146.646,200.214H90.891v-16.932h55.755V200.214z" /></svg>
                     {/* <p className="sm:hidden" >See Characters</p> */}
-                </a>
+                </div>
             </div>
 
             <div className="flex-none">

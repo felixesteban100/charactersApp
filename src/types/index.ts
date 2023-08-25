@@ -140,12 +140,14 @@ export type SelectInputProps = {
         name: string;
     }[]
     onChangeFunction: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-    forWhat: string
+    forWhat: string;
+    dataTest: string;
 }
 
 export type ButtonChangeCharacterProps = {
-    htmlFor: string;
+    // htmlFor: string;
     classNameSended: string;
     functionSended: () => void;
     forWhat: string;
+    dataTest: string
 }

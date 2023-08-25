@@ -14,8 +14,8 @@ export default function ModalCharacter({
     return (
         <div>
             <input type="checkbox" id={`my-modal-selectedCharacter`} className="modal-toggle" value="" />
-            <label  htmlFor={`my-modal-selectedCharacter`} className="modal">
-                <label className="" htmlFor="">
+            <label className="w-full h-full modal" data-test="modalCharacterOutside" htmlFor={`my-modal-selectedCharacter`} >
+                <label data-test="modalCharacter" htmlFor="">
                     <div className={`rounded-md bg-base-100 h-[95vh] w-[80vw] max-w-[80rem] overflow-y-auto overflow-x-hidden`}>
                         <div className='flex flex-col justify-center mt-5'>
                             <div className='flex justify-between mb-5 mx-5'>
@@ -53,10 +53,10 @@ export default function ModalCharacter({
 
                                         <div className='flex flex-col items-center align-middle gap-3 mx-auto max-w-screen-lg'>
 
-                                            <div className="relative w-64 md:w-72 lg:w-96 h-[25rem] md:h-[25rem] lg:h-[34rem] bg-base-100 shadow-xl">
+                                            <div className="relative w-64 md:w-72 lg:w-96 h-[25rem] md:h-[25rem] lg:h-[34rem] bg-base-100 shadow-xl ">
                                                 <label onClick={() => setSelectedImageZoomModal(selectedCharacter.images.md)} className='group cursor-pointer w-full h-full' htmlFor={`my-modal-imageZoom`}>
                                                     <img className="absolute w-full h-full object-cover blur-sm animate-pulse md:animate-none lg:animate-none group-hover:animate-pulse " src={selectedCharacter.images.md} alt={selectedCharacter.name} loading="lazy" />
-                                                    <img className="absolute w-[90%] h-[90%] object-cover rounded-md ml-5 mt-5" src={selectedCharacter.images.md} alt={selectedCharacter.name} loading="lazy" />
+                                                    <img className="absolute w-[90%] h-[90%] object-cover rounded-md ml-3 md:ml-5 mt-5" src={selectedCharacter.images.md} alt={selectedCharacter.name} loading="lazy" />
                                                 </label>
                                             </div>
 
@@ -68,9 +68,9 @@ export default function ModalCharacter({
 
                                         <div className='mx-auto flex flex-col justify-center gap-3 items-center w-[90%] md:w-[50%] lg:w-[50%]'>
                                             <div className="w-full grid grid-flow-col grid-col-3">
-                                                <div onClick={() => setSelectedOption("Stats")} className={`text-md md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Stats" ? "tab-active" : ""}`}>Stats</div>
-                                                <div onClick={() => setSelectedOption("Appereance")} className={`text-md md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Appereance" ? "tab-active" : ""}`}>Appereance</div>
-                                                <div onClick={() => setSelectedOption("Biography")} className={`text-md md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Biography" ? "tab-active" : ""}`}>Biography</div>
+                                                <div onClick={() => setSelectedOption("Stats")} className={`pb-5 lg:pb-10 text-md md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Stats" ? "tab-active" : ""}`}>Stats</div>
+                                                <div onClick={() => setSelectedOption("Appereance")} className={`pb-5 lg:pb-10 text-md md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Appereance" ? "tab-active" : ""}`}>Appereance</div>
+                                                <div onClick={() => setSelectedOption("Biography")} className={`pb-5 lg:pb-10 text-md md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Biography" ? "tab-active" : ""}`}>Biography</div>
                                             </div>
 
                                             {
@@ -190,7 +190,7 @@ export default function ModalCharacter({
                                                                     }
                                                                 </div>
                                                                 <div className="stat-title">Race</div>
-                                                                <div className="stat-value text-sm md:text-xl lg:text-xl">{selectedCharacter.appearance.race}</div>
+                                                                <div className="stat-value text-sm md:text-xl lg:text-xl">{selectedCharacter.appearance.race ?? "Unknown"}</div>
                                                             </div>
                                                             <div className="stat">
                                                                 <div className="stat-figure text-secondary">
@@ -246,13 +246,13 @@ export default function ModalCharacter({
                                                                     <div className="stat-title">Publisher</div>
                                                                     <div className="stat-value text-sm md:text-xl lg:text-xl">{selectedCharacter.biography.publisher}</div>
                                                                 </div>
-                                                                <div className="stat">
+                                                                <div className="stat  ">
                                                                     <div className="stat-figure text-secondary">
                                                                         <p className='text-2xl md:text-5xl lg:text-5xl'>🔠</p>
                                                                     </div>
-                                                                    <div className="stat-title">Aliases</div>
+                                                                    {/* <div className="stat-title">Aliases</div> */}
 
-                                                                    <div tabIndex={0} className="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box">
+                                                                    <div tabIndex={0} className=" collapse collapse-arrow border border-base-300 bg-base-100 rounded-box h-[4rem]">
                                                                         <div className="collapse-title text-xl font-medium">
                                                                             Aliases...
                                                                         </div>
@@ -265,7 +265,7 @@ export default function ModalCharacter({
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div className="stat">
+                                                                {/* <div className="stat">
                                                                     <div className="stat-figure text-secondary">
                                                                         <p className='text-2xl md:text-5xl lg:text-5xl'>🆎</p>
                                                                     </div>
@@ -275,15 +275,29 @@ export default function ModalCharacter({
                                                                             <div className="stat-value text-sm md:text-xl lg:text-xl tooltip flex" data-tip={selectedCharacter.biography.alterEgos}>{selectedCharacter.biography.alterEgos === "No alter egos found." ? "Unknown" : selectedCharacter.biography.alterEgos.slice(0, 15)}</div>
                                                                             : null
                                                                     }
-
-                                                                </div>
+                                                                </div> */}
                                                                 <div className="stat">
+                                                                    <div className="stat-figure text-secondary">
+                                                                        <p className='text-2xl md:text-5xl lg:text-5xl'>🆎</p>
+                                                                    </div>
+                                                                    {/* <div className="stat-title">Alter egos</div> */}
+
+                                                                    <div tabIndex={0} className="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box h-[4rem]">
+                                                                        <div className="collapse-title text-xl font-medium">
+                                                                            Alter egos...
+                                                                        </div>
+                                                                        <div className="collapse-content">
+                                                                            <p>{selectedCharacter.biography.alterEgos}</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div className="stat ">
                                                                     <div className="stat-figure text-secondary">
                                                                         <p className='text-2xl md:text-5xl lg:text-5xl'>👪</p>
                                                                     </div>
-                                                                    <div className="stat-title">Group Affiliation</div>
+                                                                    {/* <div className="stat-title">Group Affiliation</div> */}
 
-                                                                    <div tabIndex={0} className="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box">
+                                                                    <div tabIndex={0} className="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box h-[4rem]">
                                                                         <div className="collapse-title text-xl font-medium">
                                                                             Teams...
                                                                         </div>
@@ -292,12 +306,27 @@ export default function ModalCharacter({
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div className="stat">
+                                                                {/* <div className="stat">
                                                                     <div className="stat-figure text-secondary">
                                                                         <p className='text-2xl md:text-5xl lg:text-5xl'>🧾</p>
                                                                     </div>
                                                                     <div className="stat-title">Occupation</div>
                                                                     <div className="stat-value flex text-sm md:text-xl lg:text-xl tooltip" data-tip={selectedCharacter.work.occupation.split(",")[0]}>{selectedCharacter.work.occupation.slice(0, 15)}...</div>
+                                                                </div> */}
+                                                                <div className="stat">
+                                                                    <div className="stat-figure text-secondary">
+                                                                        <p className='text-2xl md:text-5xl lg:text-5xl'>🧾</p>
+                                                                    </div>
+                                                                    {/* <div className="stat-title">Occupation</div> */}
+
+                                                                    <div tabIndex={0} className="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box h-[4rem]">
+                                                                        <div className="collapse-title text-xl font-medium">
+                                                                        Occupation...
+                                                                        </div>
+                                                                        <div className="collapse-content">
+                                                                            <p>{selectedCharacter.work.occupation}</p>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                             :

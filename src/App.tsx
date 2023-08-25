@@ -103,8 +103,6 @@ function App() {
       // filter how Many
       // if (howMany > 0) result = result.slice(0, howMany)
 
-      console.log(howMany)
-
       firstFilter = firstFilter.reduce((acc: Character[], current: Character) => {
         if ((howMany === 0 || howMany === null) || acc.length < howMany) {
           let isMatched = 0
@@ -196,14 +194,11 @@ function App() {
 
           <br />
           <Footer />
-
-          {/* Page content here */}
         </div>
 
-        <div className="drawer-side">
-          <label htmlFor="my-drawer-change" className="drawer-overlay"></label>
-          <ul className="menu p-4 w-80 h-full bg-base-200 text-base-content">
-            {/* Sidebar content here */}
+        <div data-test="sidebarOutside" className="drawer-side">
+          <label htmlFor="my-drawer-change" className="drawer-overlay cursor-text bg-red-600 h-full w-full"></label>
+          <ul data-test="sidebar" className="menu p-4 w-80 h-full bg-base-200 text-base-content">
             <ModalChangeCharacters
               characterName={characterName}
               setCharacterName={setCharacterName}
