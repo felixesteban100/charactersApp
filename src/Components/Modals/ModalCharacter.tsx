@@ -2,11 +2,13 @@ import { ModalCharacterProps } from "../../types"
 import { useState } from 'react';
 import ImageZoom from "../ImageZoom";
 import { organizedComicsProperty } from "../../constants";
+import { manageFavorite } from "../../functions";
 
 export default function ModalCharacter({
-    manageFavorite,
+    // manageFavorite,
     favorites,
-    selectedCharacter
+    selectedCharacter,
+    setFavorites
 }: ModalCharacterProps) {
     const [selectedOption, setSelectedOption] = useState<"Stats" | "Appereance" | "Biography">("Stats")
     const [selectedImageZoomModal, setSelectedImageZoomModal] = useState<string>('')
@@ -24,9 +26,9 @@ export default function ModalCharacter({
                                     <input
                                         onChange={() => {
                                             if (favorites.includes(selectedCharacter)) {
-                                                manageFavorite("remove", selectedCharacter)
+                                                manageFavorite("remove", selectedCharacter, setFavorites)
                                             } else {
-                                                manageFavorite("add", selectedCharacter)
+                                                manageFavorite("add", selectedCharacter, setFavorites)
                                             }
                                         }}
                                         type="checkbox"

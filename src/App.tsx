@@ -1,16 +1,23 @@
+
 import { useState } from 'react'
-import { useQuery } from 'react-query';
-import axios from "axios"
 import Characters from "./Components/Characters"
 import Header from './Components/Header';
 import ModalChangeCharacters from './Components/Modals/ModalChangeCharacters';
 import Footer from './Components/Footer';
-import useLocalStorage from './customHooks/useLocalStorage';
+import useLocalStorage from './hooks/useLocalStorage';
 import HeroSelector from './Components/HeroSelector';
 import ModalTeamMembers from './Components/Modals/ModalTeamMembers';
 import ModalSettings from './Components/Modals/ModalSettings';
 import { Character } from './types';
 import { characterEmpty, listOfTeamsWithImgInTheHeroSection, teamIMG } from './constants';
+import CharactersContainer from "./Components/CharactersContainer";
+
+
+import LoadingCard from "./Components/LoadingCard";
+import { useQuery } from 'react-query';
+import axios from "axios"
+import useWindowWidth from './hooks/useWindowWidth';
+import { getLoadingCards } from './functions';
 
 //change the publisher for these
 // jason bourne, chuck, rambo, Kool-Aid Man, the cape, Ethan Hunt
@@ -19,7 +26,6 @@ function App() {
   const [letItSearch, setLetItSearch] = useState(true)
   const [selectedCharacter, setSelectedCharacter] = useLocalStorage<Character>("CHARACTERS_APP_CHARACTERSELECTED", characterEmpty)
 
-  const [favorites, setFavorites] = useLocalStorage<Character[] | []>("CHARACTERS_APP_FAVORITES", [])
   const [viewFavorites, setViewFavorites] = useLocalStorage("CHARACTERS_APP_VIEWFAVORITES", false)
 
   const [characterName, setCharacterName] = useLocalStorage<string>("CHARACTERS_APP_NAME", "")
@@ -41,8 +47,9 @@ function App() {
 
   const [theme, setTheme] = useLocalStorage("CHARACTERS_APP_THEME", "dark")
 
+  const [favorites, setFavorites] = useLocalStorage<Character[] | []>("CHARACTERS_APP_FAVORITES", [])
 
-  const { isLoading, isError, data: charactersFiltered, refetch: refetchCharacters, isFetching, isFetched } = useQuery<Character[]>({
+  const { isLoading, isError, data: charactersFiltered, refetch: refetchCharacters, isFetching } = useQuery<Character[]>({
     enabled: letItSearch,
     refetchOnMount: false,
     refetchOnReconnect: false,
@@ -60,54 +67,12 @@ function App() {
       if (team !== "All") setTeamMembers(result.filter((currentCharacter) => currentCharacter.connections.groupAffiliation.includes(team)))
 
       setLetItSearch(false)
-      return result !== undefined ? result : []
+      return result
     },
     onError: (error) => console.log(error),
   })
 
-
-  function manageFavorite(action: string, characterSelected: Character) {
-    switch (action) {
-      case "add":
-        setFavorites(prev => [...prev, characterSelected])
-        break;
-
-      case "remove":
-        setFavorites(prev => prev.filter(current => current.slug !== characterSelected.slug))
-        break;
-    }
-  }
-
-  function resetCharactersSelection() {
-    localStorage.removeItem('CHARACTERS_APP_ALLCHARACTERS')
-    localStorage.removeItem("CHARACTERS_APP_CHARACTERSFILTERED");
-    localStorage.removeItem("CHARACTERS_APP_NAME");
-    localStorage.removeItem("CHARACTERS_APP_HOWMANY");
-    localStorage.removeItem("CHARACTERS_APP_SIDE");
-    localStorage.removeItem("CHARACTERS_APP_UNIVERSE");
-    localStorage.removeItem("CHARACTERS_APP_TEAM");
-    localStorage.removeItem("CHARACTERS_APP_GENDER");
-    localStorage.removeItem("CHARACTERS_APP_RACE");
-    localStorage.removeItem("CHARACTERS_APP_HEROSECTION");
-    localStorage.removeItem("CHARACTERS_APP_TEAMMEMBERS");
-
-    setCharacterName("")
-    setHowMany(8)
-    setSide("All")
-    setUniverse("All")
-    setTeam("All")
-    setGender("All")
-    setHeroSection({ imgs: ["https://media.tenor.com/TY1HfJK5qQYAAAAC/galaxy-pixel-art.gif"], title: "", description: "" })
-    setTeamMembers([])
-  }
-
-  function getCharactersToDisplay(): Character[] {
-     if (viewFavorites) {
-      return favorites;
-    } else {
-      return charactersFiltered === undefined ? [] : charactersFiltered;
-    }
-  }
+  const windowWidth = useWindowWidth()
 
   return (
     <div data-theme={theme} className={`min-h-screen transition-colors duration-500 bg-base-200`}>
@@ -130,32 +95,65 @@ function App() {
 
           <div>
             {
-              isError || charactersFiltered === undefined ?
+              isLoading || isFetching ?
                 <div
                   id='section-characters'
                   className='flex flex-col gap-5 min-h-[100vh] items-center justify-center'
                 >
-                  <p>Opps... something happend please try again.</p>
+                  <CharactersContainer
+                    visibleResults={Array(howMany).fill(characterEmpty)}
+                  >
+                    <>
+                      {
+                        Array(getLoadingCards(windowWidth, howMany)).fill(characterEmpty).map((_, index) => {
+                          return (
+                            <div key={index}>
+                              <LoadingCard />
+                            </div>
+                          )
+                        })
+                      }
+                    </>
+                  </CharactersContainer>
                 </div>
                 :
-                <div>
-                  <Characters
-                    charactersFiltered={getCharactersToDisplay()}
-                    manageFavorite={manageFavorite}
-                    isLoading={isLoading}
-                    isFetching={isFetching}
-                    favorites={favorites}
-                    viewFavorites={viewFavorites}
-                    selectedCharacter={selectedCharacter}
-                    setSelectedCharacter={setSelectedCharacter}
-                  />
+                isError || charactersFiltered === undefined ?
+                  <div
+                    id='section-characters'
+                    className='flex flex-col gap-5 min-h-[100vh] items-center justify-center'
+                  >
+                    <p>Opps... something happend please try again.</p>
+                  </div>
+                  :
+                  <div>
+                    <Characters
+                      charactersFiltered={viewFavorites ? favorites : charactersFiltered}
+                      favorites={favorites}
+                      setFavorites={setFavorites}
+                      viewFavorites={viewFavorites}
+                      selectedCharacter={selectedCharacter}
+                      setSelectedCharacter={setSelectedCharacter}
+                      setTeamMembers={setTeamMembers}
+                      setHeroSection={setHeroSection}
+                      characterName={characterName}
+                      howMany={howMany}
+                      side={side}
+                      universe={universe}
+                      team={team}
+                      gender={gender}
+                      race={race}
+                      includeNameOrExactName={includeNameOrExactName}
+                      characterOrFullName={characterOrFullName}
+                      letItSearch={letItSearch}
+                      setLetItSearch={setLetItSearch}
+                    />
 
-                  <ModalTeamMembers
-                    teamMembers={teamMembers}
-                    team={team}
-                    universe={universe}
-                  />
-                </div>
+                    <ModalTeamMembers
+                      teamMembers={teamMembers}
+                      team={team}
+                      universe={universe}
+                    />
+                  </div>
             }
           </div>
 
@@ -163,9 +161,9 @@ function App() {
           <Footer />
         </div>
 
-        <div data-test="sidebarOutside" className="drawer-side">
+        <div data-test="sidebarOutside" className="drawer-side z-50">
           <label htmlFor="my-drawer-change" className="drawer-overlay cursor-text bg-red-600 h-full w-full"></label>
-          <ul data-test="sidebar" className="menu p-4 w-80 h-full bg-base-200 text-base-content">
+          <ul data-test="sidebar" className="menu p-4 w-80 min-h-[100vh] bg-base-200 text-base-content">
             <ModalChangeCharacters
               characterName={characterName}
               setCharacterName={setCharacterName}
@@ -188,7 +186,8 @@ function App() {
 
               setViewFavorites={setViewFavorites}
               refetchCharacters={refetchCharacters}
-              resetCharactersSelection={resetCharactersSelection}
+              setHeroSection={setHeroSection}
+              setTeamMembers={setTeamMembers}
             />
             <ModalSettings
               theme={theme}

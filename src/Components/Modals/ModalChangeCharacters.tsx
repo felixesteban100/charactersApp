@@ -1,5 +1,8 @@
 import { ALLALIGMENTS, ALLGENDERS, ALLRACES, ALLUNIVERSE, getTeamByUniverse } from "../../constants";
-import { ButtonChangeCharacterProps, ModalChangeCharactersProps, SelectInputProps } from "../../types";
+import { resetCharactersSelection } from "../../functions";
+import { ModalChangeCharactersProps } from "../../types";
+import ButtonChangeCharacter from "../Reusable/ButtonChangeCharacter";
+import SelectInput from "../Reusable/SelectInput";
 
 function ModalChangeCharacters({
     characterName,
@@ -23,7 +26,9 @@ function ModalChangeCharacters({
 
     setViewFavorites,
     refetchCharacters,
-    resetCharactersSelection
+
+    setHeroSection,
+    setTeamMembers
 }: ModalChangeCharactersProps) {
     const teamByUniverse: { name: string, value: string }[] = getTeamByUniverse(universe)
 
@@ -74,7 +79,7 @@ function ModalChangeCharacters({
                 <label className="label">
                     <span className="label-text">Select how many characters | [0 means All]</span>
                 </label>
-                <input
+                {/* <input
                     data-test="input-HowMany"
                     value={howMany ?? ""}
                     onChange={(event) => setHowMany(parseInt(event.target.value))}
@@ -82,7 +87,21 @@ function ModalChangeCharacters({
                     placeholder="Type how many characters to show"
                     className="input input-bordered w-full"
                     min={1}
-                />
+                /> */}
+                <div className="w-full flex flex-col justify-center items-center ">
+                    <input
+                        data-test="input-HowMany"
+                        value={howMany ?? ""}
+                        type="range"
+                        min={0}
+                        max={691}
+                        className="range"
+                        onChange={(event) => setHowMany(parseInt(event.target.value))}
+                    />
+                </div>
+                <div className="w-full text-center">
+                    <p>{howMany}</p>
+                </div>
             </div>
 
 
@@ -137,13 +156,13 @@ function ModalChangeCharacters({
                 forWhat={'the team'}
             />
 
-            
+
             <div className="flex flex-col gap-5 justify-around mt-5">
                 <ButtonChangeCharacter
                     dataTest="btn-FindFilters"
                     classNameSended="btn-primary"
                     functionSended={() => {
-                        refetchCharacters();
+                        refetchCharacters()
                         setViewFavorites(false)
                     }}
                     forWhat="Find by filters"
@@ -162,8 +181,9 @@ function ModalChangeCharacters({
                     dataTest="btn-Reset"
                     classNameSended="btn-danger"
                     functionSended={() => {
-                        resetCharactersSelection()
+                        resetCharactersSelection(setCharacterName, setHowMany, setSide, setUniverse, setTeam, setGender, setHeroSection, setTeamMembers)
                         setViewFavorites(false)
+                        refetchCharacters()
                     }}
                     forWhat="Reset filters"
                 />
@@ -174,41 +194,6 @@ function ModalChangeCharacters({
 
 
 
-function SelectInput({ value, options, onChangeFunction, forWhat, dataTest }: SelectInputProps) {
-    return (
-        <div className="form-control w-full">
-            <label className="label">
-                <span className="label-text">Pick the {forWhat}</span>
-            </label>
-            <select
-                value={value}
-                onChange={onChangeFunction}
-                className="select select-bordered"
-                data-test={dataTest}
-            >
-                {
-                    options.map((current, index) => (
-                        <option key={index} value={typeof current.value === "string" ? current.value : "null"}>{current.name}</option>
-                    ))
-                }
-            </select>
-        </div>
-    )
-}
 
-
-function ButtonChangeCharacter({classNameSended, functionSended, forWhat, dataTest }: ButtonChangeCharacterProps) {
-    return (
-        <div /* label */
-            key={forWhat}
-            // htmlFor={htmlFor}
-            className={`btn ${classNameSended}`}
-            onClick={functionSended}
-            data-test={dataTest}
-        >
-            {forWhat}
-        </div> /* </label> */ 
-    )
-}
 
 export default ModalChangeCharacters
