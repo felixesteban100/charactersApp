@@ -7,6 +7,7 @@ export type CharactersProps = {
     manageFavorite: (action: string, characterSelected: Character) => void
     favorites: Character[]
     isLoading: boolean
+    isFetching: boolean
     viewFavorites: boolean
     selectedCharacter: Character
     setSelectedCharacter:React.Dispatch<React.SetStateAction<Character>>
@@ -102,7 +103,7 @@ export type ModalChangeCharactersProps = {
     setCharacterOrFullName: React.Dispatch<React.SetStateAction<boolean>>,
 
     setViewFavorites :React.Dispatch<React.SetStateAction<boolean>>
-    filterCharacters: () => void
+    refetchCharacters: () => void
     resetCharactersSelection: () => void
 }
 

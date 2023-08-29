@@ -24,12 +24,12 @@ function ModalTeamMembers({ teamMembers, team, universe }: ModalTeamMembersProps
                 </thead>
                 <tbody>
                   {
-                    teamMembers !== undefined &&
+                    teamMembers &&
                     teamMembers.map((currentMember: Character) => (
                       <tr key={currentMember.slug} className={`hover`}>
-                        <td>{currentMember.name}</td>
-                        <td>{currentMember.biography.publisher}</td>
-                        <td>{currentMember.biography.alignment}</td>
+                        <td>{currentMember?.name}</td>
+                        <td>{currentMember?.biography.publisher}</td>
+                        <td>{currentMember?.biography.alignment}</td>
                       </tr>
                     ))
                   }

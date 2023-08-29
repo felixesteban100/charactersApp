@@ -5,21 +5,11 @@ import { useEffect, useState } from 'react'
 import { usePagination } from "@mantine/hooks";
 import { useInView } from 'react-intersection-observer';
 
-// import ReactImageZoom from 'react-image-zoom';
-
-// import { Controlled as ControlledZoom } from 'react-medium-image-zoom'
-// import Zoom from 'react-medium-image-zoom'
-// import 'react-medium-image-zoom/dist/styles.css'
-
-// import InnerImageZoom from 'react-inner-image-zoom';
-// import 'react-inner-image-zoom/lib/InnerImageZoom/styles.css'
-
-//https://heroes-backend.onrender.com/
-
-function Characters({ charactersFiltered, manageFavorite, isLoading, favorites, viewFavorites, selectedCharacter, setSelectedCharacter }: CharactersProps) {
+function Characters({ charactersFiltered, manageFavorite, isLoading, isFetching, favorites, viewFavorites, selectedCharacter, setSelectedCharacter }: CharactersProps) {
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const [charactersPerPage, setCharactersPerPage] = useState(8)
     const [visibleResults, setVisibleResults] = useState<Character[]>(charactersFiltered.slice(0, charactersPerPage))
+
 
     useEffect(() => {
         setVisibleResults(charactersFiltered.slice(0, charactersPerPage))
@@ -71,8 +61,6 @@ function Characters({ charactersFiltered, manageFavorite, isLoading, favorites, 
         siblings: 1
     })
 
-
-
     return (
         <div
             id='section-characters'
@@ -89,30 +77,31 @@ function Characters({ charactersFiltered, manageFavorite, isLoading, favorites, 
                             w-[90%] sm:w-[90%] md:w-[90%] lg:w-[70%] 
                             gap-10 mx-auto 
                             pt-[5rem] md:pt-[2rem] 
-                            ${visibleResults.length < 3 ? "mb-[25rem] md:mb-[24rem] lg:mb-[27rem]"
-                                : visibleResults.length < 5 ? "mb-0 md:mb-[24rem] lg:mb-[24.5rem]"
+                            ${visibleResults.length < 3 ? "mb-[22.5rem] md:mb-[24rem] lg:mb-[24.5rem]"
+                                : visibleResults.length < 5 ? "mb-0 md:mb-[20rem] lg:mb-[20rem]"
                                     : ""
                             }`
                         }
                     >
                         {
                             visibleResults.map((currentCharacter, index) => {
-                                if (isLoading) {
+                                if (isLoading || isFetching) {
                                     return (
-                                        <div key={currentCharacter._id}>
+                                        <div key={index}>
                                             <LoadingCard />
                                         </div>
                                     )
+                                }else{
+                                    return (
+                                        <div key={currentCharacter._id}>
+                                            <Character
+                                                setSelectedCharacter={setSelectedCharacter}
+                                                currentCharacter={currentCharacter}
+                                                number={index}
+                                            />
+                                        </div>
+                                    )
                                 }
-                                return (
-                                    <div key={currentCharacter._id}>
-                                        <Character
-                                            setSelectedCharacter={setSelectedCharacter}
-                                            currentCharacter={currentCharacter}
-                                            number={index}
-                                        />
-                                    </div>
-                                )
                             })
                         }
                     </div>

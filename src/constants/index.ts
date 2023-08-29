@@ -25,7 +25,7 @@ export const characterEmpty: Character = {
         placeOfBirth: "",
         firstAppearance: "",
         publisher: "",
-        alignment: "",
+        alignment: "good",
     },
     work: {
         occupation: "",

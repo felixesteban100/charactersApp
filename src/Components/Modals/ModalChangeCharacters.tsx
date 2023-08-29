@@ -22,19 +22,13 @@ function ModalChangeCharacters({
     setCharacterOrFullName,
 
     setViewFavorites,
-    filterCharacters,
+    refetchCharacters,
     resetCharactersSelection
 }: ModalChangeCharactersProps) {
     const teamByUniverse: { name: string, value: string }[] = getTeamByUniverse(universe)
 
     return (
         <div>
-            {/* <input type="checkbox" id="my-modal-change" className="modal-toggle" /> */}
-
-            {/* <label htmlFor="my-modal-change" className="modal cursor-pointer">
-                <label className="modal-box relative flex flex-col gap-5" htmlFor="">
-                    <label htmlFor="my-modal-change" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label> */}
-
             <p className="text-lg font-bold">Select characters features</p>
 
             <div className="form-control w-full">
@@ -143,14 +137,13 @@ function ModalChangeCharacters({
                 forWhat={'the team'}
             />
 
-            {/* <div className="flex flex-col md:flex-row gap-5 justify-around"> */}
+            
             <div className="flex flex-col gap-5 justify-around mt-5">
                 <ButtonChangeCharacter
                     dataTest="btn-FindFilters"
-                    // htmlFor={"my-modal-change"}
                     classNameSended="btn-primary"
                     functionSended={() => {
-                        filterCharacters();
+                        refetchCharacters();
                         setViewFavorites(false)
                     }}
                     forWhat="Find by filters"
@@ -158,7 +151,6 @@ function ModalChangeCharacters({
 
                 <ButtonChangeCharacter
                     dataTest="btn-Favorites"
-                    // htmlFor={"my-modal-change"}
                     classNameSended="btn-warning"
                     functionSended={() => {
                         setViewFavorites(true)
@@ -168,7 +160,6 @@ function ModalChangeCharacters({
 
                 <ButtonChangeCharacter
                     dataTest="btn-Reset"
-                    // htmlFor={"my-modal-change"}
                     classNameSended="btn-danger"
                     functionSended={() => {
                         resetCharactersSelection()
@@ -177,9 +168,6 @@ function ModalChangeCharacters({
                     forWhat="Reset filters"
                 />
             </div>
-
-            {/* </label>
-            </label> */}
         </div>
     )
 }
@@ -209,7 +197,7 @@ function SelectInput({ value, options, onChangeFunction, forWhat, dataTest }: Se
 }
 
 
-function ButtonChangeCharacter({ /* htmlFor,  */classNameSended, functionSended, forWhat, dataTest }: ButtonChangeCharacterProps) {
+function ButtonChangeCharacter({classNameSended, functionSended, forWhat, dataTest }: ButtonChangeCharacterProps) {
     return (
         <div /* label */
             key={forWhat}
