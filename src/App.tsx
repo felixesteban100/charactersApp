@@ -20,7 +20,6 @@ import useWindowWidth from './hooks/useWindowWidth';
 import { getLoadingCards } from './functions';
 
 //change the publisher for these
-// jason bourne, chuck, rambo, Kool-Aid Man, the cape, Ethan Hunt
 
 function App() {
   const [letItSearch, setLetItSearch] = useState(true)
@@ -133,17 +132,17 @@ function App() {
                       viewFavorites={viewFavorites}
                       selectedCharacter={selectedCharacter}
                       setSelectedCharacter={setSelectedCharacter}
-                      setTeamMembers={setTeamMembers}
-                      setHeroSection={setHeroSection}
-                      characterName={characterName}
-                      howMany={howMany}
-                      side={side}
-                      universe={universe}
-                      team={team}
-                      gender={gender}
-                      race={race}
-                      includeNameOrExactName={includeNameOrExactName}
-                      characterOrFullName={characterOrFullName}
+                      // setTeamMembers={setTeamMembers}
+                      // setHeroSection={setHeroSection}
+                      // characterName={characterName}
+                      // howMany={howMany}
+                      // side={side}
+                      // universe={universe}
+                      // team={team}
+                      // gender={gender}
+                      // race={race}
+                      // includeNameOrExactName={includeNameOrExactName}
+                      // characterOrFullName={characterOrFullName}
                       letItSearch={letItSearch}
                       setLetItSearch={setLetItSearch}
                     />

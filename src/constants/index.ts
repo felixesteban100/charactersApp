@@ -485,8 +485,8 @@ export function organizedComicsProperty(comics: string[] | null | undefined, pub
                 return [
                     "https://images.squarespace-cdn.com/content/v1/593f201de3df288fc6465e6f/1643902801105-VUT092WGQWT7VUD66Y8M/Teenage+Mutant+Ninja+Turtles+Reborn+Vol.+1.jpg?format=1000w",
                     "https://d1466nnw0ex81e.cloudfront.net/n_iv/600/2066186.jpg",
-                    "https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/81j8N4V4pIL.jpg",
-                    "https://m.media-amazon.com/images/W/IMAGERENDERING_521856-T1/images/I/91L4+Vf8YWL._AC_UF1000,1000_QL80_.jpg"
+                    "https://static.dc.com/dc/files/default_images/BMTMNT_tp_58cb173a8b8fd6.32122101.jpg",
+                    "https://m.media-amazon.com/images/I/61O+P3mEyZL.jpg"
                 ]
 
             case "George Lucas":
@@ -577,7 +577,7 @@ export const ALLUNIVERSE = [
     { value: "IDW Publishing", name: "IDW Publishing" },
     { value: "Image Comics", name: "Image Comics" },
     { value: "Warner Bros", name: "Warner Bros" },
-    { value: "Angel", name: "Angel" },
+    // { value: "Angel", name: "Angel" },
     { value: "NBC - Heroes", name: "NBC - Heroes" },
     { value: "Tempest", name: "Tempest" },
     { value: "SyFy", name: "SyFy" },
@@ -586,8 +586,8 @@ export const ALLUNIVERSE = [
     { value: "Universal Studios", name: "Universal Studios" },
     { value: "Gemini V", name: "Gemini V" },
     { value: "Star Trek", name: "Star Trek" },
-    { value: "Goliath", name: "Goliath" },
-    { value: "Deadpool", name: "Deadpool" },
+    // { value: "Goliath", name: "Goliath" },
+    // { value: "Deadpool", name: "Deadpool" },
     { value: "Wildstorm", name: "Wildstorm" },
     { value: "South Park", name: "South Park" },
     { value: "Sony Pictures", name: "Sony Pictures" },
@@ -596,12 +596,17 @@ export const ALLUNIVERSE = [
     { value: "Titan Books", name: "Titan Books" },
     { value: "J. K. Rowling", name: "J. K. Rowling" },
     { value: "Microsoft", name: "Microsoft" },
-    { value: "She-Thing", name: "She-Thing" },
+    // { value: "She-Thing", name: "She-Thing" },
     { value: "Rebellion", name: "Rebellion" },
     { value: "J. R. R. Tolkien", name: "J. R. R. Tolkien" },
+    { value: 'Carolco Pictures', name: 'Carolco Pictures'},
+    { value: 'ARK corporation', name: 'ARK corporation'},
+    { value: 'Paramount Pictures', name: 'Paramount Pictures'},
     { value: "-", name: "-" },
     // { value: null, name: "null" },
-    
+    { value: 'Real people', name: "Real people" },
+
+    // 
 ]
 
 export const randomImagesArray = [

@@ -3,7 +3,6 @@ import ModalCharacter from './Modals/ModalCharacter';
 import { useEffect, useState } from 'react'
 import { usePagination } from "@mantine/hooks";
 
-
 import CharacterComponent from './CharacterComponent';
 import CharactersContainer from './CharactersContainer';
 import useWindowWidth from '../hooks/useWindowWidth';

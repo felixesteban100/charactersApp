@@ -77,7 +77,8 @@ function ModalChangeCharacters({
 
             <div className="form-control w-full">
                 <label className="label">
-                    <span className="label-text">Select how many characters | [0 means All]</span>
+                    {/* <span className="label-text">Select how many characters | [0 means All]</span> */}
+                    <span className="label-text">Select how many characters</span>
                 </label>
                 {/* <input
                     data-test="input-HowMany"
@@ -93,7 +94,7 @@ function ModalChangeCharacters({
                         data-test="input-HowMany"
                         value={howMany ?? ""}
                         type="range"
-                        min={0}
+                        min={1}
                         max={691}
                         className="range"
                         onChange={(event) => setHowMany(parseInt(event.target.value))}

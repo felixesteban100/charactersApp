@@ -12,22 +12,22 @@ export type CharactersProps = {
     viewFavorites: boolean
     selectedCharacter: Character
     setSelectedCharacter:React.Dispatch<React.SetStateAction<Character>>
-    setTeamMembers: React.Dispatch<React.SetStateAction<Character[]>>
-    setHeroSection: React.Dispatch<React.SetStateAction<{
-        imgs: string[];
-        title: string;
-        description: string;
-    }>>
+    // setTeamMembers: React.Dispatch<React.SetStateAction<Character[]>>
+    // setHeroSection: React.Dispatch<React.SetStateAction<{
+    //     imgs: string[];
+    //     title: string;
+    //     description: string;
+    // }>>
 
-    characterName: string;
-    howMany: string | number
-    side: string
-    universe: string;
-    team: string;
-    gender: string;
-    race: string;
-    includeNameOrExactName: boolean;
-    characterOrFullName: boolean,
+    // characterName: string;
+    // howMany: string | number
+    // side: string
+    // universe: string;
+    // team: string;
+    // gender: string;
+    // race: string;
+    // includeNameOrExactName: boolean;
+    // characterOrFullName: boolean,
 
     letItSearch: boolean;
     setLetItSearch: React.Dispatch<React.SetStateAction<boolean>>

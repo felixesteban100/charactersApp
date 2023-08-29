@@ -248,13 +248,13 @@ export default function ModalCharacter({
                                                                     <div className="stat-title">Publisher</div>
                                                                     <div className="stat-value text-sm md:text-xl lg:text-xl">{selectedCharacter.biography.publisher}</div>
                                                                 </div>
-                                                                <div className="stat  ">
+                                                                <div className="flex flex-row-reverse justify-center items-center p-5 gap-1">
                                                                     <div className="stat-figure text-secondary">
-                                                                        <p className='text-2xl md:text-5xl lg:text-5xl'>🔠</p>
+                                                                        <p className='text-2xl md:text-5xl lg:text-2xl'>🔠</p>
                                                                     </div>
                                                                     {/* <div className="stat-title">Aliases</div> */}
 
-                                                                    <div tabIndex={0} className=" collapse collapse-arrow border border-base-300 bg-base-100 rounded-box h-[4rem]">
+                                                                    <div tabIndex={0} className=" collapse collapse-arrow border border-base-300 bg-base-100 rounded-box">
                                                                         <div className="collapse-title text-xl font-medium">
                                                                             Aliases...
                                                                         </div>
@@ -278,13 +278,13 @@ export default function ModalCharacter({
                                                                             : null
                                                                     }
                                                                 </div> */}
-                                                                <div className="stat">
+                                                                <div className="flex flex-row-reverse justify-center items-center p-5 gap-1">
                                                                     <div className="stat-figure text-secondary">
                                                                         <p className='text-2xl md:text-5xl lg:text-5xl'>🆎</p>
                                                                     </div>
                                                                     {/* <div className="stat-title">Alter egos</div> */}
 
-                                                                    <div tabIndex={0} className="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box h-[4rem]">
+                                                                    <div tabIndex={1} className="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box ">
                                                                         <div className="collapse-title text-xl font-medium">
                                                                             Alter egos...
                                                                         </div>
@@ -293,13 +293,13 @@ export default function ModalCharacter({
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div className="stat ">
+                                                                <div className="flex flex-row-reverse justify-center items-center p-5 gap-1 ">
                                                                     <div className="stat-figure text-secondary">
                                                                         <p className='text-2xl md:text-5xl lg:text-5xl'>👪</p>
                                                                     </div>
                                                                     {/* <div className="stat-title">Group Affiliation</div> */}
 
-                                                                    <div tabIndex={0} className="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box h-[4rem]">
+                                                                    <div tabIndex={2} className="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box">
                                                                         <div className="collapse-title text-xl font-medium">
                                                                             Teams...
                                                                         </div>
@@ -315,15 +315,15 @@ export default function ModalCharacter({
                                                                     <div className="stat-title">Occupation</div>
                                                                     <div className="stat-value flex text-sm md:text-xl lg:text-xl tooltip" data-tip={selectedCharacter.work.occupation.split(",")[0]}>{selectedCharacter.work.occupation.slice(0, 15)}...</div>
                                                                 </div> */}
-                                                                <div className="stat">
+                                                                <div className="flex flex-row-reverse justify-center items-center p-5 gap-1">
                                                                     <div className="stat-figure text-secondary">
                                                                         <p className='text-2xl md:text-5xl lg:text-5xl'>🧾</p>
                                                                     </div>
                                                                     {/* <div className="stat-title">Occupation</div> */}
 
-                                                                    <div tabIndex={0} className="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box h-[4rem]">
+                                                                    <div tabIndex={3} className="collapse collapse-arrow border border-base-300 bg-base-100 rounded-box">
                                                                         <div className="collapse-title text-xl font-medium">
-                                                                        Occupation...
+                                                                            Occupation...
                                                                         </div>
                                                                         <div className="collapse-content">
                                                                             <p>{selectedCharacter.work.occupation}</p>
