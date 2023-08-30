@@ -2,22 +2,21 @@
 import { useState } from 'react'
 import Characters from "./Components/Characters"
 import Header from './Components/Header';
-import ModalChangeCharacters from './Components/Modals/ModalChangeCharacters';
+import ModalChangeCharacters from './Components/ChangeCharactersProps';
 import Footer from './Components/Footer';
 import useLocalStorage from './hooks/useLocalStorage';
 import HeroSelector from './Components/HeroSelector';
 import ModalTeamMembers from './Components/Modals/ModalTeamMembers';
-import ModalSettings from './Components/Modals/ModalSettings';
+import ChangeTheme from './Components/ChangeTheme';
 import { Character } from './types';
 import { characterEmpty, listOfTeamsWithImgInTheHeroSection, teamIMG } from './constants';
-import CharactersContainer from "./Components/CharactersContainer";
 
 
-import LoadingCard from "./Components/LoadingCard";
+
 import { useQuery } from 'react-query';
 import axios from "axios"
-import useWindowWidth from './hooks/useWindowWidth';
-import { getLoadingCards } from './functions';
+import LoadingCharacters from './Components/LoadingCharacters';
+import SectionCharacters from './Components/SectionCharacters';
 
 //change the publisher for these
 
@@ -71,7 +70,7 @@ function App() {
     onError: (error) => console.log(error),
   })
 
-  const windowWidth = useWindowWidth()
+  
 
   return (
     <div data-theme={theme} className={`min-h-screen transition-colors duration-500 bg-base-200`}>
@@ -95,34 +94,12 @@ function App() {
           <div>
             {
               isLoading || isFetching ?
-                <div
-                  id='section-characters'
-                  className='flex flex-col gap-5 min-h-[100vh] items-center justify-center'
-                >
-                  <CharactersContainer
-                    visibleResults={Array(howMany).fill(characterEmpty)}
-                  >
-                    <>
-                      {
-                        Array(getLoadingCards(windowWidth, howMany)).fill(characterEmpty).map((_, index) => {
-                          return (
-                            <div key={index}>
-                              <LoadingCard />
-                            </div>
-                          )
-                        })
-                      }
-                    </>
-                  </CharactersContainer>
-                </div>
+                <LoadingCharacters howMany={howMany} />
                 :
                 isError || charactersFiltered === undefined ?
-                  <div
-                    id='section-characters'
-                    className='flex flex-col gap-5 min-h-[100vh] items-center justify-center'
-                  >
+                  <SectionCharacters>
                     <p>Opps... something happend please try again.</p>
-                  </div>
+                  </SectionCharacters>
                   :
                   <div>
                     <Characters
@@ -132,17 +109,6 @@ function App() {
                       viewFavorites={viewFavorites}
                       selectedCharacter={selectedCharacter}
                       setSelectedCharacter={setSelectedCharacter}
-                      // setTeamMembers={setTeamMembers}
-                      // setHeroSection={setHeroSection}
-                      // characterName={characterName}
-                      // howMany={howMany}
-                      // side={side}
-                      // universe={universe}
-                      // team={team}
-                      // gender={gender}
-                      // race={race}
-                      // includeNameOrExactName={includeNameOrExactName}
-                      // characterOrFullName={characterOrFullName}
                       letItSearch={letItSearch}
                       setLetItSearch={setLetItSearch}
                     />
@@ -188,7 +154,7 @@ function App() {
               setHeroSection={setHeroSection}
               setTeamMembers={setTeamMembers}
             />
-            <ModalSettings
+            <ChangeTheme
               theme={theme}
               setTheme={setTheme}
             />

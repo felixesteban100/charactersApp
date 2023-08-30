@@ -1,8 +1,8 @@
-import { ALLALIGMENTS, ALLGENDERS, ALLRACES, ALLUNIVERSE, getTeamByUniverse } from "../../constants";
-import { resetCharactersSelection } from "../../functions";
-import { ModalChangeCharactersProps } from "../../types";
-import ButtonChangeCharacter from "../Reusable/ButtonChangeCharacter";
-import SelectInput from "../Reusable/SelectInput";
+import { ALLALIGMENTS, ALLGENDERS, ALLRACES, ALLUNIVERSE, getTeamByUniverse } from "../constants";
+import { resetCharactersSelection } from "../functions";
+import { ChangeCharactersProps } from "../types";
+import ButtonChangeCharacter from "./Reusable/ButtonChangeCharacter";
+import SelectInput from "./Reusable/SelectInput";
 
 function ModalChangeCharacters({
     characterName,
@@ -29,7 +29,7 @@ function ModalChangeCharacters({
 
     setHeroSection,
     setTeamMembers
-}: ModalChangeCharactersProps) {
+}: ChangeCharactersProps) {
     const teamByUniverse: { name: string, value: string }[] = getTeamByUniverse(universe)
 
     return (

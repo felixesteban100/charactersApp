@@ -6,6 +6,7 @@ import { usePagination } from "@mantine/hooks";
 import CharacterComponent from './CharacterComponent';
 import CharactersContainer from './CharactersContainer';
 import useWindowWidth from '../hooks/useWindowWidth';
+import SectionCharacters from './SectionCharacters';
 
 
 function Characters({
@@ -57,67 +58,65 @@ function Characters({
     })
 
     return (
-        <div
-            id='section-characters'
-            data-test="section-characters"
-            className='flex flex-col gap-5 min-h-[100vh] items-center justify-center'
-        >
-            {
-                visibleResults.length > 0 ?
-                    <CharactersContainer
-                        visibleResults={visibleResults}
-                    >
-                        <>
-                            {
-                                visibleResults.map((currentCharacter, index) => {
-                                    return (
-                                        <div key={currentCharacter._id}>
-                                            <CharacterComponent
-                                                setSelectedCharacter={setSelectedCharacter}
-                                                currentCharacter={currentCharacter}
-                                                number={index}
-                                            />
-                                        </div>
-                                    )
-                                })
-                            }
-                        </>
-                    </CharactersContainer>
+        <SectionCharacters>
+            <>
+                {
+                    visibleResults.length > 0 ?
+                        <CharactersContainer
+                            visibleResults={visibleResults}
+                        >
+                            <>
+                                {
+                                    visibleResults.map((currentCharacter, index) => {
+                                        return (
+                                            <div key={currentCharacter._id}>
+                                                <CharacterComponent
+                                                    setSelectedCharacter={setSelectedCharacter}
+                                                    currentCharacter={currentCharacter}
+                                                    number={index}
+                                                />
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </>
+                        </CharactersContainer>
 
-                    :
-                    <div>
-                        <p className='text-primary text-4xl text-center'>
-                            {
-                                viewFavorites ?
-                                    "No favorites"
-                                    :
-                                    "No characters found"
-                            }
-                        </p>
-                    </div>
-            }
+                        :
+                        <div>
+                            <p className='text-primary text-4xl text-center'>
+                                {
+                                    viewFavorites ?
+                                        "No favorites"
+                                        :
+                                        "No characters found"
+                                }
+                            </p>
+                        </div>
+                }
 
-            <ModalCharacter
-                setFavorites={setFavorites}
-                favorites={favorites}
-                selectedCharacter={selectedCharacter}
-            />
+                <ModalCharacter
+                    setFavorites={setFavorites}
+                    favorites={favorites}
+                    selectedCharacter={selectedCharacter}
+                />
 
 
-            <div data-test="paginationHandler" className="join w-full flex justify-center">
-                {pagination.range.map((currentPage, index) => {
-                    return (
-                        <button
-                            data-test="paginationBtn"
-                            key={`${currentPage}-${index}`}
-                            onClick={() => pagination.setPage(currentPage !== 'dots' ? currentPage : 1)}
-                            className={`join-item btn btn-primary ${pagination.active === currentPage ? "btn-secondary btn-active" : ""} ${currentPage === 'dots' ? "btn-disabled" : ""}`}>
-                            {currentPage === "dots" ? <p className="text-primary">...</p> : currentPage}
-                        </button>
-                    )
-                })}
-            </div>
-        </div>
+                <div data-test="paginationHandler" className="join w-full flex justify-center">
+                    {pagination.range.map((currentPage, index) => {
+                        return (
+                            <button
+                                data-test="paginationBtn"
+                                key={`${currentPage}-${index}`}
+                                onClick={() => pagination.setPage(currentPage !== 'dots' ? currentPage : 1)}
+                                className={`join-item btn btn-primary ${pagination.active === currentPage ? "btn-secondary btn-active" : ""} ${currentPage === 'dots' ? "btn-disabled" : ""}`}>
+                                {currentPage === "dots" ? <p className="text-primary">...</p> : currentPage}
+                            </button>
+                        )
+                    })}
+                </div>
+            </>
+        </SectionCharacters>
     )
 }
 

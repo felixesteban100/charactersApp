@@ -93,7 +93,7 @@ export type ImageZoomProps = {
     character: string,
 }
 
-export type ModalSettingsProps = {
+export type ChangeThemeProps = {
     theme: string;
     setTheme: React.Dispatch<React.SetStateAction<string>>
 }
@@ -104,7 +104,7 @@ export type ModalTeamMembersProps = {
     universe: string;
 }
 
-export type ModalChangeCharactersProps = {
+export type ChangeCharactersProps = {
     characterName: string;
     setCharacterName: React.Dispatch<React.SetStateAction<string>>
     howMany: string | number

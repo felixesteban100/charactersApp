@@ -1,65 +1,52 @@
+import { publisherIMG } from "../../functions"
 import { Character, ModalTeamMembersProps } from "../../types"
+import Modal from "./Modal"
 
 
 function ModalTeamMembers({ teamMembers, team, universe }: ModalTeamMembersProps) {
   return (
-    <div>
-      <div>
-        <input type="checkbox" id="my-modal-membersList" className="modal-toggle" />
-        <label htmlFor="my-modal-membersList" className="modal cursor-pointer">
-          <label className="modal-box relative flex flex-col gap-5" htmlFor="">
-            <label htmlFor="my-modal-membersList" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-            <p className="text-lg font-bold">Members of {team === "All" ? universe : team}</p>
-            <p>Total number of members: {teamMembers?.length}</p>
-            <div className='flex flex-col gap-5'>
+    <Modal
+      id={`my-modal-membersList`}
+      size="p-5"
+      dataTestInside="modalCharacter"
+      dataTestOutside="modalCharacterOutside"
+    >
+      <div className='flex flex-col gap-5 overflow-y-scroll max-h-[90vh]'>
+        {/* <label htmlFor="my-modal-membersList" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label> */}
+        <p className="text-lg font-bold">Members of {team === "All" ? universe : team}</p>
+        <p>Total number of members: {teamMembers?.length}</p>
+        <table className="table w-full">
+          <thead>
+            <tr>
+              {/* <th className="invisible w-0"></th> */}
+              <th>Name</th>
+              <th>Publisher</th>
+              <th>Alignment</th>
+              <th>Gender</th>
+              <th>Image</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              teamMembers &&
+              teamMembers.map((currentMember: Character) => (
+                <tr key={currentMember.slug} className={`hover`}>
+                  <td>{currentMember?.name}</td>
+                  <td><img className="h-5" src={publisherIMG(currentMember?.biography.publisher)} alt="" /></td>
+                  <td className={`${(currentMember.biography.alignment === "good") ? "text-success" : currentMember.biography.alignment === "bad" ? "text-danger" : "text-warning"}`}>{currentMember.biography.alignment === "good" ? "Hero" : currentMember.biography.alignment === "bad" ? "Villain" : "Anti-Hero"}</td>
+                  <td>{currentMember?.appearance.gender}</td>
+                  <td><img className="h-20 w-16 object-cover" src={currentMember?.images.md} alt="" /></td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
 
-              <table className="table w-full">
-                <thead>
-                  <tr>
-                    {/* <th className="invisible w-0"></th> */}
-                    <th>Name</th>
-                    <th>Publisher</th>
-                    <th>Alignment</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {
-                    teamMembers &&
-                    teamMembers.map((currentMember: Character) => (
-                      <tr key={currentMember.slug} className={`hover`}>
-                        <td>{currentMember?.name}</td>
-                        <td>{currentMember?.biography.publisher}</td>
-                        <td>{currentMember?.biography.alignment}</td>
-                      </tr>
-                    ))
-                  }
-                </tbody>
-              </table>
-
-            </div>
-          </label>
-        </label>
       </div>
+    </Modal>
 
-    </div>
+
   )
 }
 
 export default ModalTeamMembers
-
-
-/* <div>
-            <input type="checkbox" id="my-modal-membersList" className="modal-toggle" />
-            <label htmlFor="my-modal-membersList" className="modal cursor-pointer">
-                <label className="modal-box relative flex flex-col gap-5" htmlFor="">
-                    <label htmlFor="my-modal-membersList" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-                    <p className="text-lg font-bold">Members of {team === "All" ? universe : team}</p>
-                    <p>Total number of members: {teamMembers?.length}</p>
-                    <div className='flex flex-col gap-5'>
-                        {teamMembers?.map((current) => (
-                            <p key={current._id}>{current.name}</p>
-                        ))}
-                    </div>
-                </label>
-            </label>
-        </div> */

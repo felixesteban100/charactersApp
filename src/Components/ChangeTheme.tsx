@@ -1,6 +1,6 @@
-import { ModalSettingsProps } from "../../types"
+import { ChangeThemeProps } from "../types"
 
-function ModalSettings({ theme, setTheme }: ModalSettingsProps) {
+function ChangeTheme({ theme, setTheme }: ChangeThemeProps) {
     const themes = ["mytheme1", "mytheme2", "mytheme3", "mytheme4", "light", "dark", "cupcake", "bumblebee", "emerald", "corporate", "synthwave", "retro", "cyberpunk", "valentine", "halloween", "garden", "forest", "aqua", "lofi", "pastel", "fantasy", "wireframe", "black", "luxury", "dracula", "cmyk", "autumn", "business", "acid", "lemonade", "night", "coffee", "winter"]
 
     return (
@@ -35,4 +35,4 @@ function ModalSettings({ theme, setTheme }: ModalSettingsProps) {
     )
 }
 
-export default ModalSettings
+export default ChangeTheme
