@@ -6,13 +6,14 @@ function Footer() {
         <div>
           <span className="footer-title">Shortcuts</span>
           <div className="flex justify-center items-center gap-2 text-xl">
-            Press <kbd className="kbd kbd-lg">ENTER</kbd> to search characters
+            {/* Press <kbd className="kbd kbd-lg">Ctrl</kbd> + <kbd className="kbd kbd-lg">ENTER</kbd> to search characters */}
+            Press <kbd className="kbd kbd-lg">Enter</kbd> to search characters
           </div>
           <div className="flex justify-center items-center gap-2 text-xl">
-            Press <kbd className="kbd kbd-lg">F</kbd> to see the favorites.
+            Press <kbd className="kbd kbd-lg">Ctrl</kbd> + <kbd className="kbd kbd-lg">z</kbd> to see the favorites.
           </div>
           <div className="flex justify-center items-center gap-2 text-xl">
-            Press <kbd className="kbd kbd-lg">R</kbd> to reset the filters.
+            Press <kbd className="kbd kbd-lg">Ctrl</kbd> + <kbd className="kbd kbd-lg">x</kbd> to reset the filters.
           </div>
         </div>
       </footer>

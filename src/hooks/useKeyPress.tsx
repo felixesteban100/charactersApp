@@ -1,19 +1,23 @@
 import { useEffect } from 'react';
 
-function useKeyPress(targetKey: string, action: () => void) {
+function useKeyPress(comboKey: string, action: () => void) {
     useEffect(() => {
-        function handleKeyPress(event: KeyboardEvent) {
-            if (event.key === targetKey.toLowerCase() || event.key === targetKey.toUpperCase() || event.key === targetKey) {
-                action();
-            }
+      function handleKeyPress(event: KeyboardEvent) {
+        if (event.ctrlKey && (event.key.toLowerCase() || event.key.toUpperCase()) === comboKey) {
+          action();
         }
 
-        document.addEventListener('keydown', handleKeyPress);
-
-        return () => {
-            document.removeEventListener('keydown', handleKeyPress);
-        };
-    }, [targetKey, action]);
-}
+        if(event.key === 'Enter'){
+            action();
+        }
+      }
+  
+      document.addEventListener('keydown', handleKeyPress);
+  
+      return () => {
+        document.removeEventListener('keydown', handleKeyPress);
+      };
+    }, [comboKey, action]);
+  }
 
 export default useKeyPress

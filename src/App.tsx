@@ -76,8 +76,8 @@ function App() {
   })
 
   useKeyPress('Enter', () => {setViewFavorites(false); refetchCharacters()});
-  useKeyPress('F', () => setViewFavorites(true));
-  useKeyPress('R', () => {resetCharactersSelection(setCharacterName, setHowMany, setSide, setUniverse, setTeam, setGender, setHeroSection, setTeamMembers); setViewFavorites(false); refetchCharacters()});
+  useKeyPress('z', () => setViewFavorites(prev => !prev));
+  useKeyPress('r', () => {resetCharactersSelection(setCharacterName, setHowMany, setSide, setUniverse, setTeam, setGender, setHeroSection, setTeamMembers); setViewFavorites(false); refetchCharacters()});
 
   return (
     <div data-theme={theme} className={`min-h-screen transition-colors duration-500 bg-base-200`}>
@@ -121,9 +121,10 @@ function App() {
                     />
 
                     <AlertMessage
-                      isFetched={isFetched}
+                      charactersFiltered={charactersFiltered}
+                      viewFavorites={viewFavorites}
                       alertType={viewFavorites ? "alert-warning" : charactersFiltered.length > 0 ? "alert-success" : "alert-error"}
-                      message={viewFavorites ? "Favorites" : charactersFiltered.length > 0 ? "Characters founded" : "No characters founded"}
+                      message={viewFavorites ? "⭐ Favorites" : charactersFiltered.length > 0 ? "😃 Characters founded" : "😢 No characters founded"}
                     />
 
                     <ModalTeamMembers

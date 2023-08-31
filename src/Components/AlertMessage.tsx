@@ -1,13 +1,15 @@
 
 import { useState, useEffect } from 'react'
+import { Character } from '../types';
 
 type AlertMessageProps = {
-    isFetched: boolean;
+    charactersFiltered: Character[]
+    viewFavorites: boolean
     alertType: string;
     message: string;
 }
 
-function AlertMessage({ isFetched, alertType, message }: AlertMessageProps) {
+function AlertMessage({ alertType, message, charactersFiltered, viewFavorites}: AlertMessageProps) {
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {
@@ -20,7 +22,7 @@ function AlertMessage({ isFetched, alertType, message }: AlertMessageProps) {
         return () => {
             clearTimeout(timeout);
         };
-    }, [isFetched]); // Empty dependency array ensures the effect runs only once
+    }, [charactersFiltered, viewFavorites]); // Empty dependency array ensures the effect runs only once
 
     return (
         <div className={`toast z-[999] ${isVisible ? "animate-fadeIn " : "animate-fadeOut"}`}>
