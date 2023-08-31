@@ -12,7 +12,7 @@ export default function StatNumber({ statName, statValue, icon }: StatNumberProp
                 <p className='text-2xl md:text-5xl lg:text-5xl'>{icon}</p>
             </div>
             <div className="stat-title">{statName}</div>
-            <div className="stat-value text-sm md:text-xl lg:text-xl">{statValue}</div>
+            <div className="stat-value text-2xl md:text-5xl lg:text-5xl">{statValue}</div>
 
         </div>
     )

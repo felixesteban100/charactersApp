@@ -60,12 +60,31 @@ export default {
             opacity: 0
           }
         },
+        scaleForwardEntrance: {
+          '0%': {
+            transform: 'scale(0)'
+          },
+          '100%': {
+            transform: 'scale(1)'
+          }
+        },
+        scaleForwardExit: {
+          '0%': {
+            opacity: 0,
+            transform: 'scale(1)'
+          },
+          '100%': {
+            transform: 'scale(0)'
+          }
+        },
       },
       animation: {
         'fadeIn': "fadeIn 1s ease-in-out 1 forwards",
         'fadeOut': "fadeOut 1s ease-out 1 forwards",
         'flipInHorBottom': "flipInHorBottom 1s ease-out 1 forwards",
         'flipOutHorTop': "flipOutHorTop 1s ease-out 1 forwards",
+        'scaleForwardEntrance': 'scaleForwardEntrance 1s ease 0s 1 normal forwards',
+        'scaleForwardExit': 'scaleForwardExit 1s ease 0s 1 normal forwards',
       },
     },
   },
@@ -127,6 +146,20 @@ export default {
           "success": "#187c63",
           "warning": "#c99908",
           "error": "#f45b4e",
+        },
+      },
+
+      {
+        mytheme5: {
+          "primary": "#01a598",
+          "secondary": "#f7e4b2",
+          "accent": "#7ded85",
+          "neutral": "#301d35",
+          "base-100": "#e9e8ed",
+          "info": "#aab7e4",
+          "success": "#54e8aa",
+          "warning": "#ae790f",
+          "error": "#e6432d",
         },
       },
 

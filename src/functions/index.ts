@@ -1,3 +1,4 @@
+import { getTeamByUniverse } from "../constants";
 import { Character } from "../types";
 
 export function resetCharactersSelection(
@@ -139,4 +140,52 @@ export function getLoadingCards(windowWidth: number, howMany: number) {
     default:
       return howMany
   }
+}
+
+export function getTeamsImagesByCharacter(selectedCharacter: Character) {
+  const imagesget = getTeamByUniverse(selectedCharacter.biography.publisher).reduce((acc, teamToFind) => {
+    const teamsByCharacter = selectedCharacter.connections.groupAffiliation.split(/,|;/)
+    let imageTeam
+
+    function findWordBetweenSpaces(inputString: string, targetWord: string): boolean {
+      const regex = new RegExp(`\\b${targetWord}\\b`);
+      return regex.test(inputString);
+    }
+
+    teamsByCharacter.forEach((team) => {
+      // if (team.trim().toLowerCase().includes(teamToFind.value.toLowerCase()) && teamToFind.img) {
+      if (findWordBetweenSpaces(team.trim().toLowerCase(), teamToFind.value.toLowerCase().trim())
+        /* (team.trim().toLowerCase() === teamToFind.value.toLowerCase() ||
+          (
+            (
+              team.trim().toLowerCase().includes(` ${teamToFind.value.toLowerCase()} `)
+              ||
+              team.trim().toLowerCase().includes(` ${teamToFind.value.toLowerCase()},`)
+              &&
+              team.trim().toLowerCase().includes(`${teamToFind.value.toLowerCase()}`)
+            )
+          )
+        )
+        && teamToFind.img */
+      ) {
+        imageTeam = teamToFind
+      }
+    });
+    if (imageTeam) acc.push(imageTeam)
+    return acc
+
+  }, new Array())
+
+  const uniqueIds = new Set();
+  const filteredArray = imagesget.filter(obj => {
+    const value = obj.value;
+    if (value !== undefined && !uniqueIds.has(value)) {
+      uniqueIds.add(value);
+      return true;
+    }
+    return false;
+  });
+  // console.log(filteredArray)
+
+  return filteredArray
 }

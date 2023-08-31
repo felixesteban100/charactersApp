@@ -6,13 +6,13 @@ import { randomImagesArray } from '../constants';
 type CharacterProps = {
     setSelectedCharacter: React.Dispatch<React.SetStateAction<Character>>
     currentCharacter: Character
-    number: number
 }
 
-function CharacterComponent({ setSelectedCharacter, currentCharacter, number }: CharacterProps) {
+function CharacterComponent({ setSelectedCharacter, currentCharacter }: CharacterProps) {
     const { ref, inView/* , entry */ } = useInView({
         /* Optional properties */
         threshold: 0.5,
+        // initialInView: false,
     });
 
     function getAligmentIMG(alignment: string) {
@@ -35,10 +35,14 @@ function CharacterComponent({ setSelectedCharacter, currentCharacter, number }: 
             className={`cursor-pointer`}
             htmlFor={`my-modal-selectedCharacter`}
         >
-            <div ref={ref} className={`${inView ? "animate-flipInHorBottom" : "animate-flipOutHorTop"} card image-full object-contain w-full h-[20rem] md:h-[20rem] xl:h-[22rem] bg-base-100 shadow-current shadow-2xl hover:scale-110 group/item`}>
+            <div
+                ref={ref}
+                // className={`${inView ? "animate-flipInHorBottom" : "animate-flipOutHorTop"} card image-full object-contain w-full h-[20rem] md:h-[20rem] xl:h-[22rem] bg-base-100 shadow-current shadow-2xl hover:scale-110 group/item`}
+                className={`${inView ? "animate-scaleForwardEntrance" : "animate-scaleForwardExit"} card image-full object-contain w-full h-[20rem] md:h-[20rem] xl:h-[22rem] bg-base-100 shadow-current shadow-2xl hover:scale-110 group/item`}
+                // className={`card image-full object-contain w-full h-[20rem] md:h-[20rem] xl:h-[22rem] bg-base-100 shadow-current shadow-2xl hover:scale-110 group/item`}
+            >
                 <figure className='relative rounded-md w-full'>
                     <img className="w-full h-full animate-pulse blur-lg rounded-md" src={currentCharacter.images.xs !== '' && currentCharacter.images.xs !== '-' ? currentCharacter.images.xs : getRandomImage(randomImagesArray)} alt={currentCharacter.name} loading="lazy" />
-
                     <img className={`imageCard absolute w-full h-full transition-opacity duration-200 ease-in-out rounded-md group-hover/item:blur-sm`} src={currentCharacter.images.md} alt={currentCharacter.name} loading='lazy' onLoadCapture={transitionImageCard} />
                 </figure>
 
@@ -50,9 +54,9 @@ function CharacterComponent({ setSelectedCharacter, currentCharacter, number }: 
                     <div className="card-actions justify-end">
                         <div className='flex w-full justify-between'>
                             {currentCharacter.biography.publisher === "DC Comics" || currentCharacter.biography.publisher === "Warner Bros" ? <img className='h-[3rem] w-[3rem] sm:h-[5rem] sm:w-[5rem] md:h-[5rem] md:w-[5rem] lg:h-[5rem] lg:w-[5rem] self-center' src={publisherIMG(currentCharacter.biography.publisher)} alt={`Logo ${currentCharacter.biography.publisher}`} loading="lazy" /> : <img className='h-[7vw] w-[15vw] sm:h-[7vw] sm:w-[15vw] md:h-[3rem] md:w-[7rem] lg:h-[3rem] lg:w-[7rem] self-center' src={publisherIMG(currentCharacter.biography.publisher)} alt={`Logo ${currentCharacter.biography.publisher}`} loading="lazy" />}
-                            <div className="tooltip" data-tip={currentCharacter.biography.alignment === "good" ? "Hero" : currentCharacter.biography.alignment === "bad" ? "Villain" : "Anti-hero"}>
+                            {/* <div className="tooltip" data-tip={currentCharacter.biography.alignment === "good" ? "Hero" : currentCharacter.biography.alignment === "bad" ? "Villain" : "Anti-hero"}>
                                 {getAligmentIMG(currentCharacter.biography.alignment)}
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </div>

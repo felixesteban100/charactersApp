@@ -33,7 +33,7 @@ function ModalChangeCharacters({
     const teamByUniverse: { name: string, value: string }[] = getTeamByUniverse(universe)
 
     return (
-        <div>
+        <div >
             <p className="text-lg font-bold">Select characters features</p>
 
             <div className="form-control w-full">

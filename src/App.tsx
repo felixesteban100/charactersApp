@@ -11,18 +11,20 @@ import ChangeTheme from './Components/ChangeTheme';
 import { Character } from './types';
 import { characterEmpty, listOfTeamsWithImgInTheHeroSection, teamIMG } from './constants';
 
-
-
 import { useQuery } from 'react-query';
 import axios from "axios"
 import LoadingCharacters from './Components/LoadingCharacters';
 import SectionCharacters from './Components/SectionCharacters';
+import AlertMessage from './Components/AlertMessage';
+import useKeyPress from './hooks/useKeyPress';
+import { resetCharactersSelection } from './functions';
 
 //change the publisher for these
 
 function App() {
   const [letItSearch, setLetItSearch] = useState(true)
-  const [selectedCharacter, setSelectedCharacter] = useLocalStorage<Character>("CHARACTERS_APP_CHARACTERSELECTED", characterEmpty)
+  // const [selectedCharacter, setSelectedCharacter] = useLocalStorage<Character>("CHARACTERS_APP_CHARACTERSELECTED", characterEmpty)
+  const [selectedCharacter, setSelectedCharacter] = useState<Character>(characterEmpty)
 
   const [viewFavorites, setViewFavorites] = useLocalStorage("CHARACTERS_APP_VIEWFAVORITES", false)
 
@@ -47,7 +49,7 @@ function App() {
 
   const [favorites, setFavorites] = useLocalStorage<Character[] | []>("CHARACTERS_APP_FAVORITES", [])
 
-  const { isLoading, isError, data: charactersFiltered, refetch: refetchCharacters, isFetching } = useQuery<Character[]>({
+  const { isLoading, isError, data: charactersFiltered, refetch: refetchCharacters, isFetching, isFetched } = useQuery<Character[]>({
     enabled: letItSearch,
     refetchOnMount: false,
     refetchOnReconnect: false,
@@ -65,12 +67,17 @@ function App() {
       if (team !== "All") setTeamMembers(result.filter((currentCharacter) => currentCharacter.connections.groupAffiliation.includes(team)))
 
       setLetItSearch(false)
+
+      if (howMany === 691) setHowMany(result.length)
+
       return result
     },
     onError: (error) => console.log(error),
   })
 
-  
+  useKeyPress('Enter', () => {setViewFavorites(false); refetchCharacters()});
+  useKeyPress('F', () => setViewFavorites(true));
+  useKeyPress('R', () => {resetCharactersSelection(setCharacterName, setHowMany, setSide, setUniverse, setTeam, setGender, setHeroSection, setTeamMembers); setViewFavorites(false); refetchCharacters()});
 
   return (
     <div data-theme={theme} className={`min-h-screen transition-colors duration-500 bg-base-200`}>
@@ -111,6 +118,12 @@ function App() {
                       setSelectedCharacter={setSelectedCharacter}
                       letItSearch={letItSearch}
                       setLetItSearch={setLetItSearch}
+                    />
+
+                    <AlertMessage
+                      isFetched={isFetched}
+                      alertType={viewFavorites ? "alert-warning" : charactersFiltered.length > 0 ? "alert-success" : "alert-error"}
+                      message={viewFavorites ? "Favorites" : charactersFiltered.length > 0 ? "Characters founded" : "No characters founded"}
                     />
 
                     <ModalTeamMembers
