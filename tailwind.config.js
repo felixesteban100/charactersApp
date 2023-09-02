@@ -36,6 +36,15 @@ export default {
             opacity: 0
           }
         },
+        fadeOut: {
+          '0%': {
+            opacity: 1,
+          },
+          '100%': {
+            opacity: 0,
+            transform: 'scale(0)'
+          }
+        },
         flipInHorBottom: {
           '0%': {
             '-webkit-transform': 'rotateX(80deg)',
@@ -81,6 +90,7 @@ export default {
       animation: {
         'fadeIn': "fadeIn 1s ease-in-out 1 forwards",
         'fadeOut': "fadeOut 1s ease-out 1 forwards",
+        'fadeOutAlert': "fadeOutAlert 1s ease-out 1 forwards",
         'flipInHorBottom': "flipInHorBottom 1s ease-out 1 forwards",
         'flipOutHorTop': "flipOutHorTop 1s ease-out 1 forwards",
         'scaleForwardEntrance': 'scaleForwardEntrance 1s ease 0s 1 normal forwards',

@@ -239,8 +239,8 @@ export function getTeamByUniverse(universe: string) {
                     img: 'https://thecosmiccircus.com/wp-content/uploads/2021/08/midnight-suns-launch-announce-article-card.jpeg'
                 },
                 {
-                    name: "New Mutans",
-                    value: "New Mutans",
+                    name: "New Mutants",
+                    value: "New Mutants",
                     img: 'https://d1yjjnpx0p53s8.cloudfront.net/styles/logo-thumbnail/s3/082020/the_new_mutants_1st_logo.jpg?mjl.sY8ZuhzkwNEcKRiDwYSYeLCVjDKg&itok=XB7yoDKc'
                 },
                 {
