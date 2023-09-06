@@ -137,13 +137,13 @@ function App() {
             }
           </div>
 
-          {/* <br /> */}
-          {/* <Footer /> */}
+          <br />
+          <Footer />
         </div>
 
         <div data-test="sidebarOutside" className="drawer-side z-50">
           <label htmlFor="my-drawer-change" className="drawer-overlay cursor-text bg-red-600 h-full w-full"></label>
-          <ul data-test="sidebar" className="menu p-4 w-80 min-h-[100vh] bg-base-200 text-base-content">
+          <ul data-test="sidebar" className="menu p-4  min-h-[100vh] w-80 lg:w-[30vw]  bg-base-200 text-base-content">
             <ModalChangeCharacters
               characterName={characterName}
               setCharacterName={setCharacterName}

@@ -2,7 +2,7 @@
 function LoadingCard() {
     return (
         <div>
-            <div className='w-full h-[20rem] md:h-[20rem] xl:h-[22rem] bg-base-100 shadow-current shadow-2xl hover:scale-110 group/item'>
+            <div className='w-full h-[20rem] md:h-[20rem] xl:h-[22rem] bg-base-100 hover:shadow-current hover:shadow-lg hover:scale-110 group/item transition-all duration-700'>
                 <div className="animate-pulse flex space-x-4">
                     <div className="flex-1 space-y-6 py-1">
                         <div className="space-y-3">

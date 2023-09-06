@@ -22,7 +22,7 @@ function Hero({ imgs, title, description }: HeroProps) {
     }, [currentImageIndex, imgs.length]);
 
     return (
-        <div>
+        <div className='-translate-y-16'>
             {/* ${isAnimating ? 'animate-ping' : ''} */} {/* bg-fixed bg-cover bg-no-repeat bg-center */}
             <motion.div
                 
