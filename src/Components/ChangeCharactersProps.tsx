@@ -9,6 +9,8 @@ function ModalChangeCharacters({
     setCharacterName,
     howMany,
     setHowMany,
+    asHowManyAsPossible,
+    setAsHowManyAsPossible,
     gender,
     setGender,
     side,
@@ -28,7 +30,10 @@ function ModalChangeCharacters({
     refetchCharacters,
 
     setHeroSection,
-    setTeamMembers
+    setTeamMembers,
+
+    isLoading,
+    isFetching,
 }: ChangeCharactersProps) {
     const teamByUniverse: { name: string, value: string }[] = getTeamByUniverse(universe)
 
@@ -91,17 +96,24 @@ function ModalChangeCharacters({
                 /> */}
                 <div className="w-full flex flex-col justify-center items-center ">
                     <input
-                        data-test="input-HowMany"
-                        value={howMany ?? ""}
+                        data-test="range-HowMany"
+                        value={asHowManyAsPossible ? 691 : howMany ?? ""}
                         type="range"
                         min={1}
                         max={691}
                         className="range"
                         onChange={(event) => setHowMany(parseInt(event.target.value))}
+                        disabled={asHowManyAsPossible}
                     />
                 </div>
                 <div className="w-full text-center">
-                    <p>{howMany}</p>
+                    <p>{asHowManyAsPossible ? 'All' : howMany}</p>
+                </div>
+                <div className="form-control">
+                    <label className="label cursor-pointer flex justify-center items-center gap-5">
+                        <span className="label-text">All characters in these categories</span>
+                        <input data-test="ashowmanyaspossible" onChange={() => setAsHowManyAsPossible(prev => !prev)} type="checkbox" checked={asHowManyAsPossible} className="checkbox" />
+                    </label>
                 </div>
             </div>
 
@@ -167,6 +179,7 @@ function ModalChangeCharacters({
                         setViewFavorites(false)
                     }}
                     forWhat="Find by filters"
+                    loadingOrFetching={isLoading || isFetching}
                 />
 
                 <ButtonChangeCharacter
@@ -182,7 +195,7 @@ function ModalChangeCharacters({
                     dataTest="btn-Reset"
                     classNameSended="btn-danger"
                     functionSended={() => {
-                        resetCharactersSelection(setCharacterName, setHowMany, setSide, setUniverse, setTeam, setGender, setHeroSection, setTeamMembers)
+                        resetCharactersSelection(setCharacterName, setHowMany, setAsHowManyAsPossible, setSide, setUniverse, setTeam, setGender, setHeroSection, setTeamMembers)
                         setViewFavorites(false)
                         refetchCharacters()
                     }}

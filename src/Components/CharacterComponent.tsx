@@ -5,10 +5,11 @@ import { randomImagesArray } from '../constants';
 
 type CharacterProps = {
     setSelectedCharacter: React.Dispatch<React.SetStateAction<Character>>
-    currentCharacter: Character
+    currentCharacter: Character;
+    indexForTest: number
 }
 
-function CharacterComponent({ setSelectedCharacter, currentCharacter }: CharacterProps) {
+function CharacterComponent({ setSelectedCharacter, currentCharacter, indexForTest }: CharacterProps) {
     const { ref, inView/* , entry */ } = useInView({
         /* Optional properties */
         threshold: 0.5,
@@ -30,7 +31,7 @@ function CharacterComponent({ setSelectedCharacter, currentCharacter }: Characte
 
     return (
         <label
-            data-test={`character`}
+            data-test={`character-${indexForTest}`}
             onClick={() => setSelectedCharacter(currentCharacter)}
             className={`cursor-pointer`}
             htmlFor={`my-modal-selectedCharacter`}

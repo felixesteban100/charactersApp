@@ -1,15 +1,22 @@
-import { ButtonChangeCharacterProps } from "../../types";
+type ButtonChangeCharacterProps = {
+    // htmlFor: string;
+    classNameSended: string;
+    functionSended: () => void;
+    forWhat: string;
+    dataTest: string;
+    loadingOrFetching?: boolean
+}
 
-export default function ButtonChangeCharacter({ classNameSended, functionSended, forWhat, dataTest }: ButtonChangeCharacterProps) {
+export default function ButtonChangeCharacter({ classNameSended, functionSended, forWhat, dataTest, loadingOrFetching }: ButtonChangeCharacterProps) {
     return (
         <div /* label */
             key={forWhat}
             // htmlFor={htmlFor}
-            className={`btn ${classNameSended}`}
+            className={`btn ${classNameSended} ${loadingOrFetching ? "btn-disabled" : ''}`}
             onClick={functionSended}
             data-test={dataTest}
         >
-            {forWhat}
+            {loadingOrFetching ? <div className="flex justify-center items-center gap-2"><span className="loading loading-spinner loading-md"></span></div> : forWhat}
         </div> /* </label> */
     )
 }

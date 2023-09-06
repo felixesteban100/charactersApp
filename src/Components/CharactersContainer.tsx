@@ -7,7 +7,7 @@ type CharactersContainerProps = {
 function CharactersContainer({ children, visibleResults }: CharactersContainerProps) {
     return (
         <div
-            data-test="characters-visible"
+            // data-test="charactersVisible"
             className={
                 `mt-5 
                 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 

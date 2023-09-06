@@ -67,10 +67,11 @@ function Characters({
                         >
                             <>
                                 {
-                                    visibleResults.map((currentCharacter) => {
+                                    visibleResults.map((currentCharacter, index) => {
                                         return (
                                             <div key={currentCharacter._id}>
                                                 <CharacterComponent
+                                                    indexForTest={index}
                                                     setSelectedCharacter={setSelectedCharacter}
                                                     currentCharacter={currentCharacter}
                                                 />
@@ -104,11 +105,11 @@ function Characters({
                 {
                     pagination.range.length > 1 ?
                         <div data-test="paginationHandler" className="join w-full flex justify-center">
-                            <button onClick={() => pagination.setPage(pagination.active - 1)} className="join-item btn btn-primary text-xl -pt-2">«</button>
+                            <button data-test="paginationBtn-prev" onClick={() => pagination.setPage(pagination.active - 1)} className="join-item btn btn-primary text-xl -pt-2">«</button>
                             {pagination.range.map((currentPage, index) => {
                                 return (
                                     <button
-                                        data-test="paginationBtn"
+                                        data-test={currentPage === 'dots' ? "paginationBtnDisabled" : `paginationBtn-${index}`}
                                         key={`${currentPage}-${index}`}
                                         onClick={() => pagination.setPage(currentPage !== 'dots' ? currentPage : 1)}
                                         className={`join-item btn btn-primary ${pagination.active === currentPage ? "btn-secondary btn-active" : ""} ${currentPage === 'dots' ? "btn-disabled" : ""}`}>
@@ -116,7 +117,7 @@ function Characters({
                                     </button>
                                 )
                             })}
-                            <button onClick={() => pagination.setPage(pagination.active + 1)} className="join-item btn btn-primary text-xl -pt-2">»</button>
+                            <button data-test="paginationBtn-next" onClick={() => pagination.setPage(pagination.active + 1)} className="join-item btn btn-primary text-xl -pt-2">»</button>
                         </div>
                         :
                         null

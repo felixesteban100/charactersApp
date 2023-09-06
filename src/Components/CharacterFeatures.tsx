@@ -17,9 +17,9 @@ function CharacterFeatures({selectedCharacter}: CharacterFeaturesProps) {
     return (
         <div className='mx-auto flex flex-col justify-center gap-3 items-center w-[90%] md:w-[50%] lg:w-[50%]'>
             <div className="w-[90%] grid grid-flow-col grid-col-3">
-                <div onClick={() => setSelectedOption("Stats")} className={`pb-10 lg:pb-10 text-xl md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Stats" ? "tab-active" : ""}`}>{windowWidth > 570 ? 'Stats' : '📊'}</div>
-                <div onClick={() => setSelectedOption("Appereance")} className={`pb-10 lg:pb-10 text-xl md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Appereance" ? "tab-active" : ""}`}>{windowWidth > 570 ? 'Appereance' : '👀'}</div>
-                <div onClick={() => setSelectedOption("Biography")} className={`pb-10 lg:pb-10 text-xl md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Biography" ? "tab-active" : ""}`}>{windowWidth > 570 ? 'Biography' : '📜'}</div>
+                <div data-test="btn-inModal-stat" onClick={() => setSelectedOption("Stats")} className={`pb-10 lg:pb-10 text-xl md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Stats" ? "tab-active" : ""}`}>{windowWidth > 570 ? 'Stats' : '📊'}</div>
+                <div data-test="btn-inModal-appereance" onClick={() => setSelectedOption("Appereance")} className={`pb-10 lg:pb-10 text-xl md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Appereance" ? "tab-active" : ""}`}>{windowWidth > 570 ? 'Appereance' : '👀'}</div>
+                <div data-test="btn-inModal-biography" onClick={() => setSelectedOption("Biography")} className={`pb-10 lg:pb-10 text-xl md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Biography" ? "tab-active" : ""}`}>{windowWidth > 570 ? 'Biography' : '📜'}</div>
             </div>
 
             {
@@ -70,8 +70,8 @@ function CharacterFeatures({selectedCharacter}: CharacterFeaturesProps) {
                                 icon="👁"
                             />
                             <StatString
-                                statName="EyeColor"
-                                statValue={selectedCharacter.appearance.eyeColor}
+                                statName="Gender"
+                                statValue={selectedCharacter.appearance.gender}
                                 icon={
                                     selectedCharacter.appearance.gender?.toLowerCase() === "male" ?
                                         "🚹"
@@ -81,6 +81,7 @@ function CharacterFeatures({selectedCharacter}: CharacterFeaturesProps) {
                                             :
                                             ""
                                 }
+                                dataTest="gender-stat"
                             />
                             <StatString
                                 statName="Hair color"
@@ -121,6 +122,7 @@ function CharacterFeatures({selectedCharacter}: CharacterFeaturesProps) {
                                                         :
                                                         "🌎"
                                 }
+                                dataTest="race-stat"
                             />
                             <StatString
                                 statName="Weigth"
@@ -146,6 +148,7 @@ function CharacterFeatures({selectedCharacter}: CharacterFeaturesProps) {
                                                     :
                                                     ""
                                     }
+                                    dataTest="aligment-stat"
                                 />
 
                                 <StatString
@@ -166,6 +169,7 @@ function CharacterFeatures({selectedCharacter}: CharacterFeaturesProps) {
                                     statName="Publisher"
                                     statValue={selectedCharacter.biography.publisher}
                                     icon="📚"
+                                    dataTest="publisher-stat"
                                 />
 
                                 <StatCollapse
@@ -187,7 +191,7 @@ function CharacterFeatures({selectedCharacter}: CharacterFeaturesProps) {
                                     icon="👪"
                                     title="Teams"
                                     content={<p>{selectedCharacter.connections.groupAffiliation}</p>}
-
+                                    dataTest="teams-collapse"
                                 />
                                 <StatCollapse
                                     icon="🧾"

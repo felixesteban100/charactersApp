@@ -109,6 +109,8 @@ export type ChangeCharactersProps = {
     setCharacterName: React.Dispatch<React.SetStateAction<string>>
     howMany: string | number
     setHowMany: React.Dispatch<React.SetStateAction<number>>
+    asHowManyAsPossible: boolean
+    setAsHowManyAsPossible: React.Dispatch<React.SetStateAction<boolean>>
     side: string
     setSide: React.Dispatch<React.SetStateAction<string>>
     universe: string;
@@ -132,6 +134,9 @@ export type ChangeCharactersProps = {
         description: string;
     }>>
     setTeamMembers: React.Dispatch<React.SetStateAction<Character[]>>
+
+    isLoading: boolean;
+    isFetching: boolean;
 }
 
 export type ColorPalette = string[];
@@ -170,12 +175,4 @@ export type SelectInputProps = {
     onChangeFunction: (event: React.ChangeEvent<HTMLSelectElement>) => void;
     forWhat: string;
     dataTest: string;
-}
-
-export type ButtonChangeCharacterProps = {
-    // htmlFor: string;
-    classNameSended: string;
-    functionSended: () => void;
-    forWhat: string;
-    dataTest: string
 }

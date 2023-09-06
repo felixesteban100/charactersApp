@@ -29,7 +29,8 @@ function App() {
   const [viewFavorites, setViewFavorites] = useLocalStorage("CHARACTERS_APP_VIEWFAVORITES", false)
 
   const [characterName, setCharacterName] = useLocalStorage<string>("CHARACTERS_APP_NAME", "")
-  const [howMany, setHowMany] = useLocalStorage<number>("CHARACTERS_APP_HOWMANY", 6)
+  const [howMany, setHowMany] = useLocalStorage<number>("CHARACTERS_APP_HOWMANY", 8)
+  const [asHowManyAsPossible, setAsHowManyAsPossible] = useLocalStorage('CHARACTERS_APP_ASHOWMANYASPOSSIBLE', false)
   const [side, setSide] = useLocalStorage<string>("CHARACTERS_APP_SIDE", "All")
   const [universe, setUniverse] = useLocalStorage<string>("CHARACTERS_APP_UNIVERSE", "All")
   const [team, setTeam] = useLocalStorage<string>("CHARACTERS_APP_TEAM", "All")
@@ -49,14 +50,14 @@ function App() {
 
   const [favorites, setFavorites] = useLocalStorage<Character[] | []>("CHARACTERS_APP_FAVORITES", [])
 
-  const { isLoading, isError, data: charactersFiltered, refetch: refetchCharacters, isFetching, isFetched } = useQuery<Character[]>({
+  const { isLoading, isError, data: charactersFiltered, refetch: refetchCharacters, isFetching } = useQuery<Character[]>({
     enabled: letItSearch,
     refetchOnMount: false,
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
     queryKey: ["Characters"],
     queryFn: async () => {
-      const result = await axios.get<Character[]>(`https://charactersapi.onrender.com/api/v1/characters/filter?characterName=${characterName}&howMany=${howMany}&side=${side}&universe=${universe}&team=${team}&gender=${gender}&race=${race}&includeNameOrExactName=${includeNameOrExactName}&characterOrFullName=${characterOrFullName}`).then((response) => response.data)
+      const result = await axios.get<Character[]>(`https://charactersapi.onrender.com/api/v1/characters/filter?characterName=${characterName}&howMany=${asHowManyAsPossible ? 0 : howMany}&side=${side}&universe=${universe}&team=${team}&gender=${gender}&race=${race}&includeNameOrExactName=${includeNameOrExactName}&characterOrFullName=${characterOrFullName}`).then((response) => response.data)
 
       setHeroSection({
         imgs: teamIMG(team),
@@ -77,7 +78,7 @@ function App() {
 
   useKeyPress('Enter', () => {setViewFavorites(false); refetchCharacters()});
   useKeyPress('z', () => setViewFavorites(prev => !prev));
-  useKeyPress('r', () => {resetCharactersSelection(setCharacterName, setHowMany, setSide, setUniverse, setTeam, setGender, setHeroSection, setTeamMembers); setViewFavorites(false); refetchCharacters()});
+  useKeyPress('r', () => {resetCharactersSelection(setCharacterName, setHowMany, setAsHowManyAsPossible, setSide, setUniverse, setTeam, setGender, setHeroSection, setTeamMembers); setViewFavorites(false); refetchCharacters()});
 
   return (
     <div data-theme={theme} className={`min-h-screen transition-colors duration-500 bg-base-200`}>
@@ -101,11 +102,11 @@ function App() {
           <div>
             {
               isLoading || isFetching ?
-                <LoadingCharacters howMany={howMany} />
+                <LoadingCharacters howMany={asHowManyAsPossible ? 621 : howMany} />
                 :
                 isError || charactersFiltered === undefined ?
                   <SectionCharacters>
-                    <p>Opps... something happend please try again.</p>
+                    <p>😢 Opps... something happend. Please try again. </p>
                   </SectionCharacters>
                   :
                   <div>
@@ -136,8 +137,8 @@ function App() {
             }
           </div>
 
-          <br />
-          <Footer />
+          {/* <br /> */}
+          {/* <Footer /> */}
         </div>
 
         <div data-test="sidebarOutside" className="drawer-side z-50">
@@ -148,6 +149,8 @@ function App() {
               setCharacterName={setCharacterName}
               howMany={howMany}
               setHowMany={setHowMany}
+              asHowManyAsPossible={asHowManyAsPossible}
+              setAsHowManyAsPossible={setAsHowManyAsPossible}
               side={side}
               setSide={setSide}
               universe={universe}
@@ -167,6 +170,9 @@ function App() {
               refetchCharacters={refetchCharacters}
               setHeroSection={setHeroSection}
               setTeamMembers={setTeamMembers}
+
+              isLoading={isLoading}
+              isFetching={isFetching}
             />
             <ChangeTheme
               theme={theme}

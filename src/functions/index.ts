@@ -4,6 +4,7 @@ import { Character } from "../types";
 export function resetCharactersSelection(
   setCharacterName: React.Dispatch<React.SetStateAction<string>>,
   setHowMany: React.Dispatch<React.SetStateAction<number>>,
+  setAsHowManyAsPossible: React.Dispatch<React.SetStateAction<boolean>>,
   setSide: React.Dispatch<React.SetStateAction<string>>,
   setUniverse: React.Dispatch<React.SetStateAction<string>>,
   setTeam: React.Dispatch<React.SetStateAction<string>>,
@@ -19,6 +20,7 @@ export function resetCharactersSelection(
   localStorage.removeItem("CHARACTERS_APP_CHARACTERSFILTERED");
   localStorage.removeItem("CHARACTERS_APP_NAME");
   localStorage.removeItem("CHARACTERS_APP_HOWMANY");
+  localStorage.removeItem("CHARACTERS_APP_ASHOWMANYASPOSSIBLE");
   localStorage.removeItem("CHARACTERS_APP_SIDE");
   localStorage.removeItem("CHARACTERS_APP_UNIVERSE");
   localStorage.removeItem("CHARACTERS_APP_TEAM");
@@ -29,6 +31,7 @@ export function resetCharactersSelection(
 
   setCharacterName("")
   setHowMany(8)
+  setAsHowManyAsPossible(false)
   setSide("All")
   setUniverse("All")
   setTeam("All")

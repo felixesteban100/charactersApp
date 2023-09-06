@@ -11,7 +11,7 @@ function Header() {
         <div className={`navbar bg-base-100 sticky top-0 z-40 transition duration-500`}>
             <div className="flex-1 gap-2">
                 {/* <label htmlFor="my-modal-change" className="btn btn-ghost normal-case text-xl hover:text-secondary">CHARACTERS APP</label> */}
-                <label data-test="characters-header-btn" htmlFor="my-drawer-change" className="btn btn-ghost normal-case text-xl hover:text-secondary">CHARACTERS APP</label>
+                <label data-test="header-btn" htmlFor="my-drawer-change" className="btn btn-ghost normal-case text-xl hover:text-secondary">CHARACTERS APP</label>
                 <div 
                     data-test="scrooll-tosection-characters" 
                     onClick={() => scrollToSection('section-characters')} 

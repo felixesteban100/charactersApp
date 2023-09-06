@@ -8,8 +8,8 @@ function ModalTeamMembers({ teamMembers, team, universe }: ModalTeamMembersProps
     <Modal
       id={`my-modal-membersList`}
       size="p-5"
-      dataTestInside="modalCharacter"
-      dataTestOutside="modalCharacterOutside"
+      dataTestInside="modalTeam"
+      dataTestOutside="modalTeamOutside"
     >
       <div className='flex flex-col gap-5 overflow-y-scroll max-h-[90vh]'>
         {/* <label htmlFor="my-modal-membersList" className="btn btn-sm btn-circle absolute right-2 top-2">✕</label> */}
