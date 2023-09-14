@@ -17,9 +17,9 @@ function CharacterFeatures({selectedCharacter}: CharacterFeaturesProps) {
     return (
         <div className='mx-auto flex flex-col justify-center gap-3 items-center w-[90%] md:w-[50%] lg:w-[50%]'>
             <div className="w-[90%] grid grid-flow-col grid-col-3">
-                <div data-test="btn-inModal-stat" onClick={() => setSelectedOption("Stats")} className={`pb-10 lg:pb-10 text-xl md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Stats" ? "tab-active" : ""}`}>{windowWidth > 570 ? 'Stats' : '📊'}</div>
-                <div data-test="btn-inModal-appereance" onClick={() => setSelectedOption("Appereance")} className={`pb-10 lg:pb-10 text-xl md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Appereance" ? "tab-active" : ""}`}>{windowWidth > 570 ? 'Appereance' : '👀'}</div>
-                <div data-test="btn-inModal-biography" onClick={() => setSelectedOption("Biography")} className={`pb-10 lg:pb-10 text-xl md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Biography" ? "tab-active" : ""}`}>{windowWidth > 570 ? 'Biography' : '📜'}</div>
+                <div /* data-test="btn-inModal-stat" */ onClick={() => setSelectedOption("Stats")} className={`pb-10 lg:pb-10 text-xl md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Stats" ? "tab-active" : ""}`}>{windowWidth > 570 ? 'Stats' : '📊'}</div>
+                <div /* data-test="btn-inModal-appereance" */ onClick={() => setSelectedOption("Appereance")} className={`pb-10 lg:pb-10 text-xl md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Appereance" ? "tab-active" : ""}`}>{windowWidth > 570 ? 'Appereance' : '👀'}</div>
+                <div /* data-test="btn-inModal-biography" */ onClick={() => setSelectedOption("Biography")} className={`pb-10 lg:pb-10 text-xl md:text-lg lg:text-xl tab tab-bordered ${selectedOption === "Biography" ? "tab-active" : ""}`}>{windowWidth > 570 ? 'Biography' : '📜'}</div>
             </div>
 
             {

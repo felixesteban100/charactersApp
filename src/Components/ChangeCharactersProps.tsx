@@ -45,38 +45,42 @@ function ModalChangeCharacters({
                 <label className="label">
                     <span className="label-text">Type the name or names</span>
                 </label>
-                <div className="input-group w-full">
-                    <input
-                        data-test="input-Name"
-                        value={characterName === null ? "" : characterName}
-                        onChange={(event) => setCharacterName(event.target.value)}
-                        type="text"
-                        placeholder={characterOrFullName === false ? "Batman / Batman, Ironman..." : "Bruce Wayne, Tony Stark..."}
-                        className="input input-bordered w-full"
-                    />
-                    <label className="swap swap-flip text-4xl">
+                <div className="flex flex-col">
+                    <div className="input-group w-full ">
                         <input
-                            data-test="includeOrExactName"
-                            type="checkbox"
-                            onChange={() => setIncludeNameOrExactName(prev => !prev)}
-                            checked={includeNameOrExactName}
+                            data-test="input-Name"
+                            value={characterName === null ? "" : characterName}
+                            onChange={(event) => setCharacterName(event.target.value)}
+                            type="text"
+                            placeholder={characterOrFullName === false ? "Batman / Batman, Ironman..." : "Bruce Wayne, Tony Stark..."}
+                            className="input input-bordered w-full"
                         />
+                        <div className="btn" onClick={() => setCharacterName("")}>x</div>
+                    </div>
+                    <div className="flex justify-center items-center m-2">
+                        <label className="swap swap-flip text-4xl">
+                            <input
+                                data-test="includeOrExactName"
+                                type="checkbox"
+                                onChange={() => setIncludeNameOrExactName(prev => !prev)}
+                                checked={includeNameOrExactName}
+                            />
 
-                        <div className="swap-on tooltip" data-tip="includes name">🔄</div>
-                        <div className="swap-off tooltip" data-tip="exact name">🎯</div>
-                    </label>
+                            <div className="swap-on tooltip" data-tip="includes name">🔄</div>
+                            <div className="swap-off tooltip" data-tip="exact name">🎯</div>
+                        </label>
+                        <label className="swap swap-flip text-4xl">
+                            <input
+                                data-test="fullOrCharacterName"
+                                type="checkbox"
+                                onChange={() => setCharacterOrFullName(prev => !prev)}
+                                checked={characterOrFullName}
+                            />
 
-                    <label className="swap swap-flip text-4xl">
-                        <input
-                            data-test="fullOrCharacterName"
-                            type="checkbox"
-                            onChange={() => setCharacterOrFullName(prev => !prev)}
-                            checked={characterOrFullName}
-                        />
-
-                        <div className="swap-on tooltip" data-tip="person name">😀</div>
-                        <div className="swap-off tooltip" data-tip="character name">🦸‍♂️</div>
-                    </label>
+                            <div className="swap-on tooltip" data-tip="person name">😀</div>
+                            <div className="swap-off tooltip" data-tip="character name">🦸‍♂️</div>
+                        </label>
+                    </div>
                 </div>
             </div>
 
@@ -153,21 +157,26 @@ function ModalChangeCharacters({
                 forWhat={'characters universe'}
             />
 
-            <SelectInput
-                dataTest={'select-Team'}
-                value={team}
-                options={[
-                    { value: "All", name: "All teams" },
-                    ...teamByUniverse.map((current) => {
-                        return {
-                            value: current.value,
-                            name: current.name,
-                        }
-                    })
-                ]}
-                onChangeFunction={(event) => setTeam(event.target.value)}
-                forWhat={'the team'}
-            />
+            {
+                universe !== 'All' ?
+                    <SelectInput
+                        dataTest={'select-Team'}
+                        value={team}
+                        options={[
+                            { value: "All", name: "All teams" },
+                            ...teamByUniverse.map((current) => {
+                                return {
+                                    value: current.value,
+                                    name: current.name,
+                                }
+                            })
+                        ]}
+                        onChangeFunction={(event) => setTeam(event.target.value)}
+                        forWhat={'the team'}
+                    />
+                    :
+                    null
+            }
 
 
             <div className="flex flex-col gap-5 justify-around mt-5">

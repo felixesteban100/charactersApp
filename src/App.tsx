@@ -91,7 +91,6 @@ function App() {
 
         <div className="drawer-content">
           {/* Page content here */}
-
           <Header />
 
           <HeroSelector
@@ -136,7 +135,6 @@ function App() {
                   </div>
             }
           </div>
-
           <br />
           <Footer />
         </div>

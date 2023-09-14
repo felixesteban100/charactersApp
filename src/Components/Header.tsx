@@ -18,7 +18,6 @@ function Header() {
 
     useEffect(() => {
         const handleScroll = () => {
-            console.log(window.scrollY)
             if (window.scrollY >= TOP_OFFSET) {
                 setShowBackground(true)
             } else {
@@ -35,7 +34,7 @@ function Header() {
 
 
     return (
-        <div className={`navbar ${showBackground ? 'bg-base-300 bg-opacity-80' : ''} sticky top-0 z-40 transition duration-500`}>
+        <div className={`navbar ${showBackground ? 'bg-base-300 bg-opacity-100' : ''} sticky top-0 z-40 transition duration-500`}>
             <div className="flex-1 gap-2">
                 {/* <label htmlFor="my-modal-change" className="btn btn-ghost normal-case text-xl hover:text-secondary">CHARACTERS APP</label> */}
                 <label data-test="header-btn" htmlFor="my-drawer-change" className="btn btn-primary btn-outline normal-case text-xl hover:text-secondary rounded-md">CHARACTERS APP</label>

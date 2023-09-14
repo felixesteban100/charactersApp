@@ -29,9 +29,10 @@ function Characters({
         pagination.setPage(1)
     }, [charactersFiltered])
 
+
     useEffect(() => {
         switch (true) {
-            case windowWidth > 782 && windowWidth < 1110:
+            case windowWidth > 782 && windowWidth < 1285:
                 setCharactersPerPage(6)
                 break;
 

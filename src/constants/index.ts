@@ -578,23 +578,23 @@ export function organizedComicsProperty(comics: string[] | null | undefined, pub
 
 export const ALLRACES = [
     { value: "All", name: "All races" },
-    { value: "Human", name: "Human" },
-    { value: "Metahuman", name: "Metahuman" },
-    { value: "Alien", name: "Alien" },
-    { value: "Kryptonian", name: "Kryptonian" },
-    { value: "Symbiote", name: "Symbiote" },
-    { value: "Mutant", name: "Mutant" },
-    { value: "Atlantean", name: "Atlantean" },
-    { value: "Demon", name: "Demon" },
-    { value: "Android", name: "Android" },
-    { value: "Cyborg", name: "Cyborg" },
-    { value: "Animal", name: "Animal" },
-    { value: "Zombie", name: "Zombie" },
-    { value: "Amazon", name: "Amazon" },
-    { value: "Eternal", name: "Eternal" },
-    { value: "Inhuman", name: "Inhuman" },
-    { value: "Asgardian", name: "Asgardian" },
-    { value: "Cosmic Entity", name: "Cosmic Entity" },
+    { value: "Human", name: "Human 🌎" },
+    { value: "Metahuman", name: "Metahuman 🧬" },
+    { value: "Alien", name: "Alien 👽" },
+    { value: "Kryptonian", name: "Kryptonian 👽" },
+    { value: "Symbiote", name: "Symbiote 👽" },
+    { value: "Mutant", name: "Mutant 🧬" },
+    { value: "Atlantean", name: "Atlantean 🐟" },
+    { value: "Demon", name: "Demon 😈" },
+    { value: "Android", name: "Android 🤖" },
+    { value: "Cyborg", name: "Cyborg 🤖" },
+    { value: "Animal", name: "Animal 🥦" },
+    { value: "Zombie", name: "Zombie 🧟‍♂️🧟‍♀️" },
+    { value: "Amazon", name: "Amazon 🥦" },
+    { value: "Eternal", name: "Eternal 👽" },
+    { value: "Inhuman", name: "Inhuman 🧬" },
+    { value: "Asgardian", name: "Asgardian 👽" },
+    { value: "Cosmic Entity", name: "Cosmic Entity 🌌" },
 ]
 
 export const ALLALIGMENTS = [
@@ -604,15 +604,15 @@ export const ALLALIGMENTS = [
     },
     {
         value: "good",
-        name: "Hero"
+        name: "Hero 😃"
     },
     {
         value: "bad",
-        name: "Villain"
+        name: "Villain 😡"
     },
     {
         value: "neutral",
-        name: "Anti-hero"
+        name: "Anti-hero 😐"
     },
 ]
 
@@ -623,11 +623,11 @@ export const ALLGENDERS = [
     },
     {
         value: "Female",
-        name: "Female"
+        name: "Female 🚺"
     },
     {
         value: "Male",
-        name: "Male"
+        name: "Male 🚹"
     },
 ]
 
