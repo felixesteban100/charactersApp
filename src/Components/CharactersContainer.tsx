@@ -1,3 +1,4 @@
+import useWindowWidth from "../hooks/useWindowWidth"
 import { Character } from "../types"
 
 type CharactersContainerProps = {
@@ -5,6 +6,8 @@ type CharactersContainerProps = {
     visibleResults: Character[]
 }
 function CharactersContainer({ children, visibleResults }: CharactersContainerProps) {
+    const windowWidth = useWindowWidth()
+
     return (
         <div
             // data-test="charactersVisible"
@@ -14,9 +17,9 @@ function CharactersContainer({ children, visibleResults }: CharactersContainerPr
                 w-[90%] sm:w-[90%] md:w-[90%] lg:w-[70%] 
                 gap-10 mx-auto 
                 pt-[5rem] md:pt-[2rem] 
-                ${visibleResults.length < 3 ? "mb-[22.5rem] md:mb-[24rem] lg:mb-[24.5rem]"
-                        : visibleResults.length < 5 ? "mb-0 md:mb-[20rem] lg:mb-[20rem]"
-                            : ""
+                ${(visibleResults.length < 3 || visibleResults.length === 3) ? "mb-[22.5rem] md:mb-[24rem] lg:mb-[24.5rem]"
+                    : (visibleResults.length < 5 && windowWidth < 800) ? "mb-0 md:mb-[20rem] lg:mb-[20rem]"
+                        : ""
                 }`
             }
         >

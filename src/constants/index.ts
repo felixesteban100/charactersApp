@@ -105,7 +105,7 @@ export function teamIMG(teamName: string) {
             return ["https://cdn.marvel.com/u/prod/marvel/i/mg/6/e0/5c3f94442d3e9/clean.jpg", "https://images5.alphacoders.com/872/872052.jpg"]
 
         case "Teen Titans":
-            return ["https://13thdimension.com/wp-content/uploads/2016/09/640z.jpg"]
+            return ["https://13thdimension.com/wp-content/uploads/2016/09/640z.jpg", "https://insidepulse.com/wp-content/uploads/2023/04/Tales-of-The-Titans-1-A-scaled.webp"]
 
         case "Future Foundation":
             return ["https://media.wired.com/photos/5932b9ebd80dd005b42b03b1/master/w_2560%2Cc_limit/FF_1_Cover-660.jpg", "https://staticg.sportskeeda.com/editor/2022/07/3d896-16591198229869-1920.jpg", "https://comicaption.files.wordpress.com/2011/11/fantasticfour600a1.jpg"]
@@ -239,6 +239,12 @@ export function getTeamByUniverse(universe: string) {
                     img: 'https://thecosmiccircus.com/wp-content/uploads/2021/08/midnight-suns-launch-announce-article-card.jpeg'
                 },
                 {
+                    name: "MCU Villains",
+                    value: "MCU Villains",
+                    //https://tiermaker.com/images/avatars-2022/Ostrazo/Ostrazo.jpg?1665249362
+                    img: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/07dc11de-dc89-436a-89e0-8ddc2bf29af2/deurkec-115a9ad5-ab77-41eb-bb60-507c8144a89d.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzA3ZGMxMWRlLWRjODktNDM2YS04OWUwLThkZGMyYmYyOWFmMlwvZGV1cmtlYy0xMTVhOWFkNS1hYjc3LTQxZWItYmI2MC01MDdjODE0NGE4OWQuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.tjqC1rZ_YsIckE9pRKb8_htMIf9PRvSnq1-WV4HORLk'
+                },
+                {
                     name: "New Mutants",
                     value: "New Mutants",
                     img: 'https://d1yjjnpx0p53s8.cloudfront.net/styles/logo-thumbnail/s3/082020/the_new_mutants_1st_logo.jpg?mjl.sY8ZuhzkwNEcKRiDwYSYeLCVjDKg&itok=XB7yoDKc'
@@ -291,7 +297,8 @@ export function getTeamByUniverse(universe: string) {
                 {
                     name: "X-Men",
                     value: "X-Men",
-                    img: 'https://assets.stickpng.com/images/6160517776000b00045a7d7e.png'
+                    // img: 'https://assets.stickpng.com/images/6160517776000b00045a7d7e.png'
+                    img: 'https://i.imgur.com/zQ4GU6V.png'
                 },
                 {
                     name: "X-Men (Original)",
