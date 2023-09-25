@@ -213,6 +213,7 @@ export function getTeamByUniverse(universe: string) {
                     value: "Hydra",
                     img: 'https://upload.wikimedia.org/wikipedia/en/7/7f/Hydra_symbol.png'
                 },
+                
                 {
                     name: "Illuminati",
                     value: "Illuminati",
@@ -258,6 +259,11 @@ export function getTeamByUniverse(universe: string) {
                     name: "Secret Avengers",
                     value: "Secret Avengers",
                     img: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/a58a7719-0dcf-4e0b-b7bb-d2b725dbbb8e/df9w9rh-9dd43bc1-9b36-4034-9bb6-8a1c7e4078d0.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2E1OGE3NzE5LTBkY2YtNGUwYi1iN2JiLWQyYjcyNWRiYmI4ZVwvZGY5dzlyaC05ZGQ0M2JjMS05YjM2LTQwMzQtOWJiNi04YTFjN2U0MDc4ZDAucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.xTMfNwvub190r_OcyRUWkVDY-1ODA0yVHDj3ztaamAI'
+                },
+                {
+                    name: "S.H.I.E.L.D",
+                    value: "S.H.I.E.L.D",
+                    img: ''
                 },
                 {
                     name: "Sinister Six",

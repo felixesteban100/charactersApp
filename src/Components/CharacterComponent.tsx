@@ -12,8 +12,9 @@ type CharacterProps = {
 function CharacterComponent({ setSelectedCharacter, currentCharacter, indexForTest }: CharacterProps) {
     const { ref, inView/* , entry */ } = useInView({
         /* Optional properties */
-        threshold: 0.5,
-        // initialInView: false,
+        threshold: [0.1, 1, 0.2],
+        initialInView: true,
+        delay: 55
     });
 
     /* function getAligmentIMG(alignment: string) {
@@ -49,7 +50,7 @@ function CharacterComponent({ setSelectedCharacter, currentCharacter, indexForTe
 
                 <div className="card-body group/edit invisible group-hover/item:visible transition delay-150 duration-300 ease-in-out flex flex-col justify-between">
                     <div>
-                        <h2 className="card-title text-primary text-xl md:text-2xl lg:text-3xl">{currentCharacter.name}</h2>
+                        <h2 className="card-title text-base-content text-xl md:text-2xl lg:text-3xl">{currentCharacter.name}</h2>
                     </div>
 
                     <div className="card-actions justify-end">

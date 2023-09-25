@@ -12,7 +12,7 @@ export default function ButtonChangeCharacter({ classNameSended, functionSended,
         <div /* label */
             key={forWhat}
             // htmlFor={htmlFor}
-            className={`btn ${classNameSended} ${loadingOrFetching ? "btn-disabled" : ''}`}
+            className={`uppercase btn ${classNameSended} ${loadingOrFetching ? "btn-disabled" : ''}`}
             onClick={functionSended}
             data-test={dataTest}
         >

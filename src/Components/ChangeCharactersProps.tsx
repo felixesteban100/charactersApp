@@ -182,7 +182,7 @@ function ModalChangeCharacters({
             <div className="flex flex-col gap-5 justify-around mt-5">
                 <ButtonChangeCharacter
                     dataTest="btn-FindFilters"
-                    classNameSended="btn-primary"
+                    classNameSended="btn-success"
                     functionSended={() => {
                         refetchCharacters()
                         setViewFavorites(false)

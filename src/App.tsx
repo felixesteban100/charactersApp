@@ -105,6 +105,7 @@ function App() {
                 :
                 isError || charactersFiltered === undefined ?
                   <SectionCharacters>
+                    <p>Sorry</p>
                     <p>😢 Opps... something happend. Please try again. </p>
                   </SectionCharacters>
                   :

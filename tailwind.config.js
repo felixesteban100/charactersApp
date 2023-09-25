@@ -79,7 +79,7 @@ export default {
         },
         scaleForwardExit: {
           '0%': {
-            opacity: 0,
+            // opacity: 0,
             transform: 'scale(1)'
           },
           '100%': {

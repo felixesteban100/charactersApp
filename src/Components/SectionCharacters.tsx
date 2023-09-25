@@ -1,6 +1,6 @@
 
 type SectionCharactersProps = {
-    children: JSX.Element
+    children: JSX.Element[]
 }
 
 function SectionCharacters({children}: SectionCharactersProps) {
