@@ -9,9 +9,9 @@ type LoadingCharactersProps = {
     howMany: number
 }
 
-function LoadingCharacters({howMany}: LoadingCharactersProps) {
+function LoadingCharacters({ howMany }: LoadingCharactersProps) {
     const windowWidth = useWindowWidth()
-    
+
     return (
         <SectionCharacters>
             <CharactersContainer
@@ -29,6 +29,7 @@ function LoadingCharacters({howMany}: LoadingCharactersProps) {
                     }
                 </>
             </CharactersContainer>
+            <></>
         </SectionCharacters>
     )
 }
