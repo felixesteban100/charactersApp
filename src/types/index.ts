@@ -72,6 +72,9 @@ export type Character = {
         sm: string;
         md: string;
         lg: string;
+        // mdi?: string;
+        // md2?: string;
+        [key: string]: string
     };
     _id: string;
     id: number;

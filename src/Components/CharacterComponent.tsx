@@ -12,9 +12,10 @@ type CharacterProps = {
 function CharacterComponent({ setSelectedCharacter, currentCharacter, indexForTest }: CharacterProps) {
     const { ref, inView/* , entry */ } = useInView({
         /* Optional properties */
-        threshold: [0.1, 1, 0.2],
+        // threshold: [0.1, 1, 0.2],
+        threshold: 0.8,
         initialInView: true,
-        delay: 55
+        // delay:20
     });
 
     /* function getAligmentIMG(alignment: string) {
@@ -40,11 +41,14 @@ function CharacterComponent({ setSelectedCharacter, currentCharacter, indexForTe
             <div
                 ref={ref}
                 // className={`${inView ? "animate-flipInHorBottom" : "animate-flipOutHorTop"} card image-full object-contain w-full h-[20rem] md:h-[20rem] xl:h-[22rem] bg-base-100 shadow-current shadow-2xl hover:scale-110 group/item`}
-                className={`${inView ? "animate-scaleForwardEntrance" : "animate-scaleForwardExit"} card image-full object-contain w-full h-[20rem] md:h-[20rem] xl:h-[22rem] bg-base-100 hover:shadow-current hover:shadow-2xl hover:scale-110 group/item transition-all duration-700`}
-                // className={`card image-full object-contain w-full h-[20rem] md:h-[20rem] xl:h-[22rem] bg-base-100 shadow-current shadow-2xl hover:scale-110 group/item`}
+                className={
+                    `${inView ? "animate-fadeIn" : "animate-fadeOut"} 
+                    card image-full object-contain w-full h-[20rem] md:h-[20rem] xl:h-[22rem] bg-base-100 hover:shadow-current hover:shadow-2xl hover:scale-110 group/item transition-all duration-700`
+                }
+            // className={`card image-full object-contain w-full h-[20rem] md:h-[20rem] xl:h-[22rem] bg-base-100 shadow-current shadow-2xl hover:scale-110 group/item`}
             >
                 <figure className='relative rounded-md w-full'>
-                    <img className="w-full h-full animate-pulse blur-lg rounded-md" src={currentCharacter.images.xs !== '' && currentCharacter.images.xs !== '-' ? currentCharacter.images.xs : getRandomImage(randomImagesArray)} alt={currentCharacter.name} loading="lazy" />
+                    {/* <img className="w-full h-full animate-pulse blur-lg rounded-md" src={getRandomImage(randomImagesArray)} alt={currentCharacter.name} loading="lazy" /> */}
                     <img className={`imageCard absolute w-full h-full transition-opacity duration-200 ease-in-out rounded-md group-hover/item:blur-sm`} src={currentCharacter.images.md} alt={currentCharacter.name} loading='lazy' onLoadCapture={transitionImageCard} />
                 </figure>
 

@@ -36,14 +36,17 @@ export default {
             opacity: 0
           }
         },
-        fadeOut: {
-          '0%': {
+        fadeOutAlert: {
+          from: {
             opacity: 1,
           },
-          '100%': {
+          to: {
             opacity: 0,
+            display: 'none'
+          },
+          /* '100%': {
             transform: 'scale(0)'
-          }
+          } */
         },
         flipInHorBottom: {
           '0%': {
@@ -88,13 +91,13 @@ export default {
         },
       },
       animation: {
-        'fadeIn': "fadeIn 1s ease-in-out 1 forwards",
-        'fadeOut': "fadeOut 1s ease-out 1 forwards",
+        'fadeIn': "fadeIn 3s ease 1 normal forwards",
+        'fadeOut': "fadeOut 1s ease 1 normal forwards",
         'fadeOutAlert': "fadeOutAlert 1s ease-out 1 forwards",
         'flipInHorBottom': "flipInHorBottom 1s ease-out 1 forwards",
         'flipOutHorTop': "flipOutHorTop 1s ease-out 1 forwards",
-        'scaleForwardEntrance': 'scaleForwardEntrance 1s ease 0s 1 normal forwards',
-        'scaleForwardExit': 'scaleForwardExit 1s ease 0s 1 normal forwards',
+        'scaleForwardEntrance': 'scaleForwardEntrance 1s ease 0s 1 normal both',
+        'scaleForwardExit': 'scaleForwardExit 1s ease 0s 1 normal both',
       },
     },
   },

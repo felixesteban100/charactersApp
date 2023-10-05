@@ -25,7 +25,7 @@ function AlertMessage({ alertType, message, charactersFiltered, viewFavorites}: 
     }, [charactersFiltered, viewFavorites]); // Empty dependency array ensures the effect runs only once
 
     return (
-        <div className={`toast z-[999] ${isVisible ? "animate-fadeIn " : "animate-fadeOut"}`}>
+        <div className={`toast z-[999] ${isVisible ? "animate-fadeIn " : "animate-fadeOutAlert"}`}>
             <div className={`alert ${alertType}`}>
                 <span className='text-current font-bold text-2xl'>{message}</span>
             </div>

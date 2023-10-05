@@ -1,7 +1,7 @@
 
-export default function StatContainer({ children }: { children: JSX.Element[] }) {
+export default function StatContainer({ children }: { children: JSX.Element[] | JSX.Element }) {
     return (
-        <div className="stats stats-vertical shadow self-center w-full h-full">
+        <div className="xl:h-[75vh] xl:overflow-y-scroll stats stats-vertical shadow self-center w-full h-full">
             {children}
         </div>
     )

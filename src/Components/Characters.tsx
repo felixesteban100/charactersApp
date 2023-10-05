@@ -38,6 +38,8 @@ function Characters({ charactersFiltered, favorites, setFavorites, viewFavorites
         siblings: 1
     })
 
+    console.log(pagination.range[pagination.range.length - 1], pagination.active)
+
     return (
         <SectionCharacters>
             {
@@ -89,7 +91,7 @@ function Characters({ charactersFiltered, favorites, setFavorites, viewFavorites
                                 </button>
                             )
                         })}
-                        <button data-test="paginationBtn-next" onClick={() => pagination.setPage(pagination.active + 1)} className={`join-item btn btn-primary text-xl -pt-2 ${pagination.range.length === pagination.active ? "btn-disabled" : ""}`}>»</button>
+                        <button data-test="paginationBtn-next" onClick={() => pagination.setPage(pagination.active + 1)} className={`join-item btn btn-primary text-xl -pt-2 ${pagination.range[pagination.range.length - 1] === pagination.active ? "btn-disabled" : ""}`}>»</button>
                     </div>
                     :
                     <></>
