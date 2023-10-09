@@ -1,5 +1,4 @@
-import { Character, CharactersProps } from '../types';
-import ModalCharacter from './Modals/ModalCharacter';
+import { Character } from '../types';
 import { useEffect, useState } from 'react'
 import { usePagination } from "@mantine/hooks";
 
@@ -8,8 +7,17 @@ import CharactersContainer from './CharactersContainer';
 import useWindowWidth from '../hooks/useWindowWidth';
 import SectionCharacters from './SectionCharacters';
 
+type CharactersProps = {
+    charactersFiltered: Character[]
+    // favorites: Character[]
+    // setFavorites: React.Dispatch<React.SetStateAction<[] | Character[]>>
+    viewFavorites: boolean
+    // selectedCharacter: Character
+    // setSelectedCharacter: React.Dispatch<React.SetStateAction<Character>>
+    setSelectedCharacter: (character: Character) => void
+}
 
-function Characters({ charactersFiltered, favorites, setFavorites, viewFavorites, selectedCharacter, setSelectedCharacter }: CharactersProps) {
+function Characters({ charactersFiltered, /* favorites, setFavorites, */ viewFavorites, /* selectedCharacter, */ setSelectedCharacter }: CharactersProps) {
     const windowWidth = useWindowWidth()
     const [charactersPerPage, setCharactersPerPage] = useState(8)
     const [visibleResults, setVisibleResults] = useState<Character[]>(charactersFiltered.slice(0, charactersPerPage))
@@ -38,7 +46,7 @@ function Characters({ charactersFiltered, favorites, setFavorites, viewFavorites
         siblings: 1
     })
 
-    console.log(pagination.range[pagination.range.length - 1], pagination.active)
+    // console.log(pagination.range[pagination.range.length - 1], pagination.active)
 
     return (
         <SectionCharacters>
@@ -97,11 +105,7 @@ function Characters({ charactersFiltered, favorites, setFavorites, viewFavorites
                     <></>
             }
 
-            <ModalCharacter
-                setFavorites={setFavorites}
-                favorites={favorites}
-                selectedCharacter={selectedCharacter}
-            />
+            
         </SectionCharacters>
     )
 }

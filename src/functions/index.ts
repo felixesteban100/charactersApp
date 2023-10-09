@@ -1,20 +1,42 @@
+import { SetURLSearchParams } from "react-router-dom";
 import { getTeamByUniverse } from "../constants";
 import { Character } from "../types";
 
 export function resetCharactersSelection(
-  setCharacterName: React.Dispatch<React.SetStateAction<string>>,
-  setHowMany: React.Dispatch<React.SetStateAction<number>>,
-  setAsHowManyAsPossible: React.Dispatch<React.SetStateAction<boolean>>,
-  setSide: React.Dispatch<React.SetStateAction<string>>,
-  setUniverse: React.Dispatch<React.SetStateAction<string>>,
-  setTeam: React.Dispatch<React.SetStateAction<string>>,
-  setGender: React.Dispatch<React.SetStateAction<string>>,
+  setSearchParams: SetURLSearchParams,
+
+  // setCharacterName: React.Dispatch<React.SetStateAction<string>>,
+  // setHowMany: React.Dispatch<React.SetStateAction<number>>,
+  // setAsHowManyAsPossible: React.Dispatch<React.SetStateAction<boolean>>,
+  // setSide: React.Dispatch<React.SetStateAction<string>>,
+  // setUniverse: React.Dispatch<React.SetStateAction<string>>,
+  // setTeam: React.Dispatch<React.SetStateAction<string>>,
+  // setGender: React.Dispatch<React.SetStateAction<string>>,
   setHeroSection: React.Dispatch<React.SetStateAction<{
     imgs: string[];
     title: string;
     description: string;
   }>>,
-  setTeamMembers: React.Dispatch<React.SetStateAction<Character[]>>
+  setTeamMembers: React.Dispatch<React.SetStateAction<Character[]>>,
+
+  // setCharacterName: (name: string) => void,
+  // setHowMany: (num: number) => void,
+  // setAsHowManyAsPossible: (howManyAsP?: boolean) => void,
+  // setSide: (sideS: string) => void,
+  // setUniverse: (universeS: string) => void,
+  // setTeam: (teamS: string) => void,
+  // setGender: (genderS: string) => void,
+  // setRace: (raceS: string) => void,
+  // setHeroSection: (heroSec: {
+  //   imgs: string[];
+  //   title: string;
+  //   description: string;
+  // }) => void,
+  // setTeamMembers: (name: Character[]) => void,
+  // setIncludeNameOrExactName: (includeOrExact?: boolean) => void,
+  // setCharacterOrFullName: (characOrFullName?: boolean) => void
+
+  
 ) {
   localStorage.removeItem('CHARACTERS_APP_ALLCHARACTERS')
   localStorage.removeItem("CHARACTERS_APP_CHARACTERSFILTERED");
@@ -29,25 +51,35 @@ export function resetCharactersSelection(
   localStorage.removeItem("CHARACTERS_APP_HEROSECTION");
   localStorage.removeItem("CHARACTERS_APP_TEAMMEMBERS");
 
-  setCharacterName("")
-  setHowMany(8)
-  setAsHowManyAsPossible(false)
-  setSide("All")
-  setUniverse("All")
-  setTeam("All")
-  setGender("All")
+  // setCharacterName("")
+  // setHowMany(8)
+  // setAsHowManyAsPossible(false)
+  // setSide("All")
+  // setUniverse("All")
+  // setTeam("All")
+  // setGender("All")
+  // setRace("All")
+
+  setSearchParams()
+
   setHeroSection({ imgs: ["https://media.tenor.com/TY1HfJK5qQYAAAAC/galaxy-pixel-art.gif"], title: "", description: "" })
   setTeamMembers([])
+  // setIncludeNameOrExactName(false)
+  // setIncludeNameOrExactName()
+  // setCharacterOrFullName(false)
+  // setCharacterOrFullName()
 }
 
-export function manageFavorite(action: string, characterSelected: Character, setFavorites: React.Dispatch<React.SetStateAction<[] | Character[]>>) {
+export function manageFavorite(action: string, characterSelected: Character, favorites: Character[],  setFavorites: (favoritesS: Character[]) => void /* setFavorites: React.Dispatch<React.SetStateAction<[] | Character[]>> */) {
   switch (action) {
     case "add":
-      setFavorites(prev => [...prev, characterSelected])
+      // setFavorites(prev => [...prev, characterSelected])
+      setFavorites([...favorites, characterSelected])
       break;
 
     case "remove":
-      setFavorites(prev => prev.filter(current => current.slug !== characterSelected.slug))
+      // setFavorites(prev => prev.filter(current => current.slug !== characterSelected.slug))
+      setFavorites(favorites.filter(current => current.slug !== characterSelected.slug))
       break;
   }
 }
@@ -77,6 +109,9 @@ export function publisherIMG(publisher: string) {
     case "Dark Horse Comics":
       return "https://i0.wp.com/www.comicsbeat.com/wp-content/uploads/2020/03/dark-horse-logo-banner.png?fit=1200%2C500&ssl=1"
 
+    case "Image Comics":
+      return "https://www.cuartomundo.cl/wp-content/uploads/2015/09/Image-Comics-Logo.png"
+
     /**
      * "Angel"
      * "NBC - Heroes"
@@ -94,7 +129,6 @@ export function publisherIMG(publisher: string) {
      * South Park
      * Sony Pictures
      * Vindicator II
-     * Image Comics
      * Titan Books
      * J. K. Rowling
      * Microsoft

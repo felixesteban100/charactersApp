@@ -4,23 +4,26 @@ import { Character } from '../types'
 
 type FavoriteCharacterButtonProps = {
     favorites: Character[]
-    setFavorites: React.Dispatch<React.SetStateAction<[] | Character[]>>
+    // setFavorites: React.Dispatch<React.SetStateAction<[] | Character[]>>
+    setFavorites: (favoritesS: Character[]) => void
     selectedCharacter: Character
 }
 
-function FavoriteCharacterButton({favorites, setFavorites, selectedCharacter }: FavoriteCharacterButtonProps) {
+function FavoriteCharacterButton({ favorites, setFavorites, selectedCharacter }: FavoriteCharacterButtonProps) {
     return (
         <label className="swap swap-flip text-2xl">
             <input
                 onChange={() => {
-                    if (favorites.includes(selectedCharacter)) {
-                        manageFavorite("remove", selectedCharacter, setFavorites)
+                    // if (favorites.includes(selectedCharacter)) {
+                    if (favorites.find(c => c._id === selectedCharacter._id)) {
+                        manageFavorite("remove", selectedCharacter, favorites, setFavorites)
                     } else {
-                        manageFavorite("add", selectedCharacter, setFavorites)
+                        manageFavorite("add", selectedCharacter, favorites, setFavorites)
                     }
                 }}
                 type="checkbox"
-                checked={favorites.includes(selectedCharacter) ? true : false}
+                // checked={favorites.includes(selectedCharacter) ? true : false}
+                checked={favorites.find(c => c._id === selectedCharacter._id) ? true : false}
             />
             <div
                 className="swap-on tooltip tooltip-left"

@@ -90,7 +90,7 @@ export function teamIMG(teamName: string) {
             return ["https://preview.redd.it/amtkskhm6jp71.jpg?width=640&crop=smart&auto=webp&s=5210447223f321889ad6f663e6bf856629c6df0a"]
 
         case "X-Men":
-            return ["https://kevinreviewsuncannyxmen.files.wordpress.com/2014/06/all-new-x-men-covers.jpg"]
+            return ["https://kevinreviewsuncannyxmen.files.wordpress.com/2014/06/all-new-x-men-covers.jpg", "https://i.pinimg.com/564x/7b/81/50/7b815015d9763e61a4bd67957cedfa91.jpg"]
 
         case "Illuminati":
             return ["https://static1.moviewebimages.com/wordpress/wp-content/uploads/2022/05/Illuminati.jpg"]
@@ -213,7 +213,7 @@ export function getTeamByUniverse(universe: string) {
                     value: "Hydra",
                     img: 'https://upload.wikimedia.org/wikipedia/en/7/7f/Hydra_symbol.png'
                 },
-                
+
                 {
                     name: "Illuminati",
                     value: "Illuminati",
@@ -713,4 +713,148 @@ export const randomImagesArray = [
     "https://i.pinimg.com/564x/6f/da/4e/6fda4e7db350b2177c5f30fa456c36aa.jpg",
     "https://i.pinimg.com/564x/fa/03/de/fa03de3f6c00ad4ac796958651bfc1a1.jpg",
     "https://i.pinimg.com/750x/7c/a9/51/7ca951ff8b9c82ec809d490165a51c7b.jpg",
+]
+
+export const batmanandSpider_manObj: Character[] = [
+    {
+        "powerstats": {
+            "intelligence": 100,
+            "strength": 26,
+            "speed": 27,
+            "durability": 50,
+            "power": 47,
+            "combat": 100
+        },
+        "appearance": {
+            "gender": "Male",
+            "race": "Human",
+            "height": [
+                "6'2",
+                "188 cm"
+            ],
+            "weight": [
+                "210 lb",
+                "95 kg"
+            ],
+            "eyeColor": "blue",
+            "hairColor": "black"
+        },
+        "biography": {
+            "fullName": "Bruce Wayne",
+            "alterEgos": "No alter egos found.",
+            "aliases": [
+                "Insider",
+                "Matches Malone"
+            ],
+            "placeOfBirth": "Crest Hill, Bristol Township; Gotham County",
+            "firstAppearance": "Detective Comics #27",
+            "publisher": "DC Comics",
+            "alignment": "good"
+        },
+        "work": {
+            "occupation": "Businessman",
+            "base": "Batcave, Stately Wayne Manor, Gotham City; Hall of Justice, Justice League Watchtower"
+        },
+        "connections": {
+            "groupAffiliation": "Batman Family, Batman Incorporated, Justice League, Justice League Dark, Outsiders, Wayne Enterprises, Club of Heroes, formerly White Lantern_Corps, Sinestro Corps, Justice League (Original)",
+            "relatives": "Damian Wayne (son), Dick Grayson (adopted son), Tim Drake (adopted son), Jason Todd (adopted son), Cassandra Cain (adopted ward) Martha Wayne (mother, deceased), Thomas Wayne (father, deceased), Alfred Pennyworth (former guardian), Roderick Kane (grandfather, deceased), Elizabeth Kane (grandmother, deceased), Nathan Kane (uncle, deceased), Simon Hurt (ancestor), Wayne Family"
+        },
+        "images": {
+            "xs": "https://i.imgur.com/VGkwQT2.png",
+            "sm": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/sm/70-batman.jpg",
+            "md": "https://w0.peakpx.com/wallpaper/978/478/HD-wallpaper-batman-comics-dc-superheros.jpg",
+            "lg": "https://images.hdqwalls.com/download/batman-gotham-city-dc-comics-4k-25-1280x2120.jpg",
+            "power": "https://i.pinimg.com/564x/ab/bc/b9/abbcb918a5f1746ff0887200e8a82506.jpg"
+        },
+        "_id": "63744cef81b33ddcb37e9172",
+        "id": 70,
+        "name": "Batman",
+        "slug": "70-batman",
+        "comics": [
+            "https://m.media-amazon.com/images/I/81kMrMHlqKL._AC_UF1000,1000_QL80_.jpg",
+            "https://images.squarespace-cdn.com/content/v1/593f201de3df288fc6465e6f/1622556757706-1OW4G4X7CTQ3JAA94YKO/Best+Comics+of+2021+Batman.jpg?format=1000w",
+            "https://i.ebayimg.com/images/g/crYAAOSwFSFiCBuZ/s-l1600.jpg",
+            "https://people.com/thmb/kyO7E3_ZKhGjtykUW4PFaPJnhe4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc():focal(496x524:498x526)/Batman-Urban-Legends-e4761e7b416047799823026def684511.jpg",
+            "https://m.media-amazon.com/images/I/51GeupQdetL.jpg",
+            "https://i0.wp.com/thegeekiary.com/wp-content/uploads/2022/02/batman-issue-125-image.jpg?resize=590%2C895&ssl=1",
+            "https://i0.wp.com/batman-news.com/wp-content/uploads/2023/01/Batman-Urban-Legends-23-1.jpg?resize=1068%2C1643&quality=80&strip=info&ssl=1"
+        ]
+    },
+    {
+        "powerstats": {
+            "intelligence": 90,
+            "strength": 55,
+            "speed": 67,
+            "durability": 75,
+            "power": 74,
+            "combat": 85
+        },
+        "appearance": {
+            "gender": "Male",
+            "race": "Human",
+            "height": [
+                "5'10",
+                "178 cm"
+            ],
+            "weight": [
+                "165 lb",
+                "74 kg"
+            ],
+            "eyeColor": "Hazel",
+            "hairColor": "Brown"
+        },
+        "biography": {
+            "fullName": "Peter Parker",
+            "alterEgos": "No alter egos found.",
+            "aliases": [
+                "Spiderman",
+                "Bag-Man",
+                "Black Marvel",
+                "Captain Universe",
+                "Dusk",
+                "Green Hood",
+                "Hornet",
+                "Mad Dog 336",
+                "Peter Palmer",
+                "Prodigy",
+                "Ricochet",
+                "Scarlet Spider",
+                "Spider-Boy",
+                "Spider-Hulk",
+                "Spider-Morphosis"
+            ],
+            "placeOfBirth": "New York, New York",
+            "firstAppearance": "Amazing Fantasy #15",
+            "publisher": "Marvel Comics",
+            "alignment": "good"
+        },
+        "work": {
+            "occupation": "Freelance photographer, teacher",
+            "base": "New York, New York"
+        },
+        "connections": {
+            "groupAffiliation": "Member of the Avengers, formerly member of Outlaws, alternate Fantastic Four, Spider-Army, Young avengers, Future Foundation",
+            "relatives": "Richard Parker (father, deceased), Mary Parker(mother, deceased), Benjamin Parker (uncle, deceased), May Parker (aunt), Mary Jane Watson-Parker (wife), May Parker (daughter, allegedly deceased)"
+        },
+        "images": {
+            "xs": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/xs/620-spider-man.jpg",
+            "sm": "https://i.pinimg.com/736x/30/04/97/3004974506e8bd36809a0961c42b4a16--copic-markers-copics.jpg",
+            "md": "https://i.pinimg.com/564x/1f/c1/99/1fc199401a38168453969044229d6f78.jpg",
+            "lg": "https://static0.gamerantimages.com/wordpress/wp-content/uploads/2022/01/spider-man-symbiote-perching.jpg",
+            "mdi": "https://i.pinimg.com/564x/06/52/ba/0652ba72707aa5651d683335da43f8c7.jpg",
+            "symbiote": "https://i.pinimg.com/564x/b6/e5/f2/b6e5f294604db206c0c617000ba28eb7.jpg"
+        },
+        "_id": "63744cef81b33ddcb37e931a",
+        "id": 620,
+        "name": "Spider-Man",
+        "slug": "620-spider-man",
+        "comics": [
+            "https://i.annihil.us/u/prod/marvel/i/mg/8/e0/57a25305eeaa5/portrait_uncanny.jpg",
+            "https://i.annihil.us/u/prod/marvel/i/mg/4/f0/5cfaa9ca8a2bd/clean.jpg",
+            "https://i.annihil.us/u/prod/marvel/i/mg/c/50/6149f7a0afd4c/clean.jpg",
+            "https://cdn.shopify.com/s/files/1/0051/8805/9206/products/The-Amazing-Spider-Man-La-Coleccion-Definitiva-Libro-2-cover_473x.jpg?v=1645236119",
+            "https://cdn.shopify.com/s/files/1/0051/8805/9206/products/Marvel-Basicos-The-Amazing-Spider-Man-Cual-es-el-Costo-de-la-Victoria-cover_462x.jpg?v=1656644031",
+            "https://i.annihil.us/u/prod/marvel/i/mg/a/10/5beca8756966a/clean.jpg"
+        ]
+    }
 ]

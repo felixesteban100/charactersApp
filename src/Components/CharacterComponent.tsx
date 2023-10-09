@@ -4,7 +4,8 @@ import { getRandomImage, publisherIMG, transitionImageCard } from '../functions'
 import { randomImagesArray } from '../constants';
 
 type CharacterProps = {
-    setSelectedCharacter: React.Dispatch<React.SetStateAction<Character>>
+    // setSelectedCharacter: React.Dispatch<React.SetStateAction<Character>>
+    setSelectedCharacter: (character: Character) => void
     currentCharacter: Character;
     indexForTest: number
 }

@@ -1,32 +1,90 @@
+import { SetURLSearchParams } from "react-router-dom";
 import { ALLALIGMENTS, ALLGENDERS, ALLRACES, ALLUNIVERSE, getTeamByUniverse } from "../constants";
 import { resetCharactersSelection } from "../functions";
-import { ChangeCharactersProps } from "../types";
+import { Character } from "../types";
 import ButtonChangeCharacter from "./Reusable/ButtonChangeCharacter";
 import SelectInput from "./Reusable/SelectInput";
 
+type ChangeCharactersProps = {
+    characterName: string;
+    // setCharacterName: React.Dispatch<React.SetStateAction<string>>
+    howMany: string | number
+    // setHowMany: React.Dispatch<React.SetStateAction<number>>
+    asHowManyAsPossible: boolean
+    // setAsHowManyAsPossible: React.Dispatch<React.SetStateAction<boolean>>
+    side: string
+    // setSide: React.Dispatch<React.SetStateAction<string>>
+    universe: string;
+    // setUniverse: React.Dispatch<React.SetStateAction<string>>
+    team: string;
+    // setTeam: React.Dispatch<React.SetStateAction<string>>
+    gender: string;
+    // setGender: React.Dispatch<React.SetStateAction<string>>
+    race: string;
+    // setRace: React.Dispatch<React.SetStateAction<string>>
+    includeNameOrExactName: boolean;
+    // setIncludeNameOrExactName: React.Dispatch<React.SetStateAction<boolean>>
+    characterOrFullName: boolean,
+    // setCharacterOrFullName: React.Dispatch<React.SetStateAction<boolean>>,
+
+    viewFavorites: boolean
+    // setViewFavorites :React.Dispatch<React.SetStateAction<boolean>>
+    // setViewFavorites: (f: boolean) => void
+    refetchCharacters: () => void
+    setHeroSection: React.Dispatch<React.SetStateAction<{
+        imgs: string[];
+        title: string;
+        description: string;
+    }>>
+    setTeamMembers: React.Dispatch<React.SetStateAction<Character[]>>
+
+    // setCharacterName: (name: string) => void,
+    // setHowMany: (num: number) => void,
+    // setAsHowManyAsPossible: (howManyAsP?: boolean) => void,
+    // setSide: (sideS: string) => void,
+    // setUniverse: (universeS: string) => void,
+    // setTeam: (teamS: string) => void,
+    // setGender: (genderS: string) => void,
+    // setRace: (raceS: string) => void,
+    // setHeroSection: (heroSec: {
+    //     imgs: string[];
+    //     title: string;
+    //     description: string;
+    // }) => void,
+    // setTeamMembers: (teamMembersS: Character[]) => void,
+    // setIncludeNameOrExactName: (/* includeOrExact?: boolean */) => void,
+    // setCharacterOrFullName: (/* characOrFullName?: boolean */) => void
+
+    isLoading: boolean;
+    isFetching: boolean;
+    setSearchDifferentCharacters: React.Dispatch<React.SetStateAction<boolean>>;
+    setSearchParams: SetURLSearchParams
+}
+
 function ModalChangeCharacters({
     characterName,
-    setCharacterName,
+    // setCharacterName,
     howMany,
-    setHowMany,
+    // setHowMany,
     asHowManyAsPossible,
-    setAsHowManyAsPossible,
+    // setAsHowManyAsPossible,
     gender,
-    setGender,
+    // setGender,
     side,
-    setSide,
+    // setSide,
     universe,
-    setUniverse,
+    // setUniverse,
     team,
-    setTeam,
+    // setTeam,
     race,
-    setRace,
+    // setRace,
     includeNameOrExactName,
-    setIncludeNameOrExactName,
+    // setIncludeNameOrExactName,
     characterOrFullName,
-    setCharacterOrFullName,
+    // setCharacterOrFullName,
 
-    setViewFavorites,
+    // setViewFavorites,
+    viewFavorites,
     refetchCharacters,
 
     setHeroSection,
@@ -34,9 +92,10 @@ function ModalChangeCharacters({
 
     isLoading,
     isFetching,
+    setSearchDifferentCharacters,
+    setSearchParams
 }: ChangeCharactersProps) {
     const teamByUniverse: { name: string, value: string }[] = getTeamByUniverse(universe)
-
     return (
         <div >
             <p className="text-lg font-bold">Select characters features</p>
@@ -50,19 +109,30 @@ function ModalChangeCharacters({
                         <input
                             data-test="input-Name"
                             value={characterName === null ? "" : characterName}
-                            onChange={(event) => setCharacterName(event.target.value)}
+                            // onChange={(event) => setCharacterName(event.target.value)}
+                            onChange={(event) => setSearchParams((prev) => {
+                                prev.set('characterName', event.target.value)
+                                return prev
+                            }, { replace: true })}
                             type="text"
-                            placeholder={characterOrFullName === false ? "Batman / Batman, Ironman..." : "Bruce Wayne, Tony Stark..."}
+                            placeholder={characterOrFullName === false ? "Batman / Batman, Iron man..." : "Bruce Wayne, Tony Stark..."}
                             className="input input-bordered w-full"
                         />
-                        <div className="btn" onClick={() => setCharacterName("")}>x</div>
+                        {/* <div className="btn" onClick={() => setCharacterName("")}>x</div> */}
+                        <div className="btn" onClick={() => setSearchParams((prev) => {
+                            prev.set('characterName', "")
+                            return prev
+                        }, { replace: true })}>x</div>
                     </div>
                     <div className="flex justify-center items-center m-2">
                         <label className="swap swap-flip text-4xl">
                             <input
                                 data-test="includeOrExactName"
                                 type="checkbox"
-                                onChange={() => setIncludeNameOrExactName(prev => !prev)}
+                                onChange={() => setSearchParams((prev) => {
+                                    prev.set('includeNameOrExactName', (!includeNameOrExactName).toString())
+                                    return prev
+                                }, { replace: true }) /* setIncludeNameOrExactName(prev => !prev) */}
                                 checked={includeNameOrExactName}
                             />
 
@@ -73,7 +143,10 @@ function ModalChangeCharacters({
                             <input
                                 data-test="fullOrCharacterName"
                                 type="checkbox"
-                                onChange={() => setCharacterOrFullName(prev => !prev)}
+                                onChange={() => setSearchParams((prev) => {
+                                    prev.set('characterOrFullName', (!characterOrFullName).toString())
+                                    return prev
+                                }, { replace: true }) /* setCharacterOrFullName(prev => !prev) */}
                                 checked={characterOrFullName}
                             />
 
@@ -106,7 +179,10 @@ function ModalChangeCharacters({
                         min={1}
                         max={691}
                         className="range"
-                        onChange={(event) => setHowMany(parseInt(event.target.value))}
+                        onChange={(event) => setSearchParams((prev) => {
+                            prev.set('howMany', event.target.value.toString())
+                            return prev
+                        }, { replace: true })}
                         disabled={asHowManyAsPossible}
                     />
                 </div>
@@ -116,7 +192,10 @@ function ModalChangeCharacters({
                 <div className="form-control">
                     <label className="label cursor-pointer flex justify-center items-center gap-5">
                         <span className="label-text">All characters in these categories</span>
-                        <input data-test="ashowmanyaspossible" onChange={() => setAsHowManyAsPossible(prev => !prev)} type="checkbox" checked={asHowManyAsPossible} className="checkbox" />
+                        <input data-test="ashowmanyaspossible" onChange={() => setSearchParams((prev) => {
+                            prev.set('asHowManyAsPossible', (!asHowManyAsPossible).toString())
+                            return prev
+                        }, { replace: true }) /* setAsHowManyAsPossible(prev => !prev) */} type="checkbox" checked={asHowManyAsPossible} className="checkbox" />
                     </label>
                 </div>
             </div>
@@ -126,7 +205,10 @@ function ModalChangeCharacters({
                 dataTest={'select-Gender'}
                 value={gender}
                 options={ALLGENDERS}
-                onChangeFunction={(event) => setGender(event.target.value)}
+                onChangeFunction={(event) => setSearchParams((prev) => {
+                    prev.set('gender', event.target.value)
+                    return prev
+                }, { replace: true })}
                 forWhat={'gender'}
             />
 
@@ -134,7 +216,10 @@ function ModalChangeCharacters({
                 dataTest={'select-Race'}
                 value={race}
                 options={ALLRACES}
-                onChangeFunction={(event) => setRace(event.target.value)}
+                onChangeFunction={(event) => setSearchParams((prev) => {
+                    prev.set('race', event.target.value)
+                    return prev
+                }, { replace: true })}
                 forWhat={'characters race'}
             />
 
@@ -142,7 +227,10 @@ function ModalChangeCharacters({
                 dataTest={'select-Aligment'}
                 value={side}
                 options={ALLALIGMENTS}
-                onChangeFunction={(event) => setSide(event.target.value)}
+                onChangeFunction={(event) => setSearchParams((prev) => {
+                    prev.set('side', event.target.value)
+                    return prev
+                }, { replace: true })}
                 forWhat={'character alignment'}
             />
 
@@ -151,8 +239,11 @@ function ModalChangeCharacters({
                 value={universe}
                 options={ALLUNIVERSE}
                 onChangeFunction={(event) => {
-                    setUniverse(event.target.value)
-                    setTeam("All")
+                    setSearchParams((prev) => {
+                        prev.set('universe', event.target.value)
+                        prev.set('team', 'All')
+                        return prev
+                    }, { replace: true })
                 }}
                 forWhat={'characters universe'}
             />
@@ -171,7 +262,10 @@ function ModalChangeCharacters({
                                 }
                             })
                         ]}
-                        onChangeFunction={(event) => setTeam(event.target.value)}
+                        onChangeFunction={(event) => setSearchParams((prev) => {
+                            prev.set('team', event.target.value)
+                            return prev
+                        }, { replace: true })}
                         forWhat={'the team'}
                     />
                     :
@@ -184,8 +278,12 @@ function ModalChangeCharacters({
                     dataTest="btn-FindFilters"
                     classNameSended="btn-success"
                     functionSended={() => {
-                        refetchCharacters()
-                        setViewFavorites(false)
+                        setSearchDifferentCharacters(true)
+                        setTimeout(() => refetchCharacters())
+                        setSearchParams((prev) => {
+                            prev.set('viewFavorites', (false).toString())
+                            return prev
+                        }, { replace: true })
                     }}
                     forWhat="Find by filters"
                     loadingOrFetching={isLoading || isFetching}
@@ -195,7 +293,10 @@ function ModalChangeCharacters({
                     dataTest="btn-Favorites"
                     classNameSended="btn-warning"
                     functionSended={() => {
-                        setViewFavorites(true)
+                        setSearchParams((prev) => {
+                            prev.set('viewFavorites', (true).toString())
+                            return prev
+                        }, { replace: true })
                     }}
                     forWhat="Favorites"
                 />
@@ -204,9 +305,13 @@ function ModalChangeCharacters({
                     dataTest="btn-Reset"
                     classNameSended="btn-danger"
                     functionSended={() => {
-                        resetCharactersSelection(setCharacterName, setHowMany, setAsHowManyAsPossible, setSide, setUniverse, setTeam, setGender, setHeroSection, setTeamMembers)
-                        setViewFavorites(false)
-                        refetchCharacters()
+                        resetCharactersSelection(setSearchParams, /* setCharacterName, setHowMany, setAsHowManyAsPossible, setSide, setUniverse, setTeam, setGender, setRace, */ setHeroSection, setTeamMembers, /* setIncludeNameOrExactName, setCharacterOrFullName */)
+                        setSearchParams((prev) => {
+                            prev.set('viewFavorites', (false).toString())
+                            return prev
+                        }, { replace: true })
+                        setSearchDifferentCharacters(true)
+                        setTimeout(() => refetchCharacters())
                     }}
                     forWhat="Reset filters"
                 />

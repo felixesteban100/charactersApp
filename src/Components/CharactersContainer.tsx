@@ -1,12 +1,12 @@
-import useWindowWidth from "../hooks/useWindowWidth"
+// import useWindowWidth from "../hooks/useWindowWidth"
 import { Character } from "../types"
 
 type CharactersContainerProps = {
     children: JSX.Element
     visibleResults: Character[]
 }
-function CharactersContainer({ children, visibleResults }: CharactersContainerProps) {
-    const windowWidth = useWindowWidth()
+function CharactersContainer({ children/* , visibleResults */ }: CharactersContainerProps) {
+    // const windowWidth = useWindowWidth()
 
     return (
         <div

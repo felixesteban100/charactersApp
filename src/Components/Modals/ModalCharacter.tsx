@@ -1,4 +1,4 @@
-import { ModalCharacterProps } from "../../types"
+import { Character } from "../../types"
 import { useEffect, useState } from 'react';
 import ImageZoom from "../ImageZoom";
 
@@ -7,6 +7,15 @@ import Modal from "./Modal";
 import CharacterFeatures from "../CharacterFeatures";
 import FavoriteCharacterButton from "../FavoriteCharacterButton";
 import { motion } from "framer-motion"
+
+type ModalCharacterProps = {
+    // manageFavorite: (action: string, characterSelected: Character) => void
+    // manageFavorite: (action: string, characterSelected: Character, setFavorites: React.Dispatch<React.SetStateAction<[] | Character[]>>) => void
+    favorites: Character[]
+    selectedCharacter: Character
+    // setFavorites: React.Dispatch<React.SetStateAction<[] | Character[]>>
+    setFavorites: (favoritesS: Character[]) => void
+}
 
 export default function ModalCharacter({
     favorites,
